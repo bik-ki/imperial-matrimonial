@@ -86,49 +86,42 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
       </div>
     );
 
-  const F = ({ id, label, children }: { id: string; label: string; children: React.ReactNode }) => (
-    <div className="space-y-1.5">
-      <Label htmlFor={id} className="text-xs uppercase tracking-[0.12em] text-muted-foreground">{label}</Label>
-      {children}
-      {errors[id] && <p className="text-xs text-destructive">{errors[id]}</p>}
-    </div>
-  );
   const inp = (id: string, type = "text", extra: Record<string, string> = {}) => (
     <Input id={id} type={type} className="h-11 rounded-sm bg-card" value={(v[id] as string) ?? ""} onChange={(e) => set(id, e.target.value)} {...extra} />
   );
 
   return (
     <form onSubmit={submit} noValidate className="grid gap-5 sm:grid-cols-2">
-      <F id="fullName" label="Full name">{inp("fullName", "text", { autoComplete: "name" })}</F>
-      <F id="phone" label="Phone number">{inp("phone", "tel", { autoComplete: "tel", placeholder: "+977" })}</F>
-      <F id="email" label="Email address">{inp("email", "email", { autoComplete: "email" })}</F>
-      <F id="service" label={mode === "booking" ? "Consultation type" : "Service required"}>
+      <Field error={errors["fullName"]} id="fullName" label="Full name">{inp("fullName", "text", { autoComplete: "name" })}</Field>
+      <Field error={errors["phone"]} id="phone" label="Phone number">{inp("phone", "tel", { autoComplete: "tel", placeholder: "+977" })}</Field>
+      <Field error={errors["email"]} id="email" label="Email address">{inp("email", "email", { autoComplete: "email" })}</Field>
+      <Field error={errors["service"]} id="service" label={mode === "booking" ? "Consultation type" : "Service required"}>
         <select id="service" className={selectCls} value={(v.service as string) ?? ""} onChange={(e) => set("service", e.target.value)}>
           <option value="">Select…</option>
           {services.map((s) => <option key={s.slug}>{s.title.en}</option>)}
           <option>Other / Not sure</option>
         </select>
-      </F>
-      <F id="date" label="Preferred date">{inp("date", "date", { min: today })}</F>
+      </Field>
+      <Field error={errors["date"]} id="date" label="Preferred date">{inp("date", "date", { min: today })}</Field>
       {mode === "booking" ? (
-        <F id="time" label="Preferred time">
+        <Field error={errors["time"]} id="time" label="Preferred time">
           <select id="time" className={selectCls} value={(v.time as string) ?? ""} onChange={(e) => set("time", e.target.value)}>
             <option value="">Select…</option>
             {["10:00 AM", "11:00 AM", "12:00 PM", "2:00 PM", "3:00 PM", "4:00 PM"].map((t) => <option key={t}>{t}</option>)}
           </select>
-        </F>
+        </Field>
       ) : (
-        <F id="contactMethod" label="Preferred contact method">
+        <Field error={errors["contactMethod"]} id="contactMethod" label="Preferred contact method">
           <select id="contactMethod" className={selectCls} value={(v.contactMethod as string) ?? ""} onChange={(e) => set("contactMethod", e.target.value)}>
             <option value="">Select…</option>
             <option>Phone call</option><option>WhatsApp</option><option>Email</option>
           </select>
-        </F>
+        </Field>
       )}
       <div className="sm:col-span-2">
-        <F id="message" label={mode === "booking" ? "Additional message (optional)" : "Brief message"}>
+        <Field error={errors["message"]} id="message" label={mode === "booking" ? "Additional message (optional)" : "Brief message"}>
           <Textarea id="message" rows={4} maxLength={1000} className="rounded-sm bg-card" value={(v.message as string) ?? ""} onChange={(e) => set("message", e.target.value)} />
-        </F>
+        </Field>
       </div>
       <div className="sm:col-span-2">
         <label className="flex items-start gap-3 text-sm text-muted-foreground">
@@ -145,5 +138,15 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
         {mode === "booking" && <p className="mt-3 text-xs text-muted-foreground">This is a booking request, not a confirmed appointment.</p>}
       </div>
     </form>
+  );
+}
+
+function Field({ id, label, error, children }: { id: string; label: string; error?: string; children: React.ReactNode }) {
+  return (
+    <div className="space-y-1.5">
+      <Label htmlFor={id} className="text-xs uppercase tracking-[0.12em] text-muted-foreground">{label}</Label>
+      {children}
+      {error && <p className="text-xs text-destructive">{error}</p>}
+    </div>
   );
 }

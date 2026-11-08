@@ -5,15 +5,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHero } from "@/components/site/Sections";
+import { useConsultation } from "@/components/site/ConsultationDialog";
+import { WhatsAppButton } from "@/components/site/WhatsAppButton";
 import { site } from "@/config/site";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — Imperial Matrimonial" },
+      { title: "Contact Imperial Matrimonial — Advocates & Legal Associates" },
       {
         name: "description",
-        content: "Contact details and enquiry form for Imperial Matrimonial.",
+        content:
+          "Contact Imperial Matrimonial about court marriage registration assistance in Nepal.",
       },
     ],
   }),
@@ -21,6 +24,8 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
+  const { open } = useConsultation();
+
   return (
     <>
       <PageHero
@@ -40,8 +45,8 @@ function ContactPage() {
             <ContactDetail label="Office hours" value="[CLIENT TO PROVIDE VERIFIED HOURS]" />
           </dl>
           <p className="mt-8 border-t pt-5 text-xs leading-relaxed text-muted-foreground">
-            Contact details are intentionally shown as placeholders. No phone, email, map, or
-            messaging link is active on this page.
+            Contact details are intentionally shown as placeholders. No phone, email, or map link is
+            active until verified.
           </p>
         </aside>
         <div className="border bg-card p-6 md:p-8">
@@ -51,6 +56,12 @@ function ContactPage() {
             sensitive or confidential details. Use the verified firm contact details once supplied.
           </p>
           <ContactForm />
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button size="lg" onClick={open}>
+              Book a Consultation
+            </Button>
+            <WhatsAppButton context="Contact page" variant="outline" size="lg" />
+          </div>
         </div>
       </section>
     </>

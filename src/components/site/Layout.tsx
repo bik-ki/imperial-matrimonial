@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { useT, type TKey } from "@/lib/i18n";
 import { site, whatsappUrl } from "@/config/site";
 import { services } from "@/data/content";
+import { trackWhatsApp } from "@/lib/leads";
 import { useConsultation } from "./ConsultationDialog";
 
 const nav: { to: string; key: TKey }[] = [
@@ -150,6 +151,7 @@ export function SocialIcons({ inverse }: { inverse?: boolean }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={s.label}
+            onClick={() => s.label === "WhatsApp" && trackWhatsApp("Social icon")}
             className={`flex h-9 w-9 items-center justify-center border transition-colors ${inverse ? "border-ink-foreground/20 hover:border-gold hover:text-gold" : "hover:border-foreground"}`}
           >
             <s.icon className="h-4 w-4" />

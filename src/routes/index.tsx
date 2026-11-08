@@ -36,10 +36,10 @@ export const Route = createFileRoute("/")({
 
 // Editable placeholder values — replace with verified figures.
 const stats = [
-  { v: "[XX]+", k: "stats.years" },
-  { v: "[XXX]+", k: "stats.couples" },
+  { v: "[Client to provide]", k: "stats.years" },
+  { v: "[Client to provide]", k: "stats.couples" },
   { v: "6", k: "stats.services" },
-  { v: "100%", k: "stats.conf" },
+  { v: "[Client to provide]", k: "stats.conf" },
 ] as const;
 
 function Home() {

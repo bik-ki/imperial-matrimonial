@@ -31,6 +31,11 @@ function ServicePage() {
   const s = services.find((x) => x.slug === slug)!;
   const { lang } = useT();
   const { open } = useConsultation();
+  const needsVerification = [
+    "court-marriage-registration",
+    "marriage-documentation",
+    "foreign-national-marriage",
+  ].includes(slug);
   return (
     <>
       <section className="border-b">
@@ -79,6 +84,7 @@ function ServicePage() {
               <Link to="/contact">Contact us</Link>
             </Button>
             <WhatsAppButton
+              context={`Service: ${s.title.en}`}
               variant="outline"
               size="lg"
               message={`Hello Imperial Matrimonial, I'd like to know more about ${s.title.en}.`}
@@ -86,6 +92,23 @@ function ServicePage() {
           </div>
         </aside>
       </section>
+      {needsVerification && (
+        <section className="border-y bg-secondary/50 py-14">
+          <div className="container-x">
+            <div className="max-w-3xl">
+              <p className="eyebrow text-gold">Client review required</p>
+              <h2 className="mt-4 text-3xl">Details to verify before publication.</h2>
+              <ul className="mt-6 grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
+                <li>[Verified service requirements needed]</li>
+                <li>[Verified timeline needed]</li>
+                <li>[Verified eligibility rules needed]</li>
+                <li>[Verified fee information needed]</li>
+                <li className="sm:col-span-2">[Verified legal details needed]</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      )}
       <section className="border-t py-16">
         <div className="container-x">
           <h2 className="text-3xl">Other services</h2>

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { PageHero, SectionHead } from "@/components/site/Sections";
-import { images, team } from "@/data/content";
+import { PageHero, SectionHead, ServiceCard } from "@/components/site/Sections";
+import { images, services, team } from "@/data/content";
 import { useConsultation } from "@/components/site/ConsultationDialog";
 
 export const Route = createFileRoute("/about")({
@@ -37,6 +37,18 @@ function About() {
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{p.d}</p>
             </div>
           ))}
+        </div>
+      </section>
+      <section className="border-t bg-secondary/50 py-20 md:py-24">
+        <div className="container-x">
+          <SectionHead
+            eyebrow="Practice focus"
+            title="Support centred on marriage registration."
+            desc="These six service areas reflect the assistance currently described in the project content. [Client to review scope and wording before publication.]"
+          />
+          <div className="mt-12 grid border-l border-t sm:grid-cols-2 lg:grid-cols-3">
+            {services.map((service) => <ServiceCard key={service.slug} s={service} />)}
+          </div>
         </div>
       </section>
       <section className="border-t py-20">

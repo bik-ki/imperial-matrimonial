@@ -75,9 +75,14 @@ function LegalDocumentPage() {
           <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{document.description}</p>
         </div>
       </header>
-      <section className="container-x max-w-4xl py-12 md:py-16">
-        <section className="border-l-2 border-gold bg-secondary/50 p-6 md:p-8">
-          <h2 className="text-2xl">Placeholder — replace before publication</h2>
+      <div className="container-x max-w-4xl py-12 md:py-16">
+        <section
+          aria-labelledby="legal-placeholder-heading"
+          className="border-l-2 border-gold bg-secondary/50 p-6 md:p-8"
+        >
+          <h2 id="legal-placeholder-heading" className="text-2xl">
+            Placeholder — replace before publication
+          </h2>
           <p className="mt-3 leading-relaxed text-muted-foreground">
             The project contains no client-approved text for this legal page. No policy, contract
             term, or legal position is stated here. The following items are a verification
@@ -97,7 +102,7 @@ function LegalDocumentPage() {
             Contact page
           </Link>
         </div>
-      </section>
+      </div>
     </>
   );
 }

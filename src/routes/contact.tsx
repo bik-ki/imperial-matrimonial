@@ -28,10 +28,15 @@ function ContactPage() {
         title="Contact the practice."
         desc="Verified contact information has not yet been provided. Please do not rely on the placeholders below."
       />
-      <section className="container-x grid gap-10 py-12 md:py-16 lg:grid-cols-[minmax(16rem,0.8fr)_minmax(0,1.2fr)]">
-        <aside className="h-fit border bg-card p-6 md:p-8">
+      <div className="container-x grid gap-10 py-12 md:py-16 lg:grid-cols-[minmax(16rem,0.8fr)_minmax(0,1.2fr)]">
+        <aside
+          aria-labelledby="contact-details-heading"
+          className="h-fit min-w-0 border bg-card p-6 md:p-8"
+        >
           <p className="eyebrow">Details for client verification</p>
-          <h2 className="mt-4 text-3xl">{site.name}</h2>
+          <h2 id="contact-details-heading" className="mt-4 text-3xl">
+            {site.name}
+          </h2>
           <p className="mt-2 text-sm text-muted-foreground">{site.tagline}</p>
           <dl className="mt-8 space-y-5 text-sm">
             <ContactDetail label="Phone" value="[CLIENT TO PROVIDE VERIFIED PHONE NUMBER]" />
@@ -44,7 +49,7 @@ function ContactPage() {
             messaging link is active on this page.
           </p>
         </aside>
-        <div className="border bg-card p-6 md:p-8">
+        <div className="min-w-0 border bg-card p-6 md:p-8">
           <h2 className="text-3xl">Enquiry form preview</h2>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
             This front-end-only form does not send, store, or share your information. Do not enter
@@ -52,7 +57,7 @@ function ContactPage() {
           </p>
           <ContactForm />
         </div>
-      </section>
+      </div>
     </>
   );
 }

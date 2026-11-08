@@ -29,6 +29,10 @@ function Process() {
         title="Clear steps. Careful guidance."
         desc="An overview of the four assistance stages described by the practice. This is not a statement of the legal procedure; applicable steps depend on verified requirements and each couple's circumstances."
       />
+      <p className="container-x border-l-2 border-gold bg-secondary/50 p-5 text-sm text-muted-foreground">
+        Project draft: confirm these assistance stages and descriptions with the client before
+        publication. They are not verified legal steps.
+      </p>
       <ProcessTimeline />
       <section className="border-t py-20">
         <div className="container-x grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">

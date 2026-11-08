@@ -28,12 +28,23 @@ function About() {
   return (
     <>
       <PageHero eyebrow="About us" title="Guiding couples through the legal path to marriage." desc="Imperial Matrimonial is a legal service provider focused on court marriage registration and related documentation in Nepal." />
+      <aside className="container-x border-l-2 border-gold bg-secondary/50 p-5 text-sm text-muted-foreground">
+        Project review: mission, professional approach, confidentiality, and other company
+        statements on this page require client verification before publication.
+      </aside>
       <section className="container-x grid gap-12 py-20 lg:grid-cols-2">
-        <img src={images.office} alt="Our office" loading="lazy" className="aspect-[4/3] w-full object-cover" />
+        <img
+          src={images.office}
+          alt="Law office desk with legal documents"
+          width={1280}
+          height={896}
+          loading="lazy"
+          className="aspect-[4/3] w-full object-cover"
+        />
         <div className="grid gap-px border bg-border sm:grid-cols-2">
           {pillars.map((p) => (
             <div key={p.t} className="bg-background p-7">
-              <h3 className="text-2xl">{p.t}</h3>
+              <h2 className="text-2xl">{p.t}</h2>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{p.d}</p>
             </div>
           ))}
@@ -45,8 +56,15 @@ function About() {
           <div className="mt-12 grid gap-8 sm:grid-cols-3">
             {team.map((m, i) => (
               <div key={i}>
-                <img src={m.image} alt="" loading="lazy" className="aspect-[4/5] w-full object-cover grayscale" />
-                <p className="mt-4 font-serif text-2xl">{m.name}</p>
+                <img
+                  src={m.image}
+                  alt=""
+                  width={1280}
+                  height={896}
+                  loading="lazy"
+                  className="aspect-[4/5] w-full object-cover grayscale"
+                />
+                <h3 className="mt-4 font-serif text-2xl">{m.name}</h3>
                 <p className="text-sm text-muted-foreground">{m.role}</p>
               </div>
             ))}

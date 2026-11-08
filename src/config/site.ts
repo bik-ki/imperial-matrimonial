@@ -27,7 +27,7 @@ export const site = {
     tiktok: "https://www.tiktok.com/",
     youtube: "https://www.youtube.com/",
   },
-  instagramHandle: "@imperialmatrimonial",
+  instagramHandle: "[Client to provide verified Instagram handle]",
 };
 
 export function whatsappUrl(message: string = site.whatsappMessage) {

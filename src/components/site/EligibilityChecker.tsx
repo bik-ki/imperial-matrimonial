@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { ArrowLeft, ArrowRight, RotateCcw, AlertTriangle, CheckCircle2, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { saveLead } from "@/lib/leads";
 import { useConsultation } from "./ConsultationDialog";
 import { WhatsAppButton } from "./WhatsAppButton";
 import { evaluate, questions, type Answers } from "@/lib/eligibility";
@@ -31,12 +28,12 @@ export function EligibilityChecker() {
         {!done ? (
           <div key={step} className="animate-fade-up">
             <p className="eyebrow">Question {step + 1} of {questions.length}</p>
-            <h3 className="mt-4 text-3xl md:text-4xl">{q.q}</h3>
-            <div className="mt-8 grid gap-3 sm:grid-cols-2" role="radiogroup">
+            <h3 id={`eligibility-question-${q.id}`} className="mt-4 text-3xl md:text-4xl">{q.q}</h3>
+            <div className="mt-8 grid gap-3 sm:grid-cols-2" role="radiogroup" aria-labelledby={`eligibility-question-${q.id}`}>
               {q.options.map((o) => {
                 const sel = answers[q.id] === o;
                 return (
-                  <button key={o} role="radio" aria-checked={sel}
+                  <button type="button" key={o} role="radio" aria-checked={sel}
                     onClick={() => { setAnswers({ ...answers, [q.id]: o }); setError(""); }}
                     className={`flex items-center justify-between border px-5 py-4 text-left text-sm transition-colors ${sel ? "border-primary bg-primary text-primary-foreground" : "hover:border-foreground"}`}>
                     {o}
@@ -64,7 +61,7 @@ function Result({ answers, onRestart }: { answers: Answers; onRestart: () => voi
   const { open } = useConsultation();
   const Icon = r.level === "positive" ? CheckCircle2 : r.level === "review" ? Info : AlertTriangle;
   return (
-    <div className="animate-fade-up">
+    <div className="animate-fade-up" role="status" aria-live="polite">
       <p className="eyebrow">Your preliminary result</p>
       <div className="mt-4 flex items-start gap-4">
         <Icon className="mt-1 h-7 w-7 shrink-0 text-gold" />
@@ -90,40 +87,6 @@ function Result({ answers, onRestart }: { answers: Answers; onRestart: () => voi
           message={`Hello Imperial Matrimonial, I used your eligibility checker. Result: "${r.title}". I'd like to discuss my case.`} />
         <Button variant="ghost" size="lg" onClick={onRestart}><RotateCcw /> Restart</Button>
       </div>
-      <SaveResult result={r.title} answers={answers} />
     </div>
-  );
-}
-
-function SaveResult({ result, answers }: { result: string; answers: Answers }) {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [consent, setConsent] = useState(false);
-  const [err, setErr] = useState("");
-  const [saved, setSaved] = useState(false);
-  if (saved) return <p className="mt-10 border-t pt-6 text-sm" role="status">Thank you — our team will contact you about your result.</p>;
-  return (
-    <form className="mt-10 border-t pt-8" noValidate onSubmit={(e) => {
-      e.preventDefault();
-      if (name.trim().length < 2) return setErr("Please enter your name.");
-      if (!/^[+\d][\d\s-]{6,19}$/.test(phone.trim())) return setErr("Please enter a valid phone number.");
-      if (!consent) return setErr("Please accept the privacy consent.");
-      saveLead({
-        source: "Eligibility Checker", fullName: name.trim(), phone: phone.trim(), eligibilityResult: result, consent: true,
-        message: Object.entries(answers).map(([k, v]) => `${k}: ${v}`).join("; "),
-      });
-      setSaved(true);
-    }}>
-      <p className="font-serif text-2xl">Optional: have our team call you about this result</p>
-      <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
-        <Input aria-label="Your name" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} className="h-11 rounded-sm" maxLength={100} />
-        <Input aria-label="Phone number" placeholder="Phone (+977…)" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className="h-11 rounded-sm" />
-        <Button type="submit" className="h-11">Request a call</Button>
-      </div>
-      <label className="mt-3 flex items-start gap-2 text-xs text-muted-foreground">
-        <Checkbox checked={consent} onCheckedChange={(c) => setConsent(c === true)} aria-label="Privacy consent" /> I consent to being contacted about this enquiry.
-      </label>
-      {err && <p className="mt-2 text-xs text-destructive">{err}</p>}
-    </form>
   );
 }

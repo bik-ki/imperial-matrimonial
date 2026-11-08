@@ -15,7 +15,7 @@ export function ConsultationProvider({ children }: { children: ReactNode }) {
           <DialogHeader>
             <p className="eyebrow">Free initial consultation</p>
             <DialogTitle className="font-serif text-4xl font-medium">Book a Consultation</DialogTitle>
-            <DialogDescription>Tell us a little about your situation. We'll contact you to confirm a time.</DialogDescription>
+            <DialogDescription>Complete the fields below. This form is currently not connected to a submission service.</DialogDescription>
           </DialogHeader>
           <LeadForm mode="booking" onDone={() => setOpen(false)} />
         </DialogContent>

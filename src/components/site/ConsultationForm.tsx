@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { services } from "@/data/content";
-import { saveLead } from "@/lib/leads";
 
 const phoneRe = /^[+\d][\d\s-]{6,19}$/;
 
@@ -55,18 +54,6 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
     setErrors({});
     setStatus("loading");
     await new Promise((res) => setTimeout(res, 500));
-    const d = r.data as Record<string, string>;
-    saveLead({
-      source: mode === "booking" ? "Consultation Booking" : "Contact Form",
-      fullName: d.fullName,
-      phone: d.phone,
-      email: d.email,
-      service: d.service,
-      consultationDate: [d.date, d.time].filter(Boolean).join(" "),
-      preferredContact: d.contactMethod ?? "",
-      message: d.message ?? "",
-      consent: true,
-    });
     setStatus("done");
   };
 
@@ -77,8 +64,8 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
         <h3 className="mt-4 text-3xl">Thank you.</h3>
         <p className="mx-auto mt-3 max-w-md text-muted-foreground">
           {mode === "booking"
-            ? "Your consultation request has been received. Our team will contact you to confirm the appointment."
-            : "Your message has been received. Our team will get back to you using your preferred contact method."}
+            ? "This form is not connected yet. Your consultation details were not sent or stored. [Client to provide an approved submission method.]"
+            : "This form is not connected yet. Your message was not sent or stored. [Client to provide an approved submission method.]"}
         </p>
         <Button variant="outline" className="mt-6" onClick={() => { setV({ consent: false }); setStatus("idle"); onDone?.(); }}>
           {onDone ? "Close" : "Send another"}
@@ -133,7 +120,7 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
       <div className="sm:col-span-2">
         <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={status === "loading"}>
           {status === "loading" && <Loader2 className="animate-spin" />}
-          {mode === "booking" ? "Request Consultation" : "Send Message"}
+          {mode === "booking" ? "Review request" : "Review message"}
         </Button>
         {mode === "booking" && <p className="mt-3 text-xs text-muted-foreground">This is a booking request, not a confirmed appointment.</p>}
       </div>

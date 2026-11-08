@@ -14,7 +14,15 @@ const nav: { to: string; key: TKey }[] = [
   { to: "/process", key: "nav.process" },
   { to: "/services", key: "nav.services" },
   { to: "/eligibility", key: "nav.eligibility" },
+  { to: "/blog", key: "nav.blog" },
+  { to: "/contact", key: "nav.contact" },
 ];
+
+const legalLinks = [
+  { doc: "privacy", label: "Privacy Policy" },
+  { doc: "terms", label: "Terms & Conditions" },
+  { doc: "disclaimer", label: "Legal Disclaimer" },
+] as const;
 
 export function Wordmark({ inverse = false }: { inverse?: boolean }) {
   return (
@@ -145,9 +153,11 @@ export function SiteFooter() {
       <div className="container-x flex flex-col gap-3 border-t border-ink-foreground/10 py-6 text-xs text-ink-foreground/50 md:flex-row md:justify-between">
         <p>© {new Date().getFullYear()} Imperial Matrimonial — Advocates & Legal Associates. All rights reserved.</p>
         <div className="flex flex-wrap gap-x-5 gap-y-2">
-          <span>Privacy Policy [Client to provide]</span>
-          <span>Terms &amp; Conditions [Client to provide]</span>
-          <span>Legal Disclaimer [Client to provide]</span>
+          {legalLinks.map((legal) => (
+            <Link key={legal.doc} to="/legal/$doc" params={{ doc: legal.doc }} className="hover:text-ink-foreground">
+              {legal.label} [Client to provide]
+            </Link>
+          ))}
         </div>
       </div>
     </footer>

@@ -53,8 +53,12 @@ export function ProcessTimeline() {
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t(s.d)}</p>
               {i === 0 ? (
                 <button onClick={open} className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold">{t("cta.bookA")} <ArrowRight className="h-3 w-3" /></button>
+              ) : i === 1 ? (
+                <Link to="/services" className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold">{t("cta.learn")} <ArrowRight className="h-3 w-3" /></Link>
+              ) : i === 2 ? (
+                <Link to="/eligibility" className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold">{t("cta.learn")} <ArrowRight className="h-3 w-3" /></Link>
               ) : (
-                <Link to="/process" className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold">{t("cta.learn")} <ArrowRight className="h-3 w-3" /></Link>
+                <Link to="/contact" className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold">{t("cta.learn")} <ArrowRight className="h-3 w-3" /></Link>
               )}
             </li>
           ))}
@@ -109,7 +113,7 @@ export function formatDate(d: string) {
 
 export function BlogCard({ a }: { a: Article }) {
   return (
-    <article className="group flex flex-col">
+    <Link to="/blog/$slug" params={{ slug: a.slug }} className="group flex flex-col">
       <div className="aspect-[4/3] overflow-hidden bg-muted">
         <img src={a.image} alt="" loading="lazy" className="h-full w-full object-cover grayscale transition-transform duration-700 group-hover:scale-105" />
       </div>
@@ -118,8 +122,8 @@ export function BlogCard({ a }: { a: Article }) {
       </div>
       <h3 className="mt-3 text-2xl leading-tight group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4">{a.title}</h3>
       <p className="mt-2 text-sm text-muted-foreground">{a.excerpt}</p>
-      <span className="mt-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Article preview</span>
-    </article>
+      <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest">Read more <ArrowRight className="h-3 w-3" /></span>
+    </Link>
   );
 }
 
@@ -130,7 +134,7 @@ export function BlogPreview() {
       <div className="container-x">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <SectionHead eyebrow={t("blog.eyebrow")} title={t("blog.title")} />
-          <p className="text-xs uppercase tracking-widest text-muted-foreground">Blog page [Client to provide]</p>
+          <Button asChild variant="outline" size="lg"><Link to="/blog">All articles</Link></Button>
         </div>
         <div className="mt-14 grid gap-10 md:grid-cols-3">
           {articles.slice(0, 3).map((a) => <BlogCard key={a.slug} a={a} />)}

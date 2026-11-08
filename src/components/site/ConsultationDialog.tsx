@@ -1,5 +1,11 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { LeadForm } from "./ConsultationForm";
 
 const Ctx = createContext<{ open: () => void }>({ open: () => {} });
@@ -13,9 +19,14 @@ export function ConsultationProvider({ children }: { children: ReactNode }) {
       <Dialog open={isOpen} onOpenChange={setOpen}>
         <DialogContent className="max-h-[92vh] max-w-2xl overflow-y-auto rounded-sm">
           <DialogHeader>
-            <p className="eyebrow">Free initial consultation</p>
-            <DialogTitle className="font-serif text-4xl font-medium">Book a Consultation</DialogTitle>
-            <DialogDescription>Tell us a little about your situation. We'll contact you to confirm a time.</DialogDescription>
+            <p className="eyebrow">Enquiry preview</p>
+            <DialogTitle className="font-serif text-4xl font-medium">
+              Consultation request preview
+            </DialogTitle>
+            <DialogDescription>
+              This prototype has no delivery integration. Completing this form does not send an
+              enquiry or book an appointment.
+            </DialogDescription>
           </DialogHeader>
           <LeadForm mode="booking" onDone={() => setOpen(false)} />
         </DialogContent>

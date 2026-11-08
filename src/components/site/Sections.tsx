@@ -92,19 +92,13 @@ export function ProcessTimeline() {
               <h3 className="mt-2 text-2xl">{t(s.t)}</h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t(s.d)}</p>
               {i === 0 ? (
-                <button
-                  onClick={open}
-                  className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold"
-                >
-                  {t("cta.bookA")} <ArrowRight className="h-3 w-3" />
-                </button>
+                <button onClick={open} className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold">{t("cta.bookA")} <ArrowRight className="h-3 w-3" /></button>
+              ) : i === 1 ? (
+                <Link to="/services" className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold">{t("cta.learn")} <ArrowRight className="h-3 w-3" /></Link>
+              ) : i === 2 ? (
+                <Link to="/eligibility" className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold">{t("cta.learn")} <ArrowRight className="h-3 w-3" /></Link>
               ) : (
-                <Link
-                  to="/process"
-                  className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold"
-                >
-                  {t("cta.learn")} <ArrowRight className="h-3 w-3" />
-                </Link>
+                <Link to="/contact" className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold">{t("cta.learn")} <ArrowRight className="h-3 w-3" /></Link>
               )}
             </li>
           ))}

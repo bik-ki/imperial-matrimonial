@@ -36,12 +36,13 @@ export function EligibilityChecker() {
             <p className="eyebrow">
               Question {step + 1} of {questions.length}
             </p>
-            <h3 className="mt-4 text-3xl md:text-4xl">{q.q}</h3>
-            <div className="mt-8 grid gap-3 sm:grid-cols-2" role="radiogroup">
+            <h3 id={`eligibility-question-${q.id}`} className="mt-4 text-3xl md:text-4xl">{q.q}</h3>
+            <div className="mt-8 grid gap-3 sm:grid-cols-2" role="radiogroup" aria-labelledby={`eligibility-question-${q.id}`}>
               {q.options.map((o) => {
                 const sel = answers[q.id] === o;
                 return (
                   <button
+                    type="button"
                     key={o}
                     role="radio"
                     aria-checked={sel}
@@ -85,7 +86,7 @@ function Result({ answers, onRestart }: { answers: Answers; onRestart: () => voi
   const r = evaluate(answers);
   const Icon = r.level === "clarify" ? AlertTriangle : Info;
   return (
-    <div className="animate-fade-up">
+    <div className="animate-fade-up" role="status" aria-live="polite">
       <p className="eyebrow">Your preliminary result</p>
       <div className="mt-4 flex items-start gap-4">
         <Icon className="mt-1 h-7 w-7 shrink-0 text-gold" />

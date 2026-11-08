@@ -109,7 +109,7 @@ export function formatDate(d: string) {
 
 export function BlogCard({ a }: { a: Article }) {
   return (
-    <Link to="/blog/$slug" params={{ slug: a.slug }} className="group flex flex-col">
+    <article className="group flex flex-col">
       <div className="aspect-[4/3] overflow-hidden bg-muted">
         <img src={a.image} alt="" loading="lazy" className="h-full w-full object-cover grayscale transition-transform duration-700 group-hover:scale-105" />
       </div>
@@ -118,8 +118,8 @@ export function BlogCard({ a }: { a: Article }) {
       </div>
       <h3 className="mt-3 text-2xl leading-tight group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4">{a.title}</h3>
       <p className="mt-2 text-sm text-muted-foreground">{a.excerpt}</p>
-      <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest">Read more <ArrowRight className="h-3 w-3" /></span>
-    </Link>
+      <span className="mt-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Article preview</span>
+    </article>
   );
 }
 
@@ -130,7 +130,7 @@ export function BlogPreview() {
       <div className="container-x">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <SectionHead eyebrow={t("blog.eyebrow")} title={t("blog.title")} />
-          <Button asChild variant="outline" size="lg"><Link to="/blog">All articles</Link></Button>
+          <p className="text-xs uppercase tracking-widest text-muted-foreground">Blog page [Client to provide]</p>
         </div>
         <div className="mt-14 grid gap-10 md:grid-cols-3">
           {articles.slice(0, 3).map((a) => <BlogCard key={a.slug} a={a} />)}

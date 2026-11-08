@@ -12,7 +12,11 @@ export const Route = createFileRoute("/services/")({
   }),
   component: () => (
     <>
-      <PageHero eyebrow="Services" title="Focused practice areas." desc="Every service is centred on one goal: a properly registered marriage." />
+      <PageHero
+        eyebrow="Services"
+        title="Focused practice areas."
+        desc="Explore the six service areas currently described in the project content. Each card links to its detail page. [Client to review scope and wording before publication.]"
+      />
       <ServicesGrid />
     </>
   ),

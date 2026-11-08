@@ -1,50 +1,121 @@
+import { useState, type FormEvent } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Mail, MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { PageHero } from "@/components/site/Sections";
 import { useConsultation } from "@/components/site/ConsultationDialog";
-import { site, whatsappUrl } from "@/config/site";
+import { WhatsAppButton } from "@/components/site/WhatsAppButton";
+import { site } from "@/config/site";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact Imperial Matrimonial — Advocates & Legal Associates" },
-      { name: "description", content: "Contact Imperial Matrimonial about court marriage registration assistance in Nepal." },
+      {
+        name: "description",
+        content:
+          "Contact Imperial Matrimonial about court marriage registration assistance in Nepal.",
+      },
     ],
   }),
-  component: Contact,
+  component: ContactPage,
 });
 
-function Contact() {
+function ContactPage() {
   const { open } = useConsultation();
+
   return (
     <>
       <PageHero
         eyebrow="Contact"
-        title="Start with a conversation."
-        desc="[Client to provide the verified company introduction and preferred contact instructions.]"
+        title="Contact the practice."
+        desc="Verified contact information has not yet been provided. Please do not rely on the placeholders below."
       />
-      <section className="container-x grid gap-12 py-20 lg:grid-cols-[1fr_0.8fr]">
-        <div>
-          <p className="eyebrow">Contact details</p>
-          <h2 className="mt-5 text-4xl">[Client to provide verified contact details]</h2>
-          <ul className="mt-8 space-y-5 text-sm text-muted-foreground">
-            <li className="flex gap-3"><Phone className="h-5 w-5 shrink-0 text-gold" /><a href={site.phoneHref}>{site.phoneDisplay}</a></li>
-            <li className="flex gap-3"><Mail className="h-5 w-5 shrink-0 text-gold" />{site.email}</li>
-            <li className="flex gap-3"><MapPin className="h-5 w-5 shrink-0 text-gold" />{site.address}</li>
-          </ul>
-          <p className="mt-8 text-sm text-muted-foreground">[Verified office hours and location details needed before publication.]</p>
-        </div>
-        <div className="border bg-card p-8">
-          <p className="eyebrow">Next step</p>
-          <h2 className="mt-4 text-3xl">Tell us what you need help with.</h2>
-          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">Use the existing consultation request flow or continue through WhatsApp. No contact form or backend connection has been added here.</p>
-          <div className="mt-8 flex flex-col gap-3">
-            <Button size="lg" onClick={open}>Book a Consultation</Button>
-            <Button asChild variant="outline" size="lg"><a href={whatsappUrl()} target="_blank" rel="noopener noreferrer">Message on WhatsApp</a></Button>
+      <section className="container-x grid gap-10 py-12 md:py-16 lg:grid-cols-[minmax(16rem,0.8fr)_minmax(0,1.2fr)]">
+        <aside className="h-fit border bg-card p-6 md:p-8">
+          <p className="eyebrow">Details for client verification</p>
+          <h2 className="mt-4 text-3xl">{site.name}</h2>
+          <p className="mt-2 text-sm text-muted-foreground">{site.tagline}</p>
+          <dl className="mt-8 space-y-5 text-sm">
+            <ContactDetail label="Phone" value="[CLIENT TO PROVIDE VERIFIED PHONE NUMBER]" />
+            <ContactDetail label="Email" value="[CLIENT TO PROVIDE VERIFIED EMAIL ADDRESS]" />
+            <ContactDetail label="Office address" value="[CLIENT TO PROVIDE VERIFIED ADDRESS]" />
+            <ContactDetail label="Office hours" value="[CLIENT TO PROVIDE VERIFIED HOURS]" />
+          </dl>
+          <p className="mt-8 border-t pt-5 text-xs leading-relaxed text-muted-foreground">
+            Contact details are intentionally shown as placeholders. No phone, email, or map link is
+            active until verified.
+          </p>
+        </aside>
+        <div className="border bg-card p-6 md:p-8">
+          <h2 className="text-3xl">Enquiry form preview</h2>
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+            This front-end-only form does not send, store, or share your information. Do not enter
+            sensitive or confidential details. Use the verified firm contact details once supplied.
+          </p>
+          <ContactForm />
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button size="lg" onClick={open}>
+              Book a Consultation
+            </Button>
+            <WhatsAppButton context="Contact page" variant="outline" size="lg" />
           </div>
         </div>
       </section>
     </>
+  );
+}
+
+function ContactDetail({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="text-xs uppercase tracking-widest text-muted-foreground">{label}</dt>
+      <dd className="mt-1 break-words">{value}</dd>
+    </div>
+  );
+}
+
+export function ContactForm() {
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmitted(true);
+  };
+
+  return (
+    <form className="mt-8 grid gap-5 sm:grid-cols-2" onSubmit={handleSubmit}>
+      <div className="space-y-1.5">
+        <Label htmlFor="contact-name">Name</Label>
+        <Input id="contact-name" name="name" autoComplete="name" required maxLength={100} />
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="contact-email">Email</Label>
+        <Input
+          id="contact-email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          required
+          maxLength={255}
+        />
+      </div>
+      <div className="space-y-1.5 sm:col-span-2">
+        <Label htmlFor="contact-message">Message</Label>
+        <Textarea id="contact-message" name="message" rows={5} required maxLength={1000} />
+      </div>
+      <div className="sm:col-span-2">
+        <Button type="submit" size="lg">
+          Preview form submission
+        </Button>
+        {submitted && (
+          <p className="mt-4 text-sm text-muted-foreground" role="status">
+            Not sent: this form has no delivery integration, and your details have not been saved.
+          </p>
+        )}
+      </div>
+    </form>
   );
 }

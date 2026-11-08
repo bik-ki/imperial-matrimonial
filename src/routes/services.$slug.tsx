@@ -35,7 +35,12 @@ function ServicePage() {
     <>
       <section className="border-b">
         <div className="container-x py-16 md:py-24">
-          <Link to="/services" className="inline-flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground"><ArrowLeft className="h-3 w-3" /> All services</Link>
+          <Link
+            to="/services"
+            className="inline-flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="h-3 w-3" /> All services
+          </Link>
           <s.icon className="mt-10 h-8 w-8 text-gold" strokeWidth={1.3} />
           <h1 className="mt-6 max-w-3xl text-5xl md:text-7xl">{s.title[lang]}</h1>
           <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{s.short[lang]}</p>
@@ -43,19 +48,42 @@ function ServicePage() {
       </section>
       <section className="container-x grid gap-12 py-16 lg:grid-cols-[1.4fr_1fr]">
         <div className="space-y-5 leading-relaxed">
-          {s.body.map((p, i) => <p key={i}>{p}</p>)}
-          <p className="text-sm text-muted-foreground">Requirements vary by circumstance. Nothing on this page is a guarantee of outcome or timeline.</p>
+          {s.body.map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
+          {s.pendingDetails && (
+            <p className="border-l-2 border-gold pl-4 text-sm text-muted-foreground">
+              <strong className="text-foreground">Details to verify:</strong> {s.pendingDetails}
+            </p>
+          )}
+          <p className="text-sm text-muted-foreground">
+            Requirements vary by circumstance. Nothing on this page is a guarantee of outcome or
+            timeline.
+          </p>
         </div>
         <aside className="border bg-card p-8">
           <p className="eyebrow">What's included</p>
           <ul className="mt-5 space-y-3">
-            {s.includes.map((i) => <li key={i} className="flex gap-3 text-sm"><Check className="h-4 w-4 shrink-0 text-gold" />{i}</li>)}
+            {s.includes.map((i) => (
+              <li key={i} className="flex gap-3 text-sm">
+                <Check className="h-4 w-4 shrink-0 text-gold" />
+                {i}
+              </li>
+            ))}
           </ul>
           <div className="mt-8 flex flex-col gap-3">
-            <Button size="lg" onClick={open}>Book a Consultation</Button>
-            <Button asChild variant="outline" size="lg"><Link to="/contact">Contact us</Link></Button>
-            <WhatsAppButton context={`Service: ${s.title.en}`} variant="outline" size="lg"
-              message={`Hello Imperial Matrimonial, I'd like to know more about ${s.title.en}.`} />
+            <Button size="lg" onClick={open}>
+              Book a Consultation
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link to="/contact">Contact us</Link>
+            </Button>
+            <WhatsAppButton
+              context={`Service: ${s.title.en}`}
+              variant="outline"
+              size="lg"
+              message={`Hello Imperial Matrimonial, I'd like to know more about ${s.title.en}.`}
+            />
           </div>
         </aside>
       </section>
@@ -78,7 +106,12 @@ function ServicePage() {
         <div className="container-x">
           <h2 className="text-3xl">Other services</h2>
           <div className="mt-8 grid border-l border-t sm:grid-cols-2 lg:grid-cols-3">
-            {services.filter((x) => x.slug !== slug).slice(0, 3).map((x) => <ServiceCard key={x.slug} s={x} />)}
+            {services
+              .filter((x) => x.slug !== slug)
+              .slice(0, 3)
+              .map((x) => (
+                <ServiceCard key={x.slug} s={x} />
+              ))}
           </div>
         </div>
       </section>

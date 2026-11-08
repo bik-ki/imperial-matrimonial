@@ -1,19 +1,25 @@
 import { MessageCircle } from "lucide-react";
-import { whatsappUrl } from "@/config/site";
+import { site, whatsappUrl } from "@/config/site";
 import { trackWhatsApp } from "@/lib/leads";
 import { useT } from "@/lib/i18n";
 import { Button, type ButtonProps } from "@/components/ui/button";
 
 export function WhatsAppButton({
-  context,
+  context = "WhatsApp button",
   message,
   label,
   ...props
-}: { context: string; message?: string; label?: string } & ButtonProps) {
+}: { context?: string; message?: string; label?: string } & ButtonProps) {
   const { t } = useT();
+  if (site.whatsappDisplay.includes("[")) return null;
   return (
     <Button asChild {...props}>
-      <a href={whatsappUrl(message)} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsApp(context)}>
+      <a
+        href={whatsappUrl(message)}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => trackWhatsApp(context)}
+      >
         <MessageCircle /> {label ?? t("cta.whatsapp")}
       </a>
     </Button>
@@ -21,6 +27,7 @@ export function WhatsAppButton({
 }
 
 export function WhatsAppFloat() {
+  if (site.whatsappDisplay.includes("[")) return null;
   return (
     <a
       href={whatsappUrl()}

@@ -5,30 +5,34 @@ import { articles } from "@/data/content";
 export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
-      { title: "Legal Resources — Imperial Matrimonial" },
-      { name: "description", content: "Existing legal resource previews from Imperial Matrimonial." },
-      { property: "og:title", content: "Legal Resources — Imperial Matrimonial" },
-      { property: "og:description", content: "Existing legal resource previews from Imperial Matrimonial." },
+      { title: "Blog — Imperial Matrimonial" },
+      {
+        name: "description",
+        content: "Draft article previews from Imperial Matrimonial. All content requires verification before publication.",
+      },
     ],
   }),
-  component: BlogIndex,
+  component: BlogIndexPage,
 });
 
-function BlogIndex() {
+function BlogIndexPage() {
   return (
     <>
       <PageHero
         eyebrow="Legal resources"
-        title="Knowledge before commitment."
-        desc="Browse the article content currently available in the project. [Client to review all legal content before publication.]"
+        title="Articles for your journey."
+        desc="Browse the current article drafts from the project."
       />
-      <section className="container-x py-20 md:py-24">
+      <section className="container-x py-16 md:py-24">
+        <p className="border-l-2 border-gold bg-secondary/50 p-5 text-sm leading-relaxed text-muted-foreground">
+          <strong className="text-foreground">Draft content — not for publication.</strong> No client-verified articles are available in the project. These existing draft entries and their metadata are placeholders; the copy, dates, and reading times must be verified and replaced or approved by the client before publication.
+        </p>
         {articles.length > 0 ? (
-          <div className="grid gap-x-10 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
             {articles.map((article) => <BlogCard key={article.slug} a={article} />)}
           </div>
         ) : (
-          <div className="border border-dashed p-10 text-center">
+          <div className="mt-12 border border-dashed p-10 text-center">
             <h2 className="text-3xl">Articles will appear here.</h2>
             <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">[Client to provide verified article content before publication.]</p>
           </div>

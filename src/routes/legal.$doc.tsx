@@ -4,7 +4,8 @@ import { ArrowLeft } from "lucide-react";
 const legalDocuments = {
   privacy: {
     title: "Privacy Policy",
-    description: "Placeholder for the client's approved privacy policy. No approved privacy text is present in the project.",
+    description:
+      "Placeholder for the client's approved privacy policy. No approved privacy text is present in the project.",
     verification: [
       "Client-approved description of information collected and its purposes.",
       "Approved retention, access, security, and deletion practices.",
@@ -14,7 +15,8 @@ const legalDocuments = {
   },
   terms: {
     title: "Terms & Conditions",
-    description: "Placeholder for the client's approved terms and conditions. No approved terms are present in the project.",
+    description:
+      "Placeholder for the client's approved terms and conditions. No approved terms are present in the project.",
     verification: [
       "Client-approved terms for use of the website and its content.",
       "Approved service scope, engagement, fees, payment, and cancellation terms, if applicable.",
@@ -24,7 +26,8 @@ const legalDocuments = {
   },
   disclaimer: {
     title: "Legal Disclaimer",
-    description: "Placeholder for the client's approved legal disclaimer. No approved disclaimer text is present in the project.",
+    description:
+      "Placeholder for the client's approved legal disclaimer. No approved disclaimer text is present in the project.",
     verification: [
       "Client-approved explanation of the purpose and limits of website information.",
       "Approved statement about when a professional relationship is or is not formed.",
@@ -60,7 +63,10 @@ function LegalDocumentPage() {
     <>
       <header className="border-b">
         <div className="container-x max-w-4xl py-12 md:py-20">
-          <Link to="/" className="inline-flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground"
+          >
             <ArrowLeft className="h-3 w-3" />
             Home
           </Link>
@@ -69,18 +75,34 @@ function LegalDocumentPage() {
           <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{document.description}</p>
         </div>
       </header>
-      <section className="container-x max-w-4xl py-12 md:py-16">
-        <section className="border-l-2 border-gold bg-secondary/50 p-6 md:p-8">
-          <h2 className="text-2xl">Placeholder — replace before publication</h2>
-          <p className="mt-3 leading-relaxed text-muted-foreground">The project contains no client-approved text for this legal page. No policy, contract term, or legal position is stated here. The following items are a verification checklist, not legal copy.</p>
+      <div className="container-x max-w-4xl py-12 md:py-16">
+        <section
+          aria-labelledby="legal-placeholder-heading"
+          className="border-l-2 border-gold bg-secondary/50 p-6 md:p-8"
+        >
+          <h2 id="legal-placeholder-heading" className="text-2xl">
+            Placeholder — replace before publication
+          </h2>
+          <p className="mt-3 leading-relaxed text-muted-foreground">
+            The project contains no client-approved text for this legal page. No policy, contract
+            term, or legal position is stated here. The following items are a verification
+            checklist, not legal copy.
+          </p>
           <ul className="mt-6 list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted-foreground">
-            {document.verification.map((item) => <li key={item}>{item}</li>)}
+            {document.verification.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
           </ul>
         </section>
         <div className="mt-8">
-          <Link to="/contact" className="text-sm font-semibold uppercase tracking-widest underline underline-offset-4 hover:text-gold">Contact page</Link>
+          <Link
+            to="/contact"
+            className="text-sm font-semibold uppercase tracking-widest underline underline-offset-4 hover:text-gold"
+          >
+            Contact page
+          </Link>
         </div>
-      </section>
+      </div>
     </>
   );
 }

@@ -41,16 +41,20 @@ function ArticlePage() {
       </header>
       <div className="container-x grid max-w-5xl gap-12 py-12 md:py-16 lg:grid-cols-[minmax(0,2fr)_minmax(16rem,1fr)]">
         <div className="space-y-8">
-          <img src={article.image} alt="" className="aspect-[4/3] w-full object-cover grayscale" />
+          <img
+            src={article.image}
+            alt={article.imageAlt}
+            className="aspect-[4/3] w-full object-cover grayscale"
+          />
           <div className="border-l-2 border-gold bg-secondary/50 p-5 text-sm leading-relaxed text-muted-foreground">
             <strong className="text-foreground">Draft content — not for publication.</strong> This article and its metadata are placeholders, not client-verified legal guidance. Replace or approve all text and verify its details before publication.
           </div>
           <div className="space-y-6 leading-relaxed">
             {article.content.map((block, index) => (
-              <section key={`${article.slug}-${index}`}>
+              <div key={`${article.slug}-${index}`}>
                 {block.h && <h2 className="mb-3 text-3xl">{block.h}</h2>}
                 <p className="text-muted-foreground">{block.p}</p>
-              </section>
+              </div>
             ))}
           </div>
           <Link to="/blog" className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold">
@@ -58,8 +62,10 @@ function ArticlePage() {
             Back to all articles
           </Link>
         </div>
-        <aside className="h-fit border bg-card p-6">
-          <p className="eyebrow">More draft articles</p>
+        <aside aria-labelledby="more-articles-heading" className="h-fit border bg-card p-6">
+          <h2 id="more-articles-heading" className="eyebrow">
+            More draft articles
+          </h2>
           <ul className="mt-5 space-y-4">
             {articles.filter((item) => item.slug !== article.slug).slice(0, 4).map((item) => (
               <li key={item.slug}>

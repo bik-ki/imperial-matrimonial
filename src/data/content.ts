@@ -135,6 +135,7 @@ export interface Article {
   date: string;
   readTime: string;
   image: string;
+  imageAlt: string;
   excerpt: string;
   content: { h?: string; p: string }[];
 }
@@ -151,6 +152,7 @@ export const articles: Article[] = [
     date: "2026-10-12",
     readTime: "6 min",
     image: court,
+    imageAlt: "Kathmandu District Court building",
     excerpt:
       "An overview of what court marriage is, who it is for, and how the process is generally structured.",
     content: [
@@ -177,6 +179,7 @@ export const articles: Article[] = [
     date: "2026-09-28",
     readTime: "5 min",
     image: signing,
+    imageAlt: "Hands signing a marriage registration document",
     excerpt: "A general checklist of documents commonly requested, and why consistency matters.",
     content: [
       { p: placeholderNote },
@@ -198,6 +201,7 @@ export const articles: Article[] = [
     date: "2026-09-10",
     readTime: "7 min",
     image: images.hero,
+    imageAlt: "Couple walking through a Kathmandu courtyard",
     excerpt: "Key considerations for couples where one partner is not a Nepali citizen.",
     content: [
       { p: placeholderNote },
@@ -219,6 +223,7 @@ export const articles: Article[] = [
     date: "2026-08-22",
     readTime: "4 min",
     image: office,
+    imageAlt: "Law office desk with legal documents",
     excerpt:
       "How a court-registered marriage differs from a traditional ceremony, and how they can coexist.",
     content: [
@@ -241,6 +246,7 @@ export const articles: Article[] = [
     date: "2026-08-05",
     readTime: "5 min",
     image: court,
+    imageAlt: "Kathmandu District Court building",
     excerpt: "A general introduction to eligibility considerations under applicable Nepalese law.",
     content: [
       { p: placeholderNote },
@@ -258,6 +264,7 @@ export const articles: Article[] = [
     date: "2026-07-18",
     readTime: "4 min",
     image: signing,
+    imageAlt: "Hands signing a marriage registration document",
     excerpt: "Avoidable issues that commonly delay registration — and how to prepare for them.",
     content: [
       { p: placeholderNote },
@@ -279,44 +286,37 @@ export const instagramPosts = [
     id: 1,
     image: court,
     caption: "What actually happens on court marriage registration day? A quick walkthrough.",
-    url: "https://www.instagram.com/",
   },
   {
     id: 2,
     image: signing,
     caption: "Five documents couples most often forget. Save this before you apply.",
-    url: "https://www.instagram.com/",
   },
   {
     id: 3,
     image: office,
     caption: "Behind the desk: how we review your documents for consistency.",
-    url: "https://www.instagram.com/",
   },
   {
     id: 4,
     image: images.hero,
     caption: "Marrying a foreign national in Nepal? Start with these questions.",
-    url: "https://www.instagram.com/",
   },
   {
     id: 5,
     image: court,
     caption: "Court marriage vs traditional marriage — myths, clarified.",
-    url: "https://www.instagram.com/",
   },
   {
     id: 6,
     image: signing,
     caption: "Living outside your home district? Here's what to ask first.",
-    url: "https://www.instagram.com/",
   },
 ];
 
 export const featuredReel = {
   image: images.hero,
   caption: "Your court marriage journey in 60 seconds.",
-  url: "https://www.instagram.com/",
 };
 
 export const team = [

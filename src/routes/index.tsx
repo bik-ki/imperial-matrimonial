@@ -34,12 +34,11 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-// Editable placeholder values — replace with verified figures.
 const stats = [
-  { v: "[Client to provide]", k: "stats.years" },
-  { v: "[Client to provide]", k: "stats.couples" },
-  { v: "6", k: "stats.services" },
-  { v: "[Client to provide]", k: "stats.conf" },
+  { k: "stats.years" },
+  { k: "stats.couples" },
+  { k: "stats.services" },
+  { k: "stats.conf" },
 ] as const;
 
 function Home() {
@@ -88,21 +87,26 @@ function Home() {
         </div>
       </section>
 
-      <section className="mt-10 border-y">
+      <div className="mt-10 border-y">
+        <p className="container-x pt-5 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+          Project placeholders — replace these metrics only with client-verified figures and claims.
+        </p>
         <div className="container-x grid grid-cols-2 md:grid-cols-4">
           {stats.map((s, i) => (
             <div
               key={s.k}
-              className={`py-10 ${i % 2 ? "pl-6" : ""} ${i > 0 ? "md:border-l md:pl-8" : ""}`}
+              className={`min-w-0 py-10 ${i % 2 ? "pl-6" : ""} ${i > 0 ? "md:border-l md:pl-8" : ""}`}
             >
-              <p className="font-serif text-5xl">{s.v}</p>
-              <p className="mt-2 text-xs uppercase tracking-[0.15em] text-muted-foreground">
+              <p className="break-words font-serif text-xl uppercase sm:text-2xl">
+                [Verify before publication]
+              </p>
+              <p className="mt-2 break-words text-xs uppercase tracking-[0.15em] text-muted-foreground">
                 {t(s.k)}
               </p>
             </div>
           ))}
         </div>
-      </section>
+      </div>
 
       <ProcessTimeline />
 

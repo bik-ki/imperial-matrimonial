@@ -46,7 +46,12 @@ function ServicePage() {
           <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{s.short[lang]}</p>
         </div>
       </section>
-      <section className="container-x grid gap-12 py-16 lg:grid-cols-[1.4fr_1fr]">
+      <p className="container-x border-l-2 border-gold bg-secondary/50 p-5 text-sm text-muted-foreground">
+        Project draft: verify this service description and listed inclusions with the client before
+        publication. Do not rely on these details as confirmed requirements, outcomes, timelines, or
+        fees.
+      </p>
+      <div className="container-x grid gap-12 py-16 lg:grid-cols-[1.4fr_1fr]">
         <div className="space-y-5 leading-relaxed">
           {s.body.map((p, i) => (
             <p key={i}>{p}</p>
@@ -61,8 +66,10 @@ function ServicePage() {
             timeline.
           </p>
         </div>
-        <aside className="border bg-card p-8">
-          <p className="eyebrow">What's included</p>
+        <aside aria-labelledby="service-includes-heading" className="border bg-card p-8">
+          <h2 id="service-includes-heading" className="eyebrow">
+            What's included
+          </h2>
           <ul className="mt-5 space-y-3">
             {s.includes.map((i) => (
               <li key={i} className="flex gap-3 text-sm">
@@ -86,7 +93,7 @@ function ServicePage() {
             />
           </div>
         </aside>
-      </section>
+      </div>
       <section className="border-y bg-secondary/50 py-14">
         <div className="container-x">
           <div className="max-w-3xl">

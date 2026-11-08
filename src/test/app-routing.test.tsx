@@ -17,17 +17,17 @@ describe("App routing", () => {
   });
 
   it.each([
+    "/about",
     "/contact",
     "/process",
     "/eligibility",
     "/blog",
+    "/services",
     "/legal/privacy",
     "/legal/terms",
     "/legal/disclaimer",
     ...articles.map((article) => `/blog/${article.slug}`),
-    "/services/single-status-certificate",
-    "/services/legal-consultation",
-    "/services/registration-guidance",
+    ...services.map((service) => `/services/${service.slug}`),
   ])("matches %s", (path) => {
     const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
 

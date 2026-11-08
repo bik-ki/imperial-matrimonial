@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, RotateCcw, AlertTriangle, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,13 +8,45 @@ export function EligibilityChecker() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [error, setError] = useState("");
+  const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const done = step >= questions.length;
   const q = questions[Math.min(step, questions.length - 1)]!;
 
   const next = () => {
-    if (!answers[q.id]) return setError("Please select an option to continue.");
+    if (!answers[q.id]) {
+      setError("Please select an option to continue.");
+      optionRefs.current[0]?.focus();
+      return;
+    }
     setError("");
     setStep(step + 1);
+  };
+  const selectOption = (option: string) => {
+    setAnswers({ ...answers, [q.id]: option });
+    setError("");
+  };
+  const handleOptionKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let nextIndex: number | undefined;
+    switch (event.key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        nextIndex = (index + 1) % q.options.length;
+        break;
+      case "ArrowLeft":
+      case "ArrowUp":
+        nextIndex = (index - 1 + q.options.length) % q.options.length;
+        break;
+      case "Home":
+        nextIndex = 0;
+        break;
+      case "End":
+        nextIndex = q.options.length - 1;
+        break;
+    }
+    if (nextIndex === undefined) return;
+    event.preventDefault();
+    selectOption(q.options[nextIndex]!);
+    optionRefs.current[nextIndex]?.focus();
   };
   const restart = () => {
     setAnswers({});
@@ -36,21 +68,33 @@ export function EligibilityChecker() {
             <p className="eyebrow">
               Question {step + 1} of {questions.length}
             </p>
-            <h3 id={`eligibility-question-${q.id}`} className="mt-4 text-3xl md:text-4xl">{q.q}</h3>
-            <div className="mt-8 grid gap-3 sm:grid-cols-2" role="radiogroup" aria-labelledby={`eligibility-question-${q.id}`}>
-              {q.options.map((o) => {
+            <h3 id="eligibility-question" className="mt-4 text-3xl md:text-4xl">
+              {q.q}
+            </h3>
+            <div
+              className="mt-8 grid gap-3 sm:grid-cols-2"
+              role="radiogroup"
+              aria-labelledby="eligibility-question"
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? "eligibility-error" : undefined}
+            >
+              {q.options.map((o, index) => {
                 const sel = answers[q.id] === o;
                 return (
                   <button
                     type="button"
                     key={o}
+                    ref={(element) => {
+                      optionRefs.current[index] = element;
+                    }}
                     role="radio"
                     aria-checked={sel}
+                    tabIndex={sel || (!answers[q.id] && index === 0) ? 0 : -1}
+                    onKeyDown={(event) => handleOptionKeyDown(event, index)}
                     onClick={() => {
-                      setAnswers({ ...answers, [q.id]: o });
-                      setError("");
+                      selectOption(o);
                     }}
-                    className={`flex items-center justify-between border px-5 py-4 text-left text-sm transition-colors ${sel ? "border-primary bg-primary text-primary-foreground" : "hover:border-foreground"}`}
+                    className={`flex items-center justify-between border px-5 py-4 text-left text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${sel ? "border-primary bg-primary text-primary-foreground" : "hover:border-foreground"}`}
                   >
                     {o}
                     <span
@@ -61,7 +105,7 @@ export function EligibilityChecker() {
               })}
             </div>
             {error && (
-              <p className="mt-4 text-sm text-destructive" role="alert">
+              <p id="eligibility-error" className="mt-4 text-sm text-destructive" role="alert">
                 {error}
               </p>
             )}

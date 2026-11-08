@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Menu,
@@ -37,16 +37,18 @@ const legalLinks = [
 ] as const;
 const hasVerifiedPhone = !site.phoneDisplay.includes("[");
 const hasVerifiedWhatsApp = !site.whatsappDisplay.includes("[");
+const hasVerifiedInstagram =
+  !site.instagramHandle.includes("[") && new URL(site.social.instagram).pathname !== "/";
 
 export function Wordmark({ inverse = false }: { inverse?: boolean }) {
   return (
     <Link to="/" className="flex flex-col leading-none" aria-label="Imperial Matrimonial home">
       <span
-        className={`font-serif text-xl tracking-[0.14em] ${inverse ? "text-ink-foreground" : "text-foreground"}`}
+        className={`whitespace-nowrap font-serif text-sm tracking-[0.08em] sm:text-xl sm:tracking-[0.14em] ${inverse ? "text-ink-foreground" : "text-foreground"}`}
       >
         IMPERIAL MATRIMONIAL
       </span>
-      <span className="mt-1 text-[0.58rem] font-semibold uppercase tracking-[0.3em] text-gold">
+      <span className="mt-1 whitespace-nowrap text-[0.5rem] font-semibold uppercase tracking-[0.15em] text-gold sm:text-[0.58rem] sm:tracking-[0.3em]">
         Advocates & Legal Associates
       </span>
     </Link>
@@ -62,7 +64,7 @@ function LangToggle() {
           key={l}
           onClick={() => setLang(l)}
           aria-pressed={lang === l}
-          className={`px-2.5 py-1.5 transition-colors ${lang === l ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+          className={`px-2.5 py-1.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${lang === l ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
         >
           {l === "en" ? "EN" : "नेपाली"}
         </button>
@@ -75,6 +77,27 @@ export function SiteHeader() {
   const { t } = useT();
   const { open } = useConsultation();
   const [mobile, setMobile] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!mobile) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobile(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [mobile]);
+
+  const closeMobileMenu = () => {
+    setMobile(false);
+    menuButtonRef.current?.focus();
+  };
+
   return (
     <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
       <div className="container-x flex h-20 items-center justify-between gap-6">
@@ -96,42 +119,47 @@ export function SiteHeader() {
           <Button onClick={open}>{t("cta.book")}</Button>
         </div>
         <button
-          className="xl:hidden"
-          onClick={() => setMobile(!mobile)}
-          aria-label="Toggle menu"
+          ref={menuButtonRef}
+          type="button"
+          className="inline-flex h-11 w-11 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold xl:hidden"
+          onClick={() => setMobile((isOpen) => !isOpen)}
+          aria-label={mobile ? "Close navigation menu" : "Open navigation menu"}
+          aria-controls="mobile-navigation"
           aria-expanded={mobile}
         >
-          {mobile ? <X /> : <Menu />}
+          {mobile ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
         </button>
       </div>
-      {mobile && (
-        <div className="border-t bg-background xl:hidden">
-          <nav className="container-x flex flex-col py-4" aria-label="Mobile">
-            {nav.map((n) => (
-              <Link
-                key={n.to}
-                to={n.to}
-                onClick={() => setMobile(false)}
-                activeOptions={{ exact: n.to === "/" }}
-                className="border-b py-3 font-serif text-2xl data-[status=active]:text-gold"
-              >
-                {t(n.key)}
-              </Link>
-            ))}
-            <div className="mt-5 flex items-center justify-between gap-3">
-              <LangToggle />
-              <Button
-                onClick={() => {
-                  setMobile(false);
-                  open();
-                }}
-              >
-                {t("cta.book")}
-              </Button>
-            </div>
-          </nav>
-        </div>
-      )}
+      <div
+        id="mobile-navigation"
+        className="max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain border-t bg-background xl:hidden"
+        hidden={!mobile}
+      >
+        <nav className="container-x flex flex-col py-4" aria-label="Mobile">
+          {nav.map((n) => (
+            <Link
+              key={n.to}
+              to={n.to}
+              onClick={closeMobileMenu}
+              activeOptions={{ exact: n.to === "/" }}
+              className="border-b py-3 font-serif text-2xl data-[status=active]:text-gold"
+            >
+              {t(n.key)}
+            </Link>
+          ))}
+          <div className="mt-5 flex items-center justify-between gap-3">
+            <LangToggle />
+            <Button
+              onClick={() => {
+                setMobile(false);
+                open();
+              }}
+            >
+              {t("cta.book")}
+            </Button>
+          </div>
+        </nav>
+      </div>
     </header>
   );
 }
@@ -148,7 +176,11 @@ export function SocialIcons({ inverse }: { inverse?: boolean }) {
   return (
     <div className="flex gap-2">
       {socials
-        .filter((s) => s.label !== "WhatsApp" || hasVerifiedWhatsApp)
+        .filter((s) => {
+          if (s.label === "WhatsApp") return hasVerifiedWhatsApp;
+          if (s.label === "Instagram") return hasVerifiedInstagram;
+          return new URL(s.href).pathname !== "/";
+        })
         .map((s) => (
           <a
             key={s.label}
@@ -188,8 +220,8 @@ export function SiteFooter() {
             <SocialIcons inverse />
           </div>
         </div>
-        <div>
-          <p className="eyebrow text-gold">Quick Links</p>
+        <nav aria-label="Quick links">
+          <h2 className="eyebrow text-gold">Quick Links</h2>
           <ul className="mt-5 space-y-2.5 text-sm text-ink-foreground/70">
             {nav.map((n) => (
               <li key={n.to}>
@@ -199,9 +231,9 @@ export function SiteFooter() {
               </li>
             ))}
           </ul>
-        </div>
-        <div>
-          <p className="eyebrow text-gold">Our Services</p>
+        </nav>
+        <nav aria-label="Our services">
+          <h2 className="eyebrow text-gold">Our Services</h2>
           <ul className="mt-5 space-y-2.5 text-sm text-ink-foreground/70">
             {services.map((s) => (
               <li key={s.slug}>
@@ -215,9 +247,9 @@ export function SiteFooter() {
               </li>
             ))}
           </ul>
-        </div>
+        </nav>
         <div>
-          <p className="eyebrow text-gold">Contact</p>
+          <h2 className="eyebrow text-gold">Contact</h2>
           <ul className="mt-5 space-y-3 text-sm text-ink-foreground/70">
             <li className="flex gap-2">
               <Phone className="h-4 w-4 shrink-0 text-gold" />
@@ -295,7 +327,10 @@ export function MobileCTABar() {
           WhatsApp
         </a>
       )}
-      <button onClick={open} className={`${cls} bg-primary text-primary-foreground`}>
+      <button
+        onClick={open}
+        className={`${cls} bg-primary text-primary-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold`}
+      >
         <CalendarCheck className="h-4 w-4" />
         {t("cta.book")}
       </button>

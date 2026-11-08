@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
 import { Info } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -39,8 +39,16 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
   const [v, setV] = useState<Record<string, string | boolean>>({ consent: false });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<"idle" | "done">("idle");
+  const formRef = useRef<HTMLFormElement>(null);
+  const focusInvalidField = useRef(false);
   const set = (k: string, val: string | boolean) => setV((p) => ({ ...p, [k]: val }));
   const today = new Date().toISOString().slice(0, 10);
+
+  useEffect(() => {
+    if (!focusInvalidField.current) return;
+    focusInvalidField.current = false;
+    formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+  }, [errors]);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,6 +56,7 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
     if (!r.success) {
       const errs: Record<string, string> = {};
       r.error.issues.forEach((i) => (errs[i.path[0] as string] ??= i.message));
+      focusInvalidField.current = true;
       setErrors(errs);
       return;
     }
@@ -85,12 +94,14 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
       className="h-11 rounded-sm bg-card"
       value={(v[id] as string) ?? ""}
       onChange={(e) => set(id, e.target.value)}
+      aria-invalid={Boolean(errors[id])}
+      aria-describedby={errors[id] ? `${id}-error` : undefined}
       {...extra}
     />
   );
 
   return (
-    <form onSubmit={submit} noValidate className="grid gap-5 sm:grid-cols-2">
+    <form ref={formRef} onSubmit={submit} noValidate className="grid gap-5 sm:grid-cols-2">
       <Field error={errors["fullName"]} id="fullName" label="Full name">
         {inp("fullName", "text", { autoComplete: "name" })}
       </Field>
@@ -110,6 +121,8 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
           className={selectCls}
           value={(v["service"] as string) ?? ""}
           onChange={(e) => set("service", e.target.value)}
+          aria-invalid={Boolean(errors["service"])}
+          aria-describedby={errors["service"] ? "service-error" : undefined}
         >
           <option value="">Select…</option>
           {services.map((s) => (
@@ -130,6 +143,8 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
             className={selectCls}
             value={(v["time"] as string) ?? ""}
             onChange={(e) => set("time", e.target.value)}
+            aria-invalid={Boolean(errors["time"])}
+            aria-describedby={errors["time"] ? "time-error" : undefined}
           >
             <option value="">Select…</option>
             {["10:00 AM", "11:00 AM", "12:00 PM", "2:00 PM", "3:00 PM", "4:00 PM"].map((t) => (
@@ -144,6 +159,8 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
             className={selectCls}
             value={(v["contactMethod"] as string) ?? ""}
             onChange={(e) => set("contactMethod", e.target.value)}
+            aria-invalid={Boolean(errors["contactMethod"])}
+            aria-describedby={errors["contactMethod"] ? "contactMethod-error" : undefined}
           >
             <option value="">Select…</option>
             <option>Phone call</option>
@@ -165,20 +182,28 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
             className="rounded-sm bg-card"
             value={(v["message"] as string) ?? ""}
             onChange={(e) => set("message", e.target.value)}
+            aria-invalid={Boolean(errors["message"])}
+            aria-describedby={errors["message"] ? "message-error" : undefined}
           />
         </Field>
       </div>
       <div className="sm:col-span-2">
-        <label className="flex items-start gap-3 text-sm text-muted-foreground">
+        <label htmlFor="consent" className="flex items-start gap-3 text-sm text-muted-foreground">
           <Checkbox
+            id="consent"
             checked={v["consent"] === true}
             onCheckedChange={(c) => set("consent", c === true)}
             className="mt-0.5"
-            aria-label="Privacy consent"
+            aria-invalid={Boolean(errors["consent"])}
+            aria-describedby={errors["consent"] ? "consent-error" : undefined}
           />
           I understand this prototype does not send or store my details.
         </label>
-        {errors["consent"] && <p className="mt-1 text-xs text-destructive">{errors["consent"]}</p>}
+        {errors["consent"] && (
+          <p id="consent-error" className="mt-1 text-xs text-destructive" role="alert">
+            {errors["consent"]}
+          </p>
+        )}
       </div>
       <div className="sm:col-span-2">
         <Button type="submit" size="lg" className="w-full sm:w-auto">
@@ -211,7 +236,11 @@ function Field({
         {label}
       </Label>
       {children}
-      {error && <p className="text-xs text-destructive">{error}</p>}
+      {error && (
+        <p id={`${id}-error`} className="text-xs text-destructive" role="alert">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

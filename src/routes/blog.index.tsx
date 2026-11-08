@@ -31,11 +31,20 @@ function BlogIndexPage() {
           their metadata are placeholders; the copy, dates, and reading times must be verified and
           replaced or approved by the client before publication.
         </p>
-        <div className="mt-12 grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-          {articles.map((article) => (
-            <BlogCard key={article.slug} a={article} headingLevel={2} />
-          ))}
-        </div>
+        {articles.length > 0 ? (
+          <div className="mt-12 grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+            {articles.map((article) => (
+              <BlogCard key={article.slug} a={article} headingLevel={2} />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-12 border border-dashed p-10 text-center">
+            <h2 className="text-3xl">Articles will appear here.</h2>
+            <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
+              [Client to provide verified article content before publication.]
+            </p>
+          </div>
+        )}
       </div>
     </>
   );

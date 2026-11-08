@@ -82,11 +82,11 @@ export function EligibilityChecker() {
                 const sel = answers[q.id] === o;
                 return (
                   <button
+                    type="button"
                     key={o}
                     ref={(element) => {
                       optionRefs.current[index] = element;
                     }}
-                    type="button"
                     role="radio"
                     aria-checked={sel}
                     tabIndex={sel || (!answers[q.id] && index === 0) ? 0 : -1}
@@ -130,7 +130,7 @@ function Result({ answers, onRestart }: { answers: Answers; onRestart: () => voi
   const r = evaluate(answers);
   const Icon = r.level === "clarify" ? AlertTriangle : Info;
   return (
-    <div className="animate-fade-up">
+    <div className="animate-fade-up" role="status" aria-live="polite">
       <p className="eyebrow">Your preliminary result</p>
       <div className="mt-4 flex items-start gap-4">
         <Icon className="mt-1 h-7 w-7 shrink-0 text-gold" />

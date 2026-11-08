@@ -30,10 +30,7 @@ function ArticlePage() {
     <article>
       <header className="border-b">
         <div className="container-x max-w-4xl py-12 md:py-20">
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground"
-          >
+          <Link to="/blog" className="inline-flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-3 w-3" />
             All articles
           </Link>
@@ -50,9 +47,7 @@ function ArticlePage() {
             className="aspect-[4/3] w-full object-cover grayscale"
           />
           <div className="border-l-2 border-gold bg-secondary/50 p-5 text-sm leading-relaxed text-muted-foreground">
-            <strong className="text-foreground">Draft content — not for publication.</strong> This
-            article and its metadata are placeholders, not client-verified legal guidance. Replace
-            or approve all text and verify its details before publication.
+            <strong className="text-foreground">Draft content — not for publication.</strong> This article and its metadata are placeholders, not client-verified legal guidance. Replace or approve all text and verify its details before publication.
           </div>
           <div className="space-y-6 leading-relaxed">
             {article.content.map((block, index) => (
@@ -62,10 +57,7 @@ function ArticlePage() {
               </div>
             ))}
           </div>
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold"
-          >
+          <Link to="/blog" className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold">
             <ArrowLeft className="h-3 w-3" />
             Back to all articles
           </Link>
@@ -75,20 +67,11 @@ function ArticlePage() {
             More draft articles
           </h2>
           <ul className="mt-5 space-y-4">
-            {articles
-              .filter((item) => item.slug !== article.slug)
-              .slice(0, 4)
-              .map((item) => (
-                <li key={item.slug}>
-                  <Link
-                    to="/blog/$slug"
-                    params={{ slug: item.slug }}
-                    className="text-sm leading-relaxed hover:underline"
-                  >
-                    {item.title}
-                  </Link>
-                </li>
-              ))}
+            {articles.filter((item) => item.slug !== article.slug).slice(0, 4).map((item) => (
+              <li key={item.slug}>
+                <Link to="/blog/$slug" params={{ slug: item.slug }} className="text-sm leading-relaxed hover:underline">{item.title}</Link>
+              </li>
+            ))}
           </ul>
         </aside>
       </div>

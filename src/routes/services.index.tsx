@@ -22,7 +22,7 @@ export const Route = createFileRoute("/services/")({
       <PageHero
         eyebrow="Services"
         title="Focused practice areas."
-        desc="Every service is centred on one goal: a properly registered marriage."
+        desc="Explore the service areas currently described in the project content. Each card links to its detail page."
       />
       <p className="container-x border-l-2 border-gold bg-secondary/50 p-5 text-sm text-muted-foreground">
         Project draft: verify every service description, scope, and inclusion with the client before

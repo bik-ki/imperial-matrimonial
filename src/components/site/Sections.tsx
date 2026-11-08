@@ -157,7 +157,7 @@ export function ServicesGrid() {
           <Button size="lg" onClick={open}>
             {t("cta.bookA")}
           </Button>
-          <WhatsAppButton variant="outline" size="lg" />
+          <WhatsAppButton context="Services section" variant="outline" size="lg" />
         </div>
       </div>
     </section>

@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { useT, type TKey } from "@/lib/i18n";
 import { site, whatsappUrl } from "@/config/site";
 import { services } from "@/data/content";
+import { trackWhatsApp } from "@/lib/leads";
 import { useConsultation } from "./ConsultationDialog";
 
 const nav: { to: string; key: TKey }[] = [
@@ -29,6 +30,11 @@ const nav: { to: string; key: TKey }[] = [
   { to: "/contact", key: "nav.contact" },
 ];
 
+const legalLinks = [
+  { doc: "privacy", label: "Privacy Policy" },
+  { doc: "terms", label: "Terms & Conditions" },
+  { doc: "disclaimer", label: "Legal Disclaimer" },
+] as const;
 const hasVerifiedPhone = !site.phoneDisplay.includes("[");
 const hasVerifiedWhatsApp = !site.whatsappDisplay.includes("[");
 const hasVerifiedInstagram =
@@ -182,6 +188,7 @@ export function SocialIcons({ inverse }: { inverse?: boolean }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={s.label}
+            onClick={() => s.label === "WhatsApp" && trackWhatsApp("Social icon")}
             className={`flex h-9 w-9 items-center justify-center border transition-colors ${inverse ? "border-ink-foreground/20 hover:border-gold hover:text-gold" : "hover:border-foreground"}`}
           >
             <s.icon className="h-4 w-4" />
@@ -280,19 +287,11 @@ export function SiteFooter() {
           rights reserved.
         </p>
         <div className="flex flex-wrap gap-x-5 gap-y-2">
-          <Link to="/legal/$doc" params={{ doc: "privacy" }} className="hover:text-ink-foreground">
-            Privacy Policy
-          </Link>
-          <Link to="/legal/$doc" params={{ doc: "terms" }} className="hover:text-ink-foreground">
-            Terms & Conditions
-          </Link>
-          <Link
-            to="/legal/$doc"
-            params={{ doc: "disclaimer" }}
-            className="hover:text-ink-foreground"
-          >
-            Legal Disclaimer
-          </Link>
+          {legalLinks.map((legal) => (
+            <Link key={legal.doc} to="/legal/$doc" params={{ doc: legal.doc }} className="hover:text-ink-foreground">
+              {legal.label} [Client to provide]
+            </Link>
+          ))}
         </div>
       </div>
     </footer>

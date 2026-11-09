@@ -6,6 +6,7 @@ import {
   Phone,
   MessageCircle,
   CalendarCheck,
+  MapPin,
   Instagram,
   Facebook,
   Youtube,
@@ -27,6 +28,7 @@ const nav: { to: string; key: TKey }[] = [
   { to: "/process", key: "nav.process" },
   { to: "/services", key: "nav.services" },
   { to: "/eligibility", key: "nav.eligibility" },
+  { to: "/faq", key: "nav.faq" },
   { to: "/blog", key: "nav.blog" },
   { to: "/contact", key: "nav.contact" },
 ];
@@ -36,14 +38,27 @@ const hasVerifiedWhatsApp = !site.whatsappDisplay.includes("[");
 
 export function Wordmark({ inverse = false }: { inverse?: boolean }) {
   return (
-    <Link to="/" className="flex flex-col leading-none" aria-label={`${site.name} home`}>
-      <span
-        className={`whitespace-nowrap font-serif text-sm tracking-[0.08em] sm:text-xl sm:tracking-[0.14em] ${inverse ? "text-ink-foreground" : "text-foreground"}`}
-      >
-        {site.name}
-      </span>
-      <span className="mt-1 whitespace-nowrap text-[0.5rem] font-semibold uppercase tracking-[0.15em] text-gold sm:text-[0.58rem] sm:tracking-[0.3em]">
-        Advocates & Legal Associates
+    <Link
+      to="/"
+      className="flex items-center gap-2 leading-none sm:gap-3"
+      aria-label={`${site.name} home`}
+    >
+      <img
+        src="/logo.png"
+        alt=""
+        width={44}
+        height={44}
+        className="h-10 w-10 object-contain sm:h-11 sm:w-11"
+      />
+      <span className="flex flex-col">
+        <span
+          className={`whitespace-nowrap font-serif text-sm tracking-[0.08em] sm:text-xl sm:tracking-[0.14em] ${inverse ? "text-ink-foreground" : "text-foreground"}`}
+        >
+          {site.name}
+        </span>
+        <span className="mt-1 whitespace-nowrap text-[0.5rem] font-semibold uppercase tracking-[0.15em] text-gold sm:text-[0.58rem] sm:tracking-[0.3em]">
+          Advocates & Legal Associates
+        </span>
       </span>
     </Link>
   );
@@ -297,6 +312,10 @@ export function SiteFooter({ socialLinks }: { socialLinks?: SiteSettingsContent[
         <div>
           <h2 className="eyebrow text-gold">{t("footer.contact")}</h2>
           <ul className="mt-5 space-y-3 text-sm text-ink-foreground/70">
+            <li className="flex gap-2">
+              <MapPin className="h-4 w-4 shrink-0 text-gold" />
+              <span>{site.location}</span>
+            </li>
             <li className="flex gap-2">
               <Phone className="h-4 w-4 shrink-0 text-gold" />
               {hasVerifiedPhone ? (

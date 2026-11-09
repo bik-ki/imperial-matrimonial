@@ -7,6 +7,7 @@ import {
 } from "@/lib/sanity.server";
 import { Scale } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { site } from "@/config/site";
 import { useT } from "@/lib/i18n";
 import { images } from "@/data/content";
 import { useConsultation } from "@/components/site/ConsultationDialog";
@@ -120,9 +121,7 @@ function Home() {
             <Scale className="h-5 w-5 text-gold" strokeWidth={1.4} />
             <div>
               <p className="text-sm font-semibold">{hero?.badgeTitle || t("hero.badge")}</p>
-              <p className="text-xs text-muted-foreground">
-                {hero?.badgeDetail || "Kathmandu, Nepal"}
-              </p>
+              <p className="text-xs text-muted-foreground">{site.location}</p>
             </div>
           </div>
         </div>

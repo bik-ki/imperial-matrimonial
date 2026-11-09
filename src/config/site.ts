@@ -3,6 +3,7 @@ const localPhoneNumber = "9745722755";
 export const site = {
   name: "BiheInCourt",
   tagline: "Advocates & Legal Associates",
+  location: "Thapathali, Kathmandu, Nepal",
   referenceUrl: "https://www.lawimperial.com/",
   whatsappNumber: `977${localPhoneNumber}`,
   phoneDisplay: "+977 974 572 2755",

@@ -59,7 +59,7 @@ const stats = [
 
 function Home() {
   const { posts: recentPosts, services, homePage, siteSettings } = Route.useLoaderData();
-  const { t } = useT();
+  const { lang, t } = useT();
   const { open } = useConsultation();
   const hero = homePage?.hero;
   const statistics = homePage?.statistics?.length
@@ -69,6 +69,18 @@ function Home() {
   const instagramUrl = siteSettings?.socialLinks?.find(
     (link) => link.platform === "instagram",
   )?.url;
+  const reviewText =
+    lang === "ne"
+      ? "अनुवाद समीक्षा आवश्यक — स्वीकृत नेपाली पाठ पक्का हुन बाँकी छ।"
+      : "Project placeholders — replace these metrics only with client-verified figures and claims.";
+  const aboutTitle =
+    lang === "ne"
+      ? "अनुवाद समीक्षा आवश्यक — विवाह सेवा, कानूनी सेवा होइन"
+      : "A legal practice, not a wedding service.";
+  const aboutDesc =
+    lang === "ne"
+      ? "अनुवाद समीक्षा आवश्यक — हामी विवाहको कानूनी पक्षमा ध्यान केन्द्रित गर्छौं — योग्यता, कागजात र दर्ता — गोपनीयता र सावधानी संग ह्यान्डल गरिन्छ।"
+      : "We focus on the legal side of marriage — eligibility, documentation and registration — handled with discretion and care.";
   return (
     <>
       <section className="container-x grid items-center gap-12 py-14 md:py-20 lg:grid-cols-[1.1fr_1fr] lg:gap-20">
@@ -119,7 +131,7 @@ function Home() {
       <div className="mt-10 border-y">
         {!homePage?.statistics?.length && (
           <p className="container-x pt-5 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-            Project placeholders — replace these metrics only with client-verified figures and claims.
+            {reviewText}
           </p>
         )}
         <div className="container-x grid grid-cols-2 md:grid-cols-4">
@@ -177,15 +189,16 @@ function Home() {
           />
           <div>
             <SectionHead
-              eyebrow={about?.eyebrow || "About the practice"}
-              title={about?.title || "A legal practice, not a wedding service."}
-              desc={
-                about?.description ||
-                "We focus on the legal side of marriage — eligibility, documentation and registration — handled with discretion and care."
+              eyebrow={
+                about?.eyebrow || (lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "About the practice")
               }
+              title={about?.title || aboutTitle}
+              desc={about?.description || aboutDesc}
             />
             <Button asChild variant="outline" size="lg" className="mt-8">
-              <Link to="/about">{about?.linkLabel || "About us"}</Link>
+              <Link to="/about">
+                {about?.linkLabel || (lang === "ne" ? "हाम्रो बारेमा" : "About us")}
+              </Link>
             </Button>
           </div>
         </div>

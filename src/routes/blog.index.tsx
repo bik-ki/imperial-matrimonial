@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { BlogCard, PageHero } from "@/components/site/Sections";
 import { getPublishedBlogPosts } from "@/lib/sanity.server";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/blog/")({
   loader: () => getPublishedBlogPosts({ data: 100 }),
@@ -18,13 +19,21 @@ export const Route = createFileRoute("/blog/")({
 
 function BlogIndexPage() {
   const posts = Route.useLoaderData();
-
+  const { lang } = useT();
   return (
     <>
       <PageHero
-        eyebrow="Legal resources"
-        title="Articles for your journey."
-        desc="Guidance and insights for your marriage registration journey."
+        eyebrow={lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Legal resources"}
+        title={
+          lang === "ne"
+            ? "अनुवाद समीक्षा आवश्यक — तपाईंको यात्राको लागि लेखहरू"
+            : "Articles for your journey."
+        }
+        desc={
+          lang === "ne"
+            ? "अनुवाद समीक्षा आवश्यक — विवाह दर्ता यात्राका लागि मार्गदर्शन र जानकारी।"
+            : "Guidance and insights for your marriage registration journey."
+        }
       />
       <div className="container-x py-16 md:py-24">
         {posts.length > 0 ? (
@@ -35,9 +44,15 @@ function BlogIndexPage() {
           </div>
         ) : (
           <div className="mt-12 border border-dashed p-10 text-center">
-            <h2 className="text-3xl">Articles will appear here.</h2>
+            <h2 className="text-3xl">
+              {lang === "ne"
+                ? "अनुवाद समीक्षा आवश्यक — लेख यहाँ देखा पर्नेछ"
+                : "Articles will appear here."}
+            </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
-              New articles will be published here as they become available.
+              {lang === "ne"
+                ? "अनुवाद समीक्षा आवश्यक — नयाँ लेखहरू उपलब्ध भएपछि यहाँ प्रकाशित हुनेछन्।"
+                : "New articles will be published here as they become available."}
             </p>
           </div>
         )}

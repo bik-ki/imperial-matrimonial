@@ -31,34 +31,28 @@ function ContactPage() {
       <PageHero
         eyebrow="Contact"
         title="Contact the practice."
-        desc="Verified contact information has not yet been provided. Please do not rely on the placeholders below."
+        desc="Call, email, or message BiheInCourt to discuss court marriage registration assistance in Nepal."
       />
       <div className="container-x grid gap-10 py-12 md:py-16 lg:grid-cols-[minmax(16rem,0.8fr)_minmax(0,1.2fr)]">
         <aside
           aria-labelledby="contact-details-heading"
           className="h-fit min-w-0 border bg-card p-6 md:p-8"
         >
-          <p className="eyebrow">Details for client verification</p>
+          <p className="eyebrow">Contact details</p>
           <h2 id="contact-details-heading" className="mt-4 text-3xl">
             {site.name}
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">{site.tagline}</p>
           <dl className="mt-8 space-y-5 text-sm">
-            <ContactDetail label="Phone" value="[CLIENT TO PROVIDE VERIFIED PHONE NUMBER]" />
-            <ContactDetail label="Email" value="[CLIENT TO PROVIDE VERIFIED EMAIL ADDRESS]" />
-            <ContactDetail label="Office address" value="[CLIENT TO PROVIDE VERIFIED ADDRESS]" />
-            <ContactDetail label="Office hours" value="[CLIENT TO PROVIDE VERIFIED HOURS]" />
+            <ContactDetail label="Phone" value={site.phoneDisplay} href={site.phoneHref} />
+            <ContactDetail label="Email" value={site.email} href={`mailto:${site.email}`} />
           </dl>
-          <p className="mt-8 border-t pt-5 text-xs leading-relaxed text-muted-foreground">
-            Contact details are intentionally shown as placeholders. No phone, email, or map link is
-            active until verified.
-          </p>
         </aside>
         <div className="min-w-0 border bg-card p-6 md:p-8">
           <h2 className="text-3xl">Enquiry form preview</h2>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
             This front-end-only form does not send, store, or share your information. Do not enter
-            sensitive or confidential details. Use the verified firm contact details once supplied.
+            sensitive or confidential details. For a response, contact the practice directly.
           </p>
           <ContactForm />
           <div className="mt-6 flex flex-wrap gap-3">
@@ -73,11 +67,13 @@ function ContactPage() {
   );
 }
 
-function ContactDetail({ label, value }: { label: string; value: string }) {
+function ContactDetail({ label, value, href }: { label: string; value: string; href: string }) {
   return (
     <div>
       <dt className="text-xs uppercase tracking-widest text-muted-foreground">{label}</dt>
-      <dd className="mt-1 break-words">{value}</dd>
+      <dd className="mt-1 break-words">
+        <a href={href}>{value}</a>
+      </dd>
     </div>
   );
 }

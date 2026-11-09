@@ -109,8 +109,7 @@ const dict = {
     "form.requestConsultation": "Request Consultation",
     "form.sendMessage": "Send Message",
     "form.previewOnlyButton": "Close",
-    "form.previewOnlyDescription":
-      "This is a booking request, not a confirmed appointment.",
+    "form.previewOnlyDescription": "This is a booking request, not a confirmed appointment.",
     "form.generalConsultation": "General consultation",
     "form.specialConsultation": "Special consultation",
     "form.otherOption": "Other / Not sure",
@@ -239,8 +238,7 @@ const dict = {
     "form.requestConsultation": "परामर्श अनुरोध गर्नुहोस्",
     "form.sendMessage": "सन्देश पठाउनुहोस्",
     "form.previewOnlyButton": "बन्द गर्नुहोस्",
-    "form.previewOnlyDescription":
-      "यो बुकिङ अनुरोध हो, पुष्टिकृत अप्वाइन्टमेन्ट होइन।",
+    "form.previewOnlyDescription": "यो बुकिङ अनुरोध हो, पुष्टिकृत अप्वाइन्टमेन्ट होइन।",
     "form.generalConsultation": "सामान्य परामर्श",
     "form.specialConsultation": "विशेष परामर्श",
     "form.otherOption": "अन्य / पक्का छैन",

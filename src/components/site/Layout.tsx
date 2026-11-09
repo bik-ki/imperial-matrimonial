@@ -9,6 +9,7 @@ import {
   Instagram,
   Facebook,
   Youtube,
+  Linkedin,
   Music2,
   Mail,
 } from "lucide-react";
@@ -18,6 +19,7 @@ import { site, whatsappUrl } from "@/config/site";
 import { services } from "@/data/content";
 import { trackWhatsApp } from "@/lib/leads";
 import { useConsultation } from "./ConsultationDialog";
+import type { SiteSettingsContent } from "@/lib/sanity.server";
 
 const nav: { to: string; key: TKey }[] = [
   { to: "/", key: "nav.home" },
@@ -31,8 +33,6 @@ const nav: { to: string; key: TKey }[] = [
 
 const hasVerifiedPhone = !site.phoneDisplay.includes("[");
 const hasVerifiedWhatsApp = !site.whatsappDisplay.includes("[");
-const hasVerifiedInstagram =
-  !site.instagramHandle.includes("[") && new URL(site.social.instagram).pathname !== "/";
 
 export function Wordmark({ inverse = false }: { inverse?: boolean }) {
   return (
@@ -171,41 +171,71 @@ export function SiteHeader() {
   );
 }
 
-const socials = [
-  { href: site.social.instagram, icon: Instagram, label: "Instagram" },
-  { href: site.social.facebook, icon: Facebook, label: "Facebook" },
-  { href: site.social.tiktok, icon: Music2, label: "TikTok" },
-  { href: site.social.youtube, icon: Youtube, label: "YouTube" },
-  { href: whatsappUrl(), icon: MessageCircle, label: "WhatsApp" },
+const socialIcons = {
+  facebook: Facebook,
+  instagram: Instagram,
+  tiktok: Music2,
+  youtube: Youtube,
+  linkedin: Linkedin,
+} as const;
+
+type SocialPlatform = keyof typeof socialIcons;
+
+function isSocialPlatform(platform: string): platform is SocialPlatform {
+  return platform in socialIcons;
+}
+
+const fallbackSocialLinks = [
+  { platform: "instagram", url: site.social.instagram },
+  { platform: "facebook", url: site.social.facebook },
+  { platform: "tiktok", url: site.social.tiktok },
+  { platform: "youtube", url: site.social.youtube },
 ];
 
-export function SocialIcons({ inverse }: { inverse?: boolean }) {
+export function SocialIcons({
+  inverse,
+  socialLinks,
+}: {
+  inverse?: boolean;
+  socialLinks?: SiteSettingsContent["socialLinks"];
+}) {
+  const links = socialLinks ?? fallbackSocialLinks;
+  const icons = links.flatMap((link) => {
+    if (!isSocialPlatform(link.platform) || !/^https:\/\/[^/]+\/[^/?#]/.test(link.url)) {
+      return [];
+    }
+    const Icon = socialIcons[link.platform];
+    return [{ ...link, Icon, label: link.platform[0]!.toUpperCase() + link.platform.slice(1) }];
+  });
+  if (hasVerifiedWhatsApp) {
+    icons.push({
+      platform: "whatsapp",
+      url: whatsappUrl(),
+      Icon: MessageCircle,
+      label: "WhatsApp",
+    });
+  }
+
   return (
     <div className="flex gap-2">
-      {socials
-        .filter((s) => {
-          if (s.label === "WhatsApp") return hasVerifiedWhatsApp;
-          if (s.label === "Instagram") return hasVerifiedInstagram;
-          return new URL(s.href).pathname !== "/";
-        })
-        .map((s) => (
-          <a
-            key={s.label}
-            href={s.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={s.label}
-            onClick={() => s.label === "WhatsApp" && trackWhatsApp("Social icon")}
-            className={`flex h-9 w-9 items-center justify-center border transition-colors ${inverse ? "border-ink-foreground/20 hover:border-gold hover:text-gold" : "hover:border-foreground"}`}
-          >
-            <s.icon className="h-4 w-4" />
-          </a>
-        ))}
+      {icons.map((s) => (
+        <a
+          key={s.platform}
+          href={s.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={s.label}
+          onClick={() => s.platform === "whatsapp" && trackWhatsApp("Social icon")}
+          className={`flex h-9 w-9 items-center justify-center border transition-colors ${inverse ? "border-ink-foreground/20 hover:border-gold hover:text-gold" : "hover:border-foreground"}`}
+        >
+          <s.Icon className="h-4 w-4" />
+        </a>
+      ))}
     </div>
   );
 }
 
-export function SiteFooter() {
+export function SiteFooter({ socialLinks }: { socialLinks?: SiteSettingsContent["socialLinks"] }) {
   const { lang, t } = useT();
   const { open } = useConsultation();
   const legalLinksToRender = [
@@ -229,7 +259,7 @@ export function SiteFooter() {
             related documentation in Nepal.
           </p>
           <div className="mt-6">
-            <SocialIcons inverse />
+            <SocialIcons inverse socialLinks={socialLinks} />
           </div>
           <div className="mt-5 flex items-center gap-3">
             <span className="text-xs text-ink-foreground/60">{t("language.label")}</span>
@@ -272,7 +302,9 @@ export function SiteFooter() {
               {hasVerifiedPhone ? (
                 <a href={site.phoneHref}>{site.phoneDisplay}</a>
               ) : (
-                <span>{t("footer.clientReview")} {t("footer.phone")}</span>
+                <span>
+                  {t("footer.clientReview")} {t("footer.phone")}
+                </span>
               )}
             </li>
             <li className="flex gap-2">
@@ -284,7 +316,8 @@ export function SiteFooter() {
       </div>
       <div className="container-x flex flex-col gap-3 border-t border-ink-foreground/10 py-6 text-xs text-ink-foreground/50 md:flex-row md:justify-between">
         <p>
-          © {new Date().getFullYear()} {site.name} — Advocates & Legal Associates. {t("footer.allRights")}
+          © {new Date().getFullYear()} {site.name} — Advocates & Legal Associates.{" "}
+          {t("footer.allRights")}
         </p>
         <div className="flex flex-wrap gap-x-5 gap-y-2">
           {legalLinksToRender.map((legal) => (

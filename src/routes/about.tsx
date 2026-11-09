@@ -1,23 +1,33 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { PageHero, SectionHead, ServiceCard } from "@/components/site/Sections";
-import { images, services, team } from "@/data/content";
+import { getPublishedServices } from "@/lib/sanity.server";
+import { images, team } from "@/data/content";
 import { useConsultation } from "@/components/site/ConsultationDialog";
 import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/about")({
+  loader: () => getPublishedServices(),
   head: () => ({
     meta: [
       { title: "About BiheInCourt — Advocates & Legal Associates" },
-      { name: "description", content: "A Kathmandu-based legal practice helping couples navigate court marriage registration in Nepal." },
+      {
+        name: "description",
+        content:
+          "A Kathmandu-based legal practice helping couples navigate court marriage registration in Nepal.",
+      },
       { property: "og:title", content: "About BiheInCourt" },
-      { property: "og:description", content: "Our mission, approach and commitment to confidentiality." },
+      {
+        property: "og:description",
+        content: "Our mission, approach and commitment to confidentiality.",
+      },
     ],
   }),
   component: About,
 });
 
 function About() {
+  const services = Route.useLoaderData();
   const { lang } = useT();
   const { open } = useConsultation();
   const reviewText =
@@ -58,7 +68,11 @@ function About() {
     <>
       <PageHero
         eyebrow={lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "About us"}
-        title={lang === "ne" ? "अनुवाद समीक्षा आवश्यक — विवाहको कानूनी बाटो" : "Guiding couples through the legal path to marriage."}
+        title={
+          lang === "ne"
+            ? "अनुवाद समीक्षा आवश्यक — विवाहको कानूनी बाटो"
+            : "Guiding couples through the legal path to marriage."
+        }
         desc={
           lang === "ne"
             ? "अनुवाद समीक्षा आवश्यक — BiheInCourt को Nepal मा विवाह दर्ता र सम्बन्धित कागजातको कानुनी सेवा केन्द्रीय विषय हो।"
@@ -90,7 +104,11 @@ function About() {
         <div className="container-x">
           <SectionHead
             eyebrow={lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Practice focus"}
-            title={lang === "ne" ? "अनुवाद समीक्षा आवश्यक — विवाह दर्तामा केन्द्रित सहयोग" : "Support centred on marriage registration."}
+            title={
+              lang === "ne"
+                ? "अनुवाद समीक्षा आवश्यक — विवाह दर्तामा केन्द्रित सहयोग"
+                : "Support centred on marriage registration."
+            }
             desc={
               lang === "ne"
                 ? "अनुवाद समीक्षा आवश्यक — यी छ सेवा क्षेत्रहरू वर्तमान परियोजना सामग्रीमा वर्णित सहयोगलाई प्रतिबिम्बित गर्छन्।"
@@ -98,7 +116,9 @@ function About() {
             }
           />
           <div className="mt-12 grid border-l border-t sm:grid-cols-2 lg:grid-cols-3">
-            {services.map((service) => <ServiceCard key={service.slug} s={service} />)}
+            {services.map((service) => (
+              <ServiceCard key={service.slug} s={service} />
+            ))}
           </div>
         </div>
       </section>
@@ -106,7 +126,11 @@ function About() {
         <div className="container-x">
           <SectionHead
             eyebrow={lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Our team"}
-            title={lang === "ne" ? "अनुवाद समीक्षा आवश्यक — तपाईंको फाइल पछाडिको व्यक्ति" : "The people behind your file."}
+            title={
+              lang === "ne"
+                ? "अनुवाद समीक्षा आवश्यक — तपाईंको फाइल पछाडिको व्यक्ति"
+                : "The people behind your file."
+            }
             desc={
               lang === "ne"
                 ? "अनुवाद समीक्षा आवश्यक — टोली सदस्यहरूको प्रोफाइलहरू प्रारम्भिक प्लेसहोल्डर हुन्; नाम, पद, र फोटो स्वीकृत विवरणले प्रतिस्थापन गर्नुपर्छ।"

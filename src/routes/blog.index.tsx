@@ -5,11 +5,11 @@ import { articles } from "@/data/content";
 export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
-      { title: "Blog — Imperial Matrimonial" },
+      { title: "Blog — BiheInCourt" },
       {
         name: "description",
         content:
-          "Draft article previews from Imperial Matrimonial. All content requires verification before publication.",
+          "Draft article previews from BiheInCourt. All content requires verification before publication.",
       },
     ],
   }),

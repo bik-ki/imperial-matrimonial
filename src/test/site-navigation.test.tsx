@@ -52,6 +52,12 @@ describe("Public site navigation", () => {
     host.remove();
   });
 
+  it("uses the approved BiheInCourt wordmark and accessible name", () => {
+    const wordmark = host.querySelector<HTMLAnchorElement>('a[aria-label="BiheInCourt home"]');
+
+    expect(wordmark?.textContent).toContain("BiheInCourt");
+  });
+
   it("supports opening and dismissing the mobile menu with the keyboard", () => {
     const toggle = host.querySelector<HTMLButtonElement>(
       'button[aria-label="Open navigation menu"]',
@@ -129,9 +135,6 @@ describe("Public site navigation", () => {
     );
 
     expect(host.querySelector('a[href="/process"]')).toBeNull();
-    expect(
-      host.querySelectorAll('a[href="https://www.instagram.com/imperialmatrimonial/"]'),
-    ).toHaveLength(0);
     expect(host.querySelector('a[href="https://www.instagram.com/"]')).toBeNull();
     expect(host.querySelector('a[href="https://www.facebook.com/"]')).toBeNull();
     expect(host.querySelector('a[href="https://www.tiktok.com/"]')).toBeNull();

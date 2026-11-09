@@ -5,7 +5,7 @@ import { EligibilityChecker } from "@/components/site/EligibilityChecker";
 export const Route = createFileRoute("/eligibility")({
   head: () => ({
     meta: [
-      { title: "Court Marriage Eligibility Checker — Imperial Matrimonial" },
+      { title: "Court Marriage Eligibility Checker — BiheInCourt" },
       {
         name: "description",
         content:

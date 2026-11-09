@@ -3,7 +3,7 @@
  * firm's verified details before publishing.
  */
 export const site = {
-  name: "Imperial Matrimonial",
+  name: "BiheInCourt",
   tagline: "Advocates & Legal Associates",
   referenceUrl: "https://www.lawimperial.com/",
   // International format, digits only, no "+" (used for wa.me links). PLACEHOLDER.
@@ -20,7 +20,7 @@ export const site = {
     { days: "Saturday", time: "[Closed / By appointment]" },
   ],
   whatsappMessage:
-    "Hello Imperial Matrimonial, I would like to know more about your court marriage services in Nepal.",
+    "Hello BiheInCourt, I would like to know more about your court marriage services in Nepal.",
   social: {
     instagram: "https://www.instagram.com/",
     facebook: "https://www.facebook.com/",

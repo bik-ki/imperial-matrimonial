@@ -125,6 +125,8 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
           aria-describedby={errors["service"] ? "service-error" : undefined}
         >
           <option value="">Select…</option>
+          <option>General consultation</option>
+          <option>Special consultation</option>
           {services.map((s) => (
             <option key={s.slug}>{s.title.en}</option>
           ))}

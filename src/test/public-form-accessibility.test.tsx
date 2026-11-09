@@ -52,6 +52,17 @@ describe("Public form accessibility", () => {
     expect(document.activeElement).toBe(fullName);
   });
 
+  it("offers the client-provided general and special consultation types", () => {
+    act(() => root.render(<LeadForm mode="booking" />));
+
+    const options = Array.from(
+      host.querySelectorAll<HTMLSelectElement>("#service option"),
+      (option) => option.textContent,
+    );
+    expect(options).toContain("General consultation");
+    expect(options).toContain("Special consultation");
+  });
+
   it("supports arrow-key selection and roving focus in the eligibility choices", () => {
     act(() => root.render(<EligibilityChecker />));
 

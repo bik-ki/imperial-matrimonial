@@ -7,9 +7,9 @@ import { useConsultation } from "@/components/site/ConsultationDialog";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Imperial Matrimonial — Advocates & Legal Associates" },
+      { title: "About BiheInCourt — Advocates & Legal Associates" },
       { name: "description", content: "A Kathmandu-based legal practice helping couples navigate court marriage registration in Nepal." },
-      { property: "og:title", content: "About Imperial Matrimonial" },
+      { property: "og:title", content: "About BiheInCourt" },
       { property: "og:description", content: "Our mission, approach and commitment to confidentiality." },
     ],
   }),
@@ -27,7 +27,7 @@ function About() {
   const { open } = useConsultation();
   return (
     <>
-      <PageHero eyebrow="About us" title="Guiding couples through the legal path to marriage." desc="Imperial Matrimonial is a legal service provider focused on court marriage registration and related documentation in Nepal." />
+      <PageHero eyebrow="About us" title="Guiding couples through the legal path to marriage." desc="BiheInCourt is a legal service provider focused on court marriage registration and related documentation in Nepal." />
       <aside className="container-x border-l-2 border-gold bg-secondary/50 p-5 text-sm text-muted-foreground">
         Project review: mission, professional approach, confidentiality, and other company
         statements on this page require client verification before publication.

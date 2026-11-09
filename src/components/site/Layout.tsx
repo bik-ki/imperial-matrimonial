@@ -42,11 +42,11 @@ const hasVerifiedInstagram =
 
 export function Wordmark({ inverse = false }: { inverse?: boolean }) {
   return (
-    <Link to="/" className="flex flex-col leading-none" aria-label="Imperial Matrimonial home">
+    <Link to="/" className="flex flex-col leading-none" aria-label={`${site.name} home`}>
       <span
         className={`whitespace-nowrap font-serif text-sm tracking-[0.08em] sm:text-xl sm:tracking-[0.14em] ${inverse ? "text-ink-foreground" : "text-foreground"}`}
       >
-        IMPERIAL MATRIMONIAL
+        {site.name}
       </span>
       <span className="mt-1 whitespace-nowrap text-[0.5rem] font-semibold uppercase tracking-[0.15em] text-gold sm:text-[0.58rem] sm:tracking-[0.3em]">
         Advocates & Legal Associates
@@ -283,8 +283,8 @@ export function SiteFooter() {
       </div>
       <div className="container-x flex flex-col gap-3 border-t border-ink-foreground/10 py-6 text-xs text-ink-foreground/50 md:flex-row md:justify-between">
         <p>
-          © {new Date().getFullYear()} Imperial Matrimonial — Advocates & Legal Associates. All
-          rights reserved.
+          © {new Date().getFullYear()} {site.name} — Advocates & Legal Associates. All rights
+          reserved.
         </p>
         <div className="flex flex-wrap gap-x-5 gap-y-2">
           {legalLinks.map((legal) => (

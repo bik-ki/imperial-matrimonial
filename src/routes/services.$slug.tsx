@@ -16,7 +16,7 @@ export const Route = createFileRoute("/services/$slug")({
   head: ({ loaderData }) => ({
     meta: loaderData
       ? [
-          { title: `${loaderData.title} — Imperial Matrimonial` },
+          { title: `${loaderData.title} — BiheInCourt` },
           { name: "description", content: loaderData.short },
           { property: "og:title", content: loaderData.title },
           { property: "og:description", content: loaderData.short },
@@ -89,7 +89,7 @@ function ServicePage() {
               context={`Service: ${s.title.en}`}
               variant="outline"
               size="lg"
-              message={`Hello Imperial Matrimonial, I'd like to know more about ${s.title.en}.`}
+              message={`Hello BiheInCourt, I'd like to know more about ${s.title.en}.`}
             />
           </div>
         </aside>

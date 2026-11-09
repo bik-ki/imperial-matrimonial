@@ -1,10 +1,10 @@
-# Imperial Matrimonial
+# BiheInCourt
 
 Act as a senior UI/UX designer, full-stack frontend developer, and conversion rate optimization specialist.
 
 I want you to build a complete, modern, responsive, interactive website prototype for a Nepal-based legal service company called:
 
-IMPERIAL MATRIMONIAL
+BiheInCourt
 Advocates & Legal Associates
 
 WEBSITE REFERENCE:
@@ -18,7 +18,7 @@ IMPORTANT: Do not replicate the old design. Create a significantly more professi
 1. BUSINESS OVERVIEW
 ==================================================
 
-Imperial Matrimonial primarily specializes in court marriage registration and related legal assistance in Nepal.
+BiheInCourt primarily specializes in court marriage registration and related legal assistance in Nepal.
 
 The company helps couples navigate the legal process of getting married through the court system.
 
@@ -118,7 +118,7 @@ I. BOOK A CONSULTATION
 
 Use a clean navigation bar with:
 
-- Imperial Matrimonial logo / wordmark
+- BiheInCourt logo / wordmark
 - Home
 - About
 - Process
@@ -144,7 +144,7 @@ Create an impressive hero section.
 LEFT SIDE:
 
 Small eyebrow text:
-"IMPERIAL MATRIMONIAL | ADVOCATES & LEGAL ASSOCIATES"
+"BiheInCourt | ADVOCATES & LEGAL ASSOCIATES"
 
 Main heading:
 
@@ -486,7 +486,7 @@ When clicked, open WhatsApp using a configurable business number and a prefilled
 
 Example:
 
-"Hello Imperial Matrimonial, I would like to know more about your court marriage services in Nepal."
+"Hello BiheInCourt, I would like to know more about your court marriage services in Nepal."
 
 Also add WhatsApp buttons in:
 - Hero section
@@ -571,7 +571,7 @@ Do not build the full admin dashboard at this stage.
 
 Create a professional About Us page.
 
-Position Imperial Matrimonial as a legal service provider focused on helping couples navigate marriage registration in Nepal.
+Position BiheInCourt as a legal service provider focused on helping couples navigate marriage registration in Nepal.
 
 Include:
 - Company introduction.
@@ -592,7 +592,7 @@ Do not invent lawyer credentials, bar registration details, or professional achi
 Build a premium multi-column footer.
 
 Column 1:
-Imperial Matrimonial logo and short company description.
+BiheInCourt logo and short company description.
 
 Column 2:
 Quick Links.

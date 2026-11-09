@@ -39,7 +39,7 @@ function ServicePage() {
             to="/services"
             className="inline-flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft className="h-3 w-3" /> All services
+            <ArrowLeft className="h-3 w-3" /> {lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "All services"}
           </Link>
           <s.icon className="mt-10 h-8 w-8 text-gold" strokeWidth={1.3} />
           <h1 className="mt-6 max-w-3xl text-5xl md:text-7xl">{s.title[lang]}</h1>
@@ -47,28 +47,56 @@ function ServicePage() {
         </div>
       </section>
       <p className="container-x border-l-2 border-gold bg-secondary/50 p-5 text-sm text-muted-foreground">
-        Project draft: verify this service description and listed inclusions with the client before
-        publication. Do not rely on these details as confirmed requirements, outcomes, timelines, or
-        fees.
+        {lang === "ne"
+          ? "अनुवाद समीक्षा आवश्यक — प्रकाशन अघि यो सेवा विवरण र समावेशीकरण ग्राहकले पुष्टि गर्नुहोस्। यी विवरणहरू प्रमाणित आवश्यकताहरू, परिणाम, समयसीमा वा शुल्क मान्नुहोस्।"
+          : "Project draft: verify this service description and listed inclusions with the client before publication. Do not rely on these details as confirmed requirements, outcomes, timelines, or fees."}
       </p>
       <div className="container-x grid gap-12 py-16 lg:grid-cols-[1.4fr_1fr]">
-        <div className="space-y-5 leading-relaxed">
+        <div className="space-y-8 leading-relaxed">
+          <section>
+            <h2 className="text-2xl">{lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Overview"}</h2>
+            <p className="mt-3 text-muted-foreground">{s.overview[lang]}</p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl">
+              {lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Who this service may be for"}
+            </h2>
+            <p className="mt-3 text-muted-foreground">{s.whoFor[lang]}</p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl">
+              {lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Information and documents to confirm"}
+            </h2>
+            <p className="mt-3 text-muted-foreground">{s.confirm[lang]}</p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl">{lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "How to enquire"}</h2>
+            <p className="mt-3 text-muted-foreground">{s.enquiry[lang]}</p>
+          </section>
+
           {s.body.map((p, i) => (
             <p key={i}>{p}</p>
           ))}
           {s.pendingDetails && (
             <p className="border-l-2 border-gold pl-4 text-sm text-muted-foreground">
-              <strong className="text-foreground">Details to verify:</strong> {s.pendingDetails}
+              <strong className="text-foreground">
+                {lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Details to verify:"}
+              </strong>{" "}
+              {s.pendingDetails}
             </p>
           )}
           <p className="text-sm text-muted-foreground">
-            Requirements vary by circumstance. Nothing on this page is a guarantee of outcome or
-            timeline.
+            {lang === "ne"
+              ? "अनुवाद समीक्षा आवश्यक — आवश्यकताहरू परिस्थिति अनुसार फरक पर्दछ। यस पृष्ठमा कुनै परिणाम वा समयसीमा ग्यारेन्टी छैन।"
+              : "Requirements vary by circumstance. Nothing on this page is a guarantee of outcome or timeline."}
           </p>
         </div>
         <aside aria-labelledby="service-includes-heading" className="border bg-card p-8">
           <h2 id="service-includes-heading" className="eyebrow">
-            What's included
+            {lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "What's included"}
           </h2>
           <ul className="mt-5 space-y-3">
             {s.includes.map((i) => (
@@ -80,10 +108,10 @@ function ServicePage() {
           </ul>
           <div className="mt-8 flex flex-col gap-3">
             <Button size="lg" onClick={open}>
-              Book a Consultation
+              {lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Book a Consultation"}
             </Button>
             <Button asChild variant="outline" size="lg">
-              <Link to="/contact">Contact us</Link>
+              <Link to="/contact">{lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Contact us"}</Link>
             </Button>
             <WhatsAppButton
               context={`Service: ${s.title.en}`}
@@ -97,21 +125,27 @@ function ServicePage() {
       <section className="border-y bg-secondary/50 py-14">
         <div className="container-x">
           <div className="max-w-3xl">
-            <p className="eyebrow text-gold">Client review required</p>
-            <h2 className="mt-4 text-3xl">Details to verify before publication.</h2>
+            <p className="eyebrow text-gold">
+              {lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Client review required"}
+            </p>
+            <h2 className="mt-4 text-3xl">
+              {lang === "ne" ? "अनुवाद समीक्षा आवश्यक — प्रकाशन अघि विवरण जाँच गर्नुहोस्" : "Details to verify before publication."}
+            </h2>
             <ul className="mt-6 grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
-              <li>[Verified service requirements needed]</li>
-              <li>[Verified timeline needed]</li>
-              <li>[Verified eligibility rules needed]</li>
-              <li>[Verified fee information needed]</li>
-              <li className="sm:col-span-2">[Verified legal details needed]</li>
+              <li>{lang === "ne" ? "अनुवाद समीक्षा आवश्यक — सेवा आवश्यकताहरू" : "[Verified service requirements needed]"}</li>
+              <li>{lang === "ne" ? "अनुवाद समीक्षा आवश्यक — समयसीमा" : "[Verified timeline needed]"}</li>
+              <li>{lang === "ne" ? "अनुवाद समीक्षा आवश्यक — योग्यता नियम" : "[Verified eligibility rules needed]"}</li>
+              <li>{lang === "ne" ? "अनुवाद समीक्षा आवश्यक — शुल्क जानकारी" : "[Verified fee information needed]"}</li>
+              <li className="sm:col-span-2">
+                {lang === "ne" ? "अनुवाद समीक्षा आवश्यक — कानूनी विवरण" : "[Verified legal details needed]"}
+              </li>
             </ul>
           </div>
         </div>
       </section>
       <section className="border-t py-16">
         <div className="container-x">
-          <h2 className="text-3xl">Other services</h2>
+          <h2 className="text-3xl">{lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Other services"}</h2>
           <div className="mt-8 grid border-l border-t sm:grid-cols-2 lg:grid-cols-3">
             {services
               .filter((x) => x.slug !== slug)

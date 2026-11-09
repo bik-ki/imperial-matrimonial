@@ -42,8 +42,18 @@ const stats = [
 ] as const;
 
 function Home() {
-  const { t } = useT();
+  const { lang, t } = useT();
   const { open } = useConsultation();
+  const reviewText =
+    lang === "ne"
+      ? "अनुवाद समीक्षा आवश्यक — स्वीकृत नेपाली पाठ पक्का हुन बाँकी छ।"
+      : "Project placeholders — replace these metrics only with client-verified figures and claims.";
+  const aboutTitle =
+    lang === "ne" ? "अनुवाद समीक्षा आवश्यक — विवाह सेवा, कानूनी सेवा होइन" : "A legal practice, not a wedding service.";
+  const aboutDesc =
+    lang === "ne"
+      ? "अनुवाद समीक्षा आवश्यक — हामी विवाहको कानूनी पक्षमा ध्यान केन्द्रित गर्छौं — योग्यता, कागजात र दर्ता — गोपनीयता र सावधानी संग ह्यान्डल गरिन्छ।"
+      : "We focus on the legal side of marriage — eligibility, documentation and registration — handled with discretion and care.";
   return (
     <>
       <section className="container-x grid items-center gap-12 py-14 md:py-20 lg:grid-cols-[1.1fr_1fr] lg:gap-20">
@@ -89,7 +99,7 @@ function Home() {
 
       <div className="mt-10 border-y">
         <p className="container-x pt-5 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-          Project placeholders — replace these metrics only with client-verified figures and claims.
+          {reviewText}
         </p>
         <div className="container-x grid grid-cols-2 md:grid-cols-4">
           {stats.map((s, i) => (
@@ -140,12 +150,12 @@ function Home() {
           />
           <div>
             <SectionHead
-              eyebrow="About the practice"
-              title="A legal practice, not a wedding service."
-              desc="We focus on the legal side of marriage — eligibility, documentation and registration — handled with discretion and care."
+              eyebrow={lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "About the practice"}
+              title={aboutTitle}
+              desc={aboutDesc}
             />
             <Button asChild variant="outline" size="lg" className="mt-8">
-              <Link to="/about">About us</Link>
+              <Link to="/about">{lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "About us"}</Link>
             </Button>
           </div>
         </div>

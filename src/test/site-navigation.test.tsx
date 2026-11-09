@@ -136,10 +136,14 @@ describe("Public site navigation", () => {
 
     expect(host.querySelector('a[href="/process"]')).toBeNull();
     expect(host.querySelector('a[href="https://www.instagram.com/"]')).toBeNull();
-    expect(host.querySelector('a[href="https://www.facebook.com/"]')).toBeNull();
-    expect(host.querySelector('a[href="https://www.tiktok.com/"]')).toBeNull();
+    expect(
+      host.querySelector('a[href="https://www.facebook.com/profile.php?id=61572165336250"]'),
+    ).not.toBeNull();
+    expect(
+      host.querySelector('a[href="https://vm.tiktok.com/ZS9fktqq3uryh-0QlTU/"]'),
+    ).not.toBeNull();
     expect(host.querySelector('a[href="https://www.youtube.com/"]')).toBeNull();
-    expect(host.querySelectorAll("a").length).toBe(1);
+    expect(host.querySelector('a[href^="https://wa.me/9779745722755?text="]')).not.toBeNull();
     expect(host.textContent).toContain("verify the Instagram profile URL and handle");
     expect(
       Array.from(host.querySelectorAll("a")).some((link) =>

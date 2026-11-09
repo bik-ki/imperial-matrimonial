@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as EligibilityRouteImport } from './routes/eligibility'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ProcessRouteImport } from './routes/process'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -38,6 +39,11 @@ const ContactRoute = ContactRouteImport.update({
 const EligibilityRoute = EligibilityRouteImport.update({
   id: '/eligibility',
   path: '/eligibility',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProcessRoute = ProcessRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/eligibility': typeof EligibilityRoute
+  '/faq': typeof FaqRoute
   '/process': typeof ProcessRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/legal/$doc': typeof LegalDocRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/eligibility': typeof EligibilityRoute
+  '/faq': typeof FaqRoute
   '/process': typeof ProcessRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/legal/$doc': typeof LegalDocRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/eligibility': typeof EligibilityRoute
+  '/faq': typeof FaqRoute
   '/process': typeof ProcessRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/legal/$doc': typeof LegalDocRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/eligibility'
+    | '/faq'
     | '/process'
     | '/blog/$slug'
     | '/legal/$doc'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/eligibility'
+    | '/faq'
     | '/process'
     | '/blog/$slug'
     | '/legal/$doc'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/eligibility'
+    | '/faq'
     | '/process'
     | '/blog/$slug'
     | '/legal/$doc'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   EligibilityRoute: typeof EligibilityRoute
+  FaqRoute: typeof FaqRoute
   ProcessRoute: typeof ProcessRoute
   BlogSlugRoute: typeof BlogSlugRoute
   LegalDocRoute: typeof LegalDocRoute
@@ -188,6 +201,13 @@ declare module '@tanstack/react-router' {
       path: '/eligibility'
       fullPath: '/eligibility'
       preLoaderRoute: typeof EligibilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/process': {
@@ -240,6 +260,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   EligibilityRoute: EligibilityRoute,
+  FaqRoute: FaqRoute,
   ProcessRoute: ProcessRoute,
   BlogSlugRoute: BlogSlugRoute,
   LegalDocRoute: LegalDocRoute,

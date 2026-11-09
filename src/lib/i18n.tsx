@@ -5,7 +5,7 @@ export type Lang = "en" | "ne";
 const dict = {
   en: {
     "nav.home": "Home", "nav.about": "About", "nav.process": "Process", "nav.services": "Services",
-    "nav.eligibility": "Eligibility Checker", "nav.blog": "Blog", "nav.contact": "Contact",
+    "nav.eligibility": "Eligibility Checker", "nav.faq": "FAQs", "nav.blog": "Blog", "nav.contact": "Contact",
     "cta.book": "Book Consultation", "cta.check": "Check Your Eligibility", "cta.bookA": "Book a Consultation",
     "cta.whatsapp": "Chat on WhatsApp", "cta.learn": "Learn more", "cta.call": "Call",
     "hero.eyebrow": "BiheInCourt | Advocates & Legal Associates",
@@ -32,7 +32,7 @@ const dict = {
   },
   ne: {
     "nav.home": "गृहपृष्ठ", "nav.about": "हाम्रो बारेमा", "nav.process": "प्रक्रिया", "nav.services": "सेवाहरू",
-    "nav.eligibility": "योग्यता जाँच", "nav.blog": "ब्लग", "nav.contact": "सम्पर्क",
+    "nav.eligibility": "योग्यता जाँच", "nav.faq": "प्रश्नोत्तर", "nav.blog": "ब्लग", "nav.contact": "सम्पर्क",
     "cta.book": "परामर्श बुक गर्नुहोस्", "cta.check": "आफ्नो योग्यता जाँच गर्नुहोस्", "cta.bookA": "परामर्श बुक गर्नुहोस्",
     "cta.whatsapp": "WhatsApp मा कुरा गर्नुहोस्", "cta.learn": "थप जान्नुहोस्", "cta.call": "फोन",
     "hero.eyebrow": "BiheInCourt | अधिवक्ता तथा कानुनी सहयोगीहरू",

@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHero, ServicesGrid } from "@/components/site/Sections";
+import { getPublishedServices } from "@/lib/sanity.server";
 
 export const Route = createFileRoute("/services/")({
+  loader: () => getPublishedServices(),
   head: () => ({
     meta: [
       { title: "Services — Court Marriage & Documentation | BiheInCourt" },
@@ -17,7 +19,12 @@ export const Route = createFileRoute("/services/")({
       },
     ],
   }),
-  component: () => (
+  component: ServicesPage,
+});
+
+function ServicesPage() {
+  const services = Route.useLoaderData();
+  return (
     <>
       <PageHero
         eyebrow="Services"
@@ -40,7 +47,7 @@ export const Route = createFileRoute("/services/")({
           engages an advocate in each district court.
         </p>
       </section>
-      <ServicesGrid />
+      <ServicesGrid services={services} />
     </>
-  ),
-});
+  );
+}

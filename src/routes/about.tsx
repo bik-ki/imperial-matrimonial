@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { PageHero, SectionHead, ServiceCard } from "@/components/site/Sections";
-import { images, services, team } from "@/data/content";
+import { getPublishedServices } from "@/lib/sanity.server";
+import { images, team } from "@/data/content";
 import { useConsultation } from "@/components/site/ConsultationDialog";
 
 export const Route = createFileRoute("/about")({
+  loader: () => getPublishedServices(),
   head: () => ({
     meta: [
       { title: "About BiheInCourt — Advocates & Legal Associates" },
@@ -24,6 +26,7 @@ const pillars = [
 ];
 
 function About() {
+  const services = Route.useLoaderData();
   const { open } = useConsultation();
   return (
     <>

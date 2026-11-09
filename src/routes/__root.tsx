@@ -17,6 +17,7 @@ import { LangProvider } from "@/lib/i18n";
 import { ConsultationProvider } from "@/components/site/ConsultationDialog";
 import { SiteHeader, SiteFooter, MobileCTABar } from "@/components/site/Layout";
 import { WhatsAppFloat } from "@/components/site/WhatsAppButton";
+import { getSiteSettings } from "@/lib/sanity.server";
 
 function NotFoundComponent() {
   return (
@@ -51,6 +52,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  loader: () => getSiteSettings(),
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -85,6 +87,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const settings = Route.useLoaderData();
   const path = useRouterState({ select: (s) => s.location.pathname });
   const internal = path.startsWith("/internal");
   return (
@@ -93,7 +96,13 @@ function RootComponent() {
         <ConsultationProvider>
           {!internal && <SiteHeader />}
           <main><Outlet /></main>
-          {!internal && <><SiteFooter /><WhatsAppFloat /><MobileCTABar /></>}
+          {!internal && (
+            <>
+              <SiteFooter socialLinks={settings?.socialLinks} />
+              <WhatsAppFloat />
+              <MobileCTABar />
+            </>
+          )}
         </ConsultationProvider>
       </LangProvider>
     </QueryClientProvider>

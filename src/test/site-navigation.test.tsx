@@ -65,6 +65,7 @@ describe("Public site navigation", () => {
     const wordmark = host.querySelector<HTMLAnchorElement>('a[aria-label="BiheInCourt home"]');
 
     expect(wordmark?.textContent).toContain("BiheInCourt");
+    expect(wordmark?.querySelector('img[src="/logo.png"]')).not.toBeNull();
   });
 
   it("keeps the selected language visible, persistent, and honest about untranslated copy", () => {
@@ -142,6 +143,12 @@ describe("Public site navigation", () => {
   });
 
   it("points each mobile navigation item to its public route", () => {
+    const desktopDestinations = Array.from(
+      host.querySelectorAll<HTMLAnchorElement>('header nav[aria-label="Main"] a'),
+      (link) => link.getAttribute("href"),
+    );
+    expect(desktopDestinations).toContain("/faq");
+
     act(() =>
       host
         .querySelector<HTMLButtonElement>('button[aria-label="Open navigation menu"]')
@@ -158,6 +165,7 @@ describe("Public site navigation", () => {
       "/process",
       "/services",
       "/eligibility",
+      "/faq",
       "/blog",
       "/contact",
     ]);
@@ -177,8 +185,19 @@ describe("Public site navigation", () => {
       Array.from(quickLinks?.querySelectorAll<HTMLAnchorElement>("a") ?? [], (link) =>
         link.getAttribute("href"),
       ),
-    ).toEqual(["/", "/about", "/process", "/services", "/eligibility", "/blog", "/contact"]);
+    ).toEqual([
+      "/",
+      "/about",
+      "/process",
+      "/services",
+      "/eligibility",
+      "/faq",
+      "/blog",
+      "/contact",
+    ]);
     expect(host.querySelector('footer [aria-label="Language"]')).not.toBeNull();
+    expect(host.querySelector("footer")?.textContent).toContain("Thapathali, Kathmandu, Nepal");
+    expect(host.querySelector('footer img[src="/logo.png"]')).not.toBeNull();
   });
 
   it("closes when a navigation link is selected and points services to its index", () => {

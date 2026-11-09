@@ -46,6 +46,12 @@ function ContactPage() {
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">{site.tagline}</p>
           <dl className="mt-8 space-y-5 text-sm">
+            <div>
+              <dt className="text-xs uppercase tracking-widest text-muted-foreground">
+                {t("footer.location")}
+              </dt>
+              <dd className="mt-1">{site.location}</dd>
+            </div>
             <ContactDetail label={t("footer.phone")} value={site.phoneDisplay} href={site.phoneHref} />
             <ContactDetail label={t("footer.email")} value={site.email} href={`mailto:${site.email}`} />
           </dl>

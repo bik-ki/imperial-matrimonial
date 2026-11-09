@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
+import { useT } from "@/lib/i18n";
 
 const legalDocuments = {
   privacy: {
@@ -59,6 +60,7 @@ export const Route = createFileRoute("/legal/$doc")({
 
 function LegalDocumentPage() {
   const { document } = Route.useLoaderData();
+  const { lang } = useT();
   return (
     <>
       <header className="border-b">
@@ -68,11 +70,17 @@ function LegalDocumentPage() {
             className="inline-flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="h-3 w-3" />
-            Home
+            {lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Home"}
           </Link>
-          <p className="eyebrow mt-10">Client-approved copy required</p>
+          <p className="eyebrow mt-10">
+            {lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Client-approved copy required"}
+          </p>
           <h1 className="mt-5 text-5xl md:text-7xl">{document.title}</h1>
-          <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{document.description}</p>
+          <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
+            {lang === "ne"
+              ? "अनुवाद समीक्षा आवश्यक — यो कानूनी पृष्ठको स्वीकृत सामग्री परियोजनामा छैन।"
+              : document.description}
+          </p>
         </div>
       </header>
       <div className="container-x max-w-4xl py-12 md:py-16">
@@ -81,12 +89,12 @@ function LegalDocumentPage() {
           className="border-l-2 border-gold bg-secondary/50 p-6 md:p-8"
         >
           <h2 id="legal-placeholder-heading" className="text-2xl">
-            Placeholder — replace before publication
+            {lang === "ne" ? "अनुवाद समीक्षा आवश्यक — प्रकाशन अघि प्रतिस्थापन गर्नुहोस्" : "Placeholder — replace before publication"}
           </h2>
           <p className="mt-3 leading-relaxed text-muted-foreground">
-            The project contains no client-approved text for this legal page. No policy, contract
-            term, or legal position is stated here. The following items are a verification
-            checklist, not legal copy.
+            {lang === "ne"
+              ? "अनुवाद समीक्षा आवश्यक — परियोजनामा यो कानूनी पृष्ठको कुनै ग्राहक-स्वीकृत पाठ छैन। यहाँ कुनै नीति, सम्झौता सर्त वा कानूनी स्थिति बताइएको छैन। तलका बुँदाहरू कानूनी पाठ होइनन्, जाँच सूची मात्र हुन्।"
+              : "The project contains no client-approved text for this legal page. No policy, contract term, or legal position is stated here. The following items are a verification checklist, not legal copy."}
           </p>
           <ul className="mt-6 list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted-foreground">
             {document.verification.map((item) => (
@@ -99,7 +107,7 @@ function LegalDocumentPage() {
             to="/contact"
             className="text-sm font-semibold uppercase tracking-widest underline underline-offset-4 hover:text-gold"
           >
-            Contact page
+            {lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Contact page"}
           </Link>
         </div>
       </div>

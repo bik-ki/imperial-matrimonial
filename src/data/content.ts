@@ -100,13 +100,13 @@ export const services: Service[] = [
     icon: FileCheck2,
     title: { en: "Legal Consultation", ne: "कानुनी परामर्श" },
     short: {
-      en: "A confidential consultation to understand your situation and options.",
+      en: "General consultation and special consultation are available.",
       ne: "तपाईंको अवस्था र विकल्प बुझ्न गोप्य परामर्श।",
     },
     body: [
       "A structured consultation to assess your circumstances and outline the likely next steps.",
     ],
-    includes: ["Confidential discussion", "Situation assessment", "Next-step plan"],
+    includes: ["General consultation", "Special consultation"],
     pendingDetails:
       "Placeholder: specific requirements, applicable legal details, timelines, and fees have not been verified. Confirm them with the firm for your circumstances.",
   },

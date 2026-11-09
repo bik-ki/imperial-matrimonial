@@ -5,11 +5,11 @@ import { PageHero, ProcessTimeline } from "@/components/site/Sections";
 export const Route = createFileRoute("/process")({
   head: () => ({
     meta: [
-      { title: "Marriage Registration Assistance Process — Imperial Matrimonial" },
+      { title: "Marriage Registration Assistance Process — BiheInCourt" },
       {
         name: "description",
         content:
-          "The four assistance stages described by Imperial Matrimonial, from initial consultation through court registration.",
+          "The four assistance stages described by BiheInCourt, from initial consultation through court registration.",
       },
       { property: "og:title", content: "Your Journey to Legal Marriage" },
       {

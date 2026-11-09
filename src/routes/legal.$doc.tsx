@@ -46,11 +46,11 @@ export const Route = createFileRoute("/legal/$doc")({
   head: ({ loaderData }) => ({
     meta: loaderData
       ? [
-          { title: `${loaderData.document.title} — Imperial Matrimonial` },
+          { title: `${loaderData.document.title} — BiheInCourt` },
           { name: "robots", content: "noindex, nofollow" },
         ]
       : [
-          { title: "Legal page not found — Imperial Matrimonial" },
+          { title: "Legal page not found — BiheInCourt" },
           { name: "robots", content: "noindex" },
         ],
   }),

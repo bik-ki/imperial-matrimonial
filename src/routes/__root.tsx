@@ -55,7 +55,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Imperial Matrimonial — Court Marriage Lawyers in Nepal" },
+      { title: "BiheInCourt — Court Marriage Lawyers in Nepal" },
       { name: "description", content: "Professional court marriage registration assistance in Kathmandu, Nepal." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

@@ -4,13 +4,13 @@ import { PageHero, ServicesGrid } from "@/components/site/Sections";
 export const Route = createFileRoute("/services/")({
   head: () => ({
     meta: [
-      { title: "Services — Court Marriage & Documentation | Imperial Matrimonial" },
+      { title: "Services — Court Marriage & Documentation | BiheInCourt" },
       {
         name: "description",
         content:
           "Court marriage registration, documentation, foreign national marriage and single status certificate assistance in Nepal.",
       },
-      { property: "og:title", content: "Practice Areas — Imperial Matrimonial" },
+      { property: "og:title", content: "Practice Areas — BiheInCourt" },
       {
         property: "og:description",
         content: "Legal assistance focused on marriage registration in Nepal.",
@@ -28,6 +28,18 @@ export const Route = createFileRoute("/services/")({
         Project draft: verify every service description, scope, and inclusion with the client before
         publication. No specific requirements, outcomes, timelines, or fees are confirmed here.
       </p>
+      <section
+        aria-labelledby="district-coverage-heading"
+        className="container-x grid gap-3 border-b py-10 sm:grid-cols-[minmax(12rem,0.6fr)_1fr] sm:items-center"
+      >
+        <h2 id="district-coverage-heading" className="text-2xl">
+          District court coverage
+        </h2>
+        <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
+          Legal services are provided through district courts in all 77 districts. BiheInCourt
+          engages an advocate in each district court.
+        </p>
+      </section>
       <ServicesGrid />
     </>
   ),

@@ -17,17 +17,17 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Imperial Matrimonial — Court Marriage Registration in Nepal" },
+      { title: "BiheInCourt — Court Marriage Registration in Nepal" },
       {
         name: "description",
         content:
           "Professional, confidential court marriage assistance in Kathmandu. Check your eligibility and book a consultation.",
       },
-      { property: "og:title", content: "Imperial Matrimonial — Your Marriage. Made Official." },
+      { property: "og:title", content: "BiheInCourt — Your Marriage. Made Official." },
       {
         property: "og:description",
         content:
-          "Professional court marriage assistance in Nepal by Imperial Matrimonial, Advocates & Legal Associates.",
+          "Professional court marriage assistance in Nepal by BiheInCourt, Advocates & Legal Associates.",
       },
     ],
   }),

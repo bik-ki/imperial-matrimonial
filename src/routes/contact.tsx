@@ -12,11 +12,11 @@ import { site } from "@/config/site";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact Imperial Matrimonial — Advocates & Legal Associates" },
+      { title: "Contact BiheInCourt — Advocates & Legal Associates" },
       {
         name: "description",
         content:
-          "Contact Imperial Matrimonial about court marriage registration assistance in Nepal.",
+          "Contact BiheInCourt about court marriage registration assistance in Nepal.",
       },
     ],
   }),

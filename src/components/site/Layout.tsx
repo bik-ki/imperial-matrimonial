@@ -10,7 +10,6 @@ import {
   Facebook,
   Youtube,
   Music2,
-  MapPin,
   Mail,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -261,23 +260,8 @@ export function SiteFooter() {
             </li>
             <li className="flex gap-2">
               <Mail className="h-4 w-4 shrink-0 text-gold" />
-              {site.email.includes("[") ? "[Client to provide verified email address]" : site.email}
+              <a href={`mailto:${site.email}`}>{site.email}</a>
             </li>
-            <li className="flex gap-2">
-              <MapPin className="h-4 w-4 shrink-0 text-gold" />
-              {site.address.includes("[")
-                ? "[Client to provide verified office address]"
-                : site.address}
-            </li>
-            {site.hours.some((h) => h.time.includes("[")) ? (
-              <li className="text-xs">[Client to provide verified office hours]</li>
-            ) : (
-              site.hours.map((h) => (
-                <li key={h.days} className="text-xs">
-                  {h.days}: {h.time}
-                </li>
-              ))
-            )}
           </ul>
         </div>
       </div>

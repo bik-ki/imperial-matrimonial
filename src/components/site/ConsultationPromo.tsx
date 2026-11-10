@@ -3,7 +3,6 @@ import { useNavigate } from "@tanstack/react-router";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { useConsultation } from "./ConsultationDialog";
 import { fetchConsultationPromo, type ConsultationPromo } from "@/lib/consultation-promo";
-import { sanityConfigured } from "@/lib/sanity";
 
 const DISMISSED_KEY = "imperial_consultation_promo_dismissed_v1";
 
@@ -31,7 +30,7 @@ export function ConsultationPromo() {
   const [imageFailed, setImageFailed] = useState(false);
 
   useEffect(() => {
-    if (!sanityConfigured || wasDismissed()) return;
+    if (wasDismissed()) return;
 
     let active = true;
     fetchConsultationPromo()

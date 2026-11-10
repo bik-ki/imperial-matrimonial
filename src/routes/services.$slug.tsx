@@ -1,25 +1,32 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Check, ArrowLeft } from "lucide-react";
+import { PortableText } from "@portabletext/react";
 import { Button } from "@/components/ui/button";
-import { services } from "@/data/content";
+import { getPublishedService } from "@/lib/sanity.server";
 import { useT } from "@/lib/i18n";
 import { useConsultation } from "@/components/site/ConsultationDialog";
 import { WhatsAppButton } from "@/components/site/WhatsAppButton";
 import { ServiceCard } from "@/components/site/Sections";
+import { getServiceIcon } from "@/lib/service-icons";
 
 export const Route = createFileRoute("/services/$slug")({
-  loader: ({ params }) => {
-    const s = services.find((x) => x.slug === params.slug);
-    if (!s) throw notFound();
-    return { slug: s.slug, title: s.title.en, short: s.short.en };
+  loader: async ({ params }) => {
+    const result = await getPublishedService({ data: params.slug });
+    if (!result) throw notFound();
+    return result;
   },
   head: ({ loaderData }) => ({
     meta: loaderData
       ? [
-          { title: `${loaderData.title} — BiheInCourt` },
-          { name: "description", content: loaderData.short },
-          { property: "og:title", content: loaderData.title },
-          { property: "og:description", content: loaderData.short },
+          {
+            title: `${loaderData.service.seoTitle || loaderData.service.title} — BiheInCourt`,
+          },
+          {
+            name: "description",
+            content: loaderData.service.seoDescription || loaderData.service.summary,
+          },
+          { property: "og:title", content: loaderData.service.title },
+          { property: "og:description", content: loaderData.service.summary },
         ]
       : [{ title: "Service not found" }, { name: "robots", content: "noindex" }],
   }),
@@ -27,10 +34,12 @@ export const Route = createFileRoute("/services/$slug")({
 });
 
 function ServicePage() {
-  const { slug } = Route.useLoaderData();
-  const s = services.find((x) => x.slug === slug)!;
+  const { service: s, otherServices } = Route.useLoaderData();
   const { lang } = useT();
   const { open } = useConsultation();
+  const Icon = getServiceIcon(s.slug);
+  const title = lang === "ne" ? s.titleNe || s.title : s.title;
+  const summary = lang === "ne" ? s.summaryNe || s.summary : s.summary;
   return (
     <>
       <section className="border-b">
@@ -39,11 +48,12 @@ function ServicePage() {
             to="/services"
             className="inline-flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft className="h-3 w-3" /> {lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "All services"}
+            <ArrowLeft className="h-3 w-3" />{" "}
+            {lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "All services"}
           </Link>
-          <s.icon className="mt-10 h-8 w-8 text-gold" strokeWidth={1.3} />
-          <h1 className="mt-6 max-w-3xl text-5xl md:text-7xl">{s.title[lang]}</h1>
-          <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{s.short[lang]}</p>
+          <Icon className="mt-10 h-8 w-8 text-gold" strokeWidth={1.3} />
+          <h1 className="mt-6 max-w-3xl text-5xl md:text-7xl">{title}</h1>
+          <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{summary}</p>
         </div>
       </section>
       <p className="container-x border-l-2 border-gold bg-secondary/50 p-5 text-sm text-muted-foreground">
@@ -52,34 +62,28 @@ function ServicePage() {
           : "Project draft: verify this service description and listed inclusions with the client before publication. Do not rely on these details as confirmed requirements, outcomes, timelines, or fees."}
       </p>
       <div className="container-x grid gap-12 py-16 lg:grid-cols-[1.4fr_1fr]">
-        <div className="space-y-8 leading-relaxed">
-          <section>
-            <h2 className="text-2xl">{lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Overview"}</h2>
-            <p className="mt-3 text-muted-foreground">{s.overview[lang]}</p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl">
-              {lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Who this service may be for"}
-            </h2>
-            <p className="mt-3 text-muted-foreground">{s.whoFor[lang]}</p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl">
-              {lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Information and documents to confirm"}
-            </h2>
-            <p className="mt-3 text-muted-foreground">{s.confirm[lang]}</p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl">{lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "How to enquire"}</h2>
-            <p className="mt-3 text-muted-foreground">{s.enquiry[lang]}</p>
-          </section>
-
-          {s.body.map((p, i) => (
-            <p key={i}>{p}</p>
-          ))}
+        <div className="space-y-5 leading-relaxed">
+          <PortableText
+            value={s.body}
+            components={{
+              block: {
+                normal: ({ children }) => <p>{children}</p>,
+                h2: ({ children }) => <h2 className="text-3xl">{children}</h2>,
+                h3: ({ children }) => <h3 className="text-2xl">{children}</h3>,
+                blockquote: ({ children }) => (
+                  <blockquote className="border-l-2 border-gold pl-4 text-muted-foreground">
+                    {children}
+                  </blockquote>
+                ),
+              },
+              list: {
+                bullet: ({ children }) => <ul className="list-disc space-y-2 pl-6">{children}</ul>,
+                number: ({ children }) => (
+                  <ol className="list-decimal space-y-2 pl-6">{children}</ol>
+                ),
+              },
+            }}
+          />
           {s.pendingDetails && (
             <p className="border-l-2 border-gold pl-4 text-sm text-muted-foreground">
               <strong className="text-foreground">
@@ -114,10 +118,10 @@ function ServicePage() {
               <Link to="/contact">{lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Contact us"}</Link>
             </Button>
             <WhatsAppButton
-              context={`Service: ${s.title.en}`}
+              context={`Service: ${s.title}`}
               variant="outline"
               size="lg"
-              message={`Hello BiheInCourt, I'd like to know more about ${s.title.en}.`}
+              message={`Hello BiheInCourt, I'd like to know more about ${s.title}.`}
             />
           </div>
         </aside>
@@ -129,15 +133,33 @@ function ServicePage() {
               {lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Client review required"}
             </p>
             <h2 className="mt-4 text-3xl">
-              {lang === "ne" ? "अनुवाद समीक्षा आवश्यक — प्रकाशन अघि विवरण जाँच गर्नुहोस्" : "Details to verify before publication."}
+              {lang === "ne"
+                ? "अनुवाद समीक्षा आवश्यक — प्रकाशन अघि विवरण जाँच गर्नुहोस्"
+                : "Details to verify before publication."}
             </h2>
             <ul className="mt-6 grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
-              <li>{lang === "ne" ? "अनुवाद समीक्षा आवश्यक — सेवा आवश्यकताहरू" : "[Verified service requirements needed]"}</li>
-              <li>{lang === "ne" ? "अनुवाद समीक्षा आवश्यक — समयसीमा" : "[Verified timeline needed]"}</li>
-              <li>{lang === "ne" ? "अनुवाद समीक्षा आवश्यक — योग्यता नियम" : "[Verified eligibility rules needed]"}</li>
-              <li>{lang === "ne" ? "अनुवाद समीक्षा आवश्यक — शुल्क जानकारी" : "[Verified fee information needed]"}</li>
+              <li>
+                {lang === "ne"
+                  ? "अनुवाद समीक्षा आवश्यक — सेवा आवश्यकताहरू"
+                  : "[Verified service requirements needed]"}
+              </li>
+              <li>
+                {lang === "ne" ? "अनुवाद समीक्षा आवश्यक — समयसीमा" : "[Verified timeline needed]"}
+              </li>
+              <li>
+                {lang === "ne"
+                  ? "अनुवाद समीक्षा आवश्यक — योग्यता नियम"
+                  : "[Verified eligibility rules needed]"}
+              </li>
+              <li>
+                {lang === "ne"
+                  ? "अनुवाद समीक्षा आवश्यक — शुल्क जानकारी"
+                  : "[Verified fee information needed]"}
+              </li>
               <li className="sm:col-span-2">
-                {lang === "ne" ? "अनुवाद समीक्षा आवश्यक — कानूनी विवरण" : "[Verified legal details needed]"}
+                {lang === "ne"
+                  ? "अनुवाद समीक्षा आवश्यक — कानूनी विवरण"
+                  : "[Verified legal details needed]"}
               </li>
             </ul>
           </div>
@@ -147,12 +169,9 @@ function ServicePage() {
         <div className="container-x">
           <h2 className="text-3xl">{lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Other services"}</h2>
           <div className="mt-8 grid border-l border-t sm:grid-cols-2 lg:grid-cols-3">
-            {services
-              .filter((x) => x.slug !== slug)
-              .slice(0, 3)
-              .map((x) => (
-                <ServiceCard key={x.slug} s={x} />
-              ))}
+            {otherServices.map((x) => (
+              <ServiceCard key={x.slug} s={x} />
+            ))}
           </div>
         </div>
       </section>

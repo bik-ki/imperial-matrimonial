@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as EligibilityRouteImport } from './routes/eligibility'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as ProcessRouteImport } from './routes/process'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -39,6 +40,11 @@ const ContactRoute = ContactRouteImport.update({
 const EligibilityRoute = EligibilityRouteImport.update({
   id: '/eligibility',
   path: '/eligibility',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GalleryRoute = GalleryRouteImport.update({
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/eligibility': typeof EligibilityRoute
+  '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/process': typeof ProcessRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -95,6 +102,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/eligibility': typeof EligibilityRoute
+  '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/process': typeof ProcessRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -109,6 +117,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/eligibility': typeof EligibilityRoute
+  '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/process': typeof ProcessRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -124,6 +133,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/eligibility'
+    | '/faq'
     | '/gallery'
     | '/process'
     | '/blog/$slug'
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/eligibility'
+    | '/faq'
     | '/gallery'
     | '/process'
     | '/blog/$slug'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/eligibility'
+    | '/faq'
     | '/gallery'
     | '/process'
     | '/blog/$slug'
@@ -164,6 +176,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   EligibilityRoute: typeof EligibilityRoute
+  FaqRoute: typeof FaqRoute
   GalleryRoute: typeof GalleryRoute
   ProcessRoute: typeof ProcessRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -201,6 +214,13 @@ declare module '@tanstack/react-router' {
       path: '/eligibility'
       fullPath: '/eligibility'
       preLoaderRoute: typeof EligibilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gallery': {
@@ -260,6 +280,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   EligibilityRoute: EligibilityRoute,
+  FaqRoute: FaqRoute,
   GalleryRoute: GalleryRoute,
   ProcessRoute: ProcessRoute,
   BlogSlugRoute: BlogSlugRoute,

@@ -18,6 +18,7 @@ import { ConsultationProvider } from "@/components/site/ConsultationDialog";
 import { SiteHeader, SiteFooter, MobileCTABar } from "@/components/site/Layout";
 import { WhatsAppFloat } from "@/components/site/WhatsAppButton";
 import { ConsultationPromo } from "@/components/site/ConsultationPromo";
+import { getSiteSettings } from "@/lib/sanity.server";
 
 function NotFoundComponent() {
   return (
@@ -71,14 +72,20 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  loader: () => getSiteSettings(),
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "BiheInCourt — Court Marriage Lawyers in Nepal" },
-      { name: "description", content: "Professional court marriage registration assistance in Kathmandu, Nepal." },
+      {
+        name: "description",
+        content: "Professional court marriage registration assistance in Kathmandu, Nepal.",
+      },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "/thumbnail.png" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "/thumbnail.png" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -88,7 +95,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap",
       },
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/logo.png", type: "image/png" },
     ],
   }),
   shellComponent: RootShell,
@@ -113,6 +120,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const settings = Route.useLoaderData();
   const path = useRouterState({ select: (s) => s.location.pathname });
   const internal = path.startsWith("/internal");
   return (
@@ -125,7 +133,7 @@ function RootComponent() {
           </main>
           {!internal && (
             <>
-              <SiteFooter />
+              <SiteFooter socialLinks={settings?.socialLinks} />
               <WhatsAppFloat />
               <MobileCTABar />
               <ConsultationPromo />

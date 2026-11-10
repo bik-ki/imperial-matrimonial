@@ -230,7 +230,7 @@ export function BlogPreview() {
 export function InstagramCard({ p }: { p: (typeof instagramPosts)[number] }) {
   return (
     <div className="relative aspect-square overflow-hidden bg-muted">
-      <img src={p.image} alt="" loading="lazy" className="h-full w-full object-cover grayscale" />
+      <img src={p.image} alt="" loading="lazy" className="h-full w-full object-cover" />
       <div className="absolute inset-0 flex flex-col justify-between bg-ink/65 p-4 text-ink-foreground">
         <p className="text-[0.65rem] uppercase tracking-widest text-gold">Sample post preview</p>
         <p className="line-clamp-4 text-sm">{p.caption}</p>

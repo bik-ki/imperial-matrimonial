@@ -6,9 +6,11 @@ import {
   Phone,
   MessageCircle,
   CalendarCheck,
+  MapPin,
   Instagram,
   Facebook,
   Youtube,
+  Linkedin,
   Music2,
   Mail,
 } from "lucide-react";
@@ -18,6 +20,7 @@ import { site, whatsappUrl } from "@/config/site";
 import { services } from "@/data/content";
 import { trackWhatsApp } from "@/lib/leads";
 import { useConsultation } from "./ConsultationDialog";
+import type { SiteSettingsContent } from "@/lib/sanity.server";
 
 const nav: { to: string; key: TKey }[] = [
   { to: "/", key: "nav.home" },
@@ -25,6 +28,7 @@ const nav: { to: string; key: TKey }[] = [
   { to: "/process", key: "nav.process" },
   { to: "/services", key: "nav.services" },
   { to: "/eligibility", key: "nav.eligibility" },
+  { to: "/faq", key: "nav.faq" },
   { to: "/blog", key: "nav.blog" },
   { to: "/gallery", key: "nav.gallery" },
   { to: "/contact", key: "nav.contact" },
@@ -32,19 +36,30 @@ const nav: { to: string; key: TKey }[] = [
 
 const hasVerifiedPhone = !site.phoneDisplay.includes("[");
 const hasVerifiedWhatsApp = !site.whatsappDisplay.includes("[");
-const hasVerifiedInstagram =
-  !site.instagramHandle.includes("[") && new URL(site.social.instagram).pathname !== "/";
 
 export function Wordmark({ inverse = false }: { inverse?: boolean }) {
   return (
-    <Link to="/" className="flex flex-col leading-none" aria-label={`${site.name} home`}>
-      <span
-        className={`whitespace-nowrap font-serif text-sm tracking-[0.08em] sm:text-xl sm:tracking-[0.14em] ${inverse ? "text-ink-foreground" : "text-foreground"}`}
-      >
-        {site.name}
-      </span>
-      <span className="mt-1 whitespace-nowrap text-[0.5rem] font-semibold uppercase tracking-[0.15em] text-gold sm:text-[0.58rem] sm:tracking-[0.3em]">
-        Advocates & Legal Associates
+    <Link
+      to="/"
+      className="flex items-center gap-2 leading-none sm:gap-3"
+      aria-label={`${site.name} home`}
+    >
+      <img
+        src="/logo.png"
+        alt=""
+        width={44}
+        height={44}
+        className="h-10 w-10 object-contain sm:h-11 sm:w-11"
+      />
+      <span className="flex flex-col">
+        <span
+          className={`whitespace-nowrap font-serif text-sm tracking-[0.08em] sm:text-xl sm:tracking-[0.14em] ${inverse ? "text-ink-foreground" : "text-foreground"}`}
+        >
+          {site.name}
+        </span>
+        <span className="mt-1 whitespace-nowrap text-[0.5rem] font-semibold uppercase tracking-[0.15em] text-gold sm:text-[0.58rem] sm:tracking-[0.3em]">
+          Advocates & Legal Associates
+        </span>
       </span>
     </Link>
   );
@@ -172,41 +187,71 @@ export function SiteHeader() {
   );
 }
 
-const socials = [
-  { href: site.social.instagram, icon: Instagram, label: "Instagram" },
-  { href: site.social.facebook, icon: Facebook, label: "Facebook" },
-  { href: site.social.tiktok, icon: Music2, label: "TikTok" },
-  { href: site.social.youtube, icon: Youtube, label: "YouTube" },
-  { href: whatsappUrl(), icon: MessageCircle, label: "WhatsApp" },
+const socialIcons = {
+  facebook: Facebook,
+  instagram: Instagram,
+  tiktok: Music2,
+  youtube: Youtube,
+  linkedin: Linkedin,
+} as const;
+
+type SocialPlatform = keyof typeof socialIcons;
+
+function isSocialPlatform(platform: string): platform is SocialPlatform {
+  return platform in socialIcons;
+}
+
+const fallbackSocialLinks = [
+  { platform: "instagram", url: site.social.instagram },
+  { platform: "facebook", url: site.social.facebook },
+  { platform: "tiktok", url: site.social.tiktok },
+  { platform: "youtube", url: site.social.youtube },
 ];
 
-export function SocialIcons({ inverse }: { inverse?: boolean }) {
+export function SocialIcons({
+  inverse,
+  socialLinks,
+}: {
+  inverse?: boolean;
+  socialLinks?: SiteSettingsContent["socialLinks"];
+}) {
+  const links = socialLinks ?? fallbackSocialLinks;
+  const icons = links.flatMap((link) => {
+    if (!isSocialPlatform(link.platform) || !/^https:\/\/[^/]+\/[^/?#]/.test(link.url)) {
+      return [];
+    }
+    const Icon = socialIcons[link.platform];
+    return [{ ...link, Icon, label: link.platform[0]!.toUpperCase() + link.platform.slice(1) }];
+  });
+  if (hasVerifiedWhatsApp) {
+    icons.push({
+      platform: "whatsapp",
+      url: whatsappUrl(),
+      Icon: MessageCircle,
+      label: "WhatsApp",
+    });
+  }
+
   return (
     <div className="flex gap-2">
-      {socials
-        .filter((s) => {
-          if (s.label === "WhatsApp") return hasVerifiedWhatsApp;
-          if (s.label === "Instagram") return hasVerifiedInstagram;
-          return new URL(s.href).pathname !== "/";
-        })
-        .map((s) => (
-          <a
-            key={s.label}
-            href={s.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={s.label}
-            onClick={() => s.label === "WhatsApp" && trackWhatsApp("Social icon")}
-            className={`flex h-9 w-9 items-center justify-center border transition-colors ${inverse ? "border-ink-foreground/20 hover:border-gold hover:text-gold" : "hover:border-foreground"}`}
-          >
-            <s.icon className="h-4 w-4" />
-          </a>
-        ))}
+      {icons.map((s) => (
+        <a
+          key={s.platform}
+          href={s.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={s.label}
+          onClick={() => s.platform === "whatsapp" && trackWhatsApp("Social icon")}
+          className={`flex h-9 w-9 items-center justify-center border transition-colors ${inverse ? "border-ink-foreground/20 hover:border-gold hover:text-gold" : "hover:border-foreground"}`}
+        >
+          <s.Icon className="h-4 w-4" />
+        </a>
+      ))}
     </div>
   );
 }
 
-export function SiteFooter() {
+export function SiteFooter({ socialLinks }: { socialLinks?: SiteSettingsContent["socialLinks"] }) {
   const { lang, t } = useT();
   const { open } = useConsultation();
   const legalLinksToRender = [
@@ -230,7 +275,7 @@ export function SiteFooter() {
             related documentation in Nepal.
           </p>
           <div className="mt-6">
-            <SocialIcons inverse />
+            <SocialIcons inverse socialLinks={socialLinks} />
           </div>
           <div className="mt-5 flex items-center gap-3">
             <span className="text-xs text-ink-foreground/60">{t("language.label")}</span>
@@ -269,11 +314,17 @@ export function SiteFooter() {
           <h2 className="eyebrow text-gold">{t("footer.contact")}</h2>
           <ul className="mt-5 space-y-3 text-sm text-ink-foreground/70">
             <li className="flex gap-2">
+              <MapPin className="h-4 w-4 shrink-0 text-gold" />
+              <span>{site.location}</span>
+            </li>
+            <li className="flex gap-2">
               <Phone className="h-4 w-4 shrink-0 text-gold" />
               {hasVerifiedPhone ? (
                 <a href={site.phoneHref}>{site.phoneDisplay}</a>
               ) : (
-                <span>{t("footer.clientReview")} {t("footer.phone")}</span>
+                <span>
+                  {t("footer.clientReview")} {t("footer.phone")}
+                </span>
               )}
             </li>
             <li className="flex gap-2">
@@ -285,7 +336,8 @@ export function SiteFooter() {
       </div>
       <div className="container-x flex flex-col gap-3 border-t border-ink-foreground/10 py-6 text-xs text-ink-foreground/50 md:flex-row md:justify-between">
         <p>
-          © {new Date().getFullYear()} {site.name} — Advocates & Legal Associates. {t("footer.allRights")}
+          © {new Date().getFullYear()} {site.name} — Advocates & Legal Associates.{" "}
+          {t("footer.allRights")}
         </p>
         <div className="flex flex-wrap gap-x-5 gap-y-2">
           {legalLinksToRender.map((legal) => (

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { services } from "@/data/content";
 import { useT, type TKey } from "@/lib/i18n";
+import { gmailComposeUrl, isConfiguredBusinessEmail, site } from "@/config/site";
 
 const phoneRe = /^[+\d][\d\s-]{6,19}$/;
 
@@ -42,7 +43,8 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
   const { lang, t } = useT();
   const [v, setV] = useState<Record<string, string | boolean>>({ consent: false });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [status, setStatus] = useState<"idle" | "done">("idle");
+  const [status, setStatus] = useState<"idle" | "preview" | "error" | "opened">("idle");
+  const [statusMessage, setStatusMessage] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
   const focusInvalidField = useRef(false);
   const set = (k: string, val: string | boolean) => setV((p) => ({ ...p, [k]: val }));

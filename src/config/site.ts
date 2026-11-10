@@ -9,6 +9,10 @@ export const site = {
   phoneHref: `tel:+977${localPhoneNumber}`,
   whatsappDisplay: "+977 974 572 2755",
   email: "biheincourt@gmail.com",
+  consultation: {
+    subjectPrefix: "Consultation request",
+    bodyHeading: "New consultation request",
+  },
   whatsappMessage:
     "Hello BiheInCourt, I would like to know more about your court marriage services in Nepal.",
   social: {

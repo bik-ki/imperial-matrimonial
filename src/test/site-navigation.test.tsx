@@ -159,6 +159,7 @@ describe("Public site navigation", () => {
       "/services",
       "/eligibility",
       "/blog",
+      "/gallery",
       "/contact",
     ]);
   });
@@ -177,7 +178,16 @@ describe("Public site navigation", () => {
       Array.from(quickLinks?.querySelectorAll<HTMLAnchorElement>("a") ?? [], (link) =>
         link.getAttribute("href"),
       ),
-    ).toEqual(["/", "/about", "/process", "/services", "/eligibility", "/blog", "/contact"]);
+    ).toEqual([
+      "/",
+      "/about",
+      "/process",
+      "/services",
+      "/eligibility",
+      "/blog",
+      "/gallery",
+      "/contact",
+    ]);
     expect(host.querySelector('footer [aria-label="Language"]')).not.toBeNull();
   });
 

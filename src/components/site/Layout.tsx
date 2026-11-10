@@ -30,6 +30,7 @@ const nav: { to: string; key: TKey }[] = [
   { to: "/eligibility", key: "nav.eligibility" },
   { to: "/faq", key: "nav.faq" },
   { to: "/blog", key: "nav.blog" },
+  { to: "/gallery", key: "nav.gallery" },
   { to: "/contact", key: "nav.contact" },
 ];
 

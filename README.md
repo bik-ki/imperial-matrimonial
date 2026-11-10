@@ -15,8 +15,9 @@ I have also provided a screenshot of an earlier website prototype. Use it only a
 IMPORTANT: Do not replicate the old design. Create a significantly more professional, premium, minimal, and modern website.
 
 ==================================================
+
 1. BUSINESS OVERVIEW
-==================================================
+   \==================================================
 
 BiheInCourt primarily specializes in court marriage registration and related legal assistance in Nepal.
 
@@ -46,6 +47,7 @@ Every important section should encourage visitors to:
 5. Explore the legal marriage process.
 
 Target audience:
+
 - Nepali couples planning court marriage.
 - Couples living outside their home district.
 - Nepali citizens marrying foreign nationals.
@@ -54,8 +56,7 @@ Target audience:
 
 The website should initially be in English, but include a functional English / नेपाली language toggle.
 
-==================================================
-2. DESIGN SYSTEM AND VISUAL IDENTITY
+================================================== 2. DESIGN SYSTEM AND VISUAL IDENTITY
 ==================================================
 
 Create a premium, sophisticated legal brand identity.
@@ -64,6 +65,7 @@ THEME:
 Strict black-and-white visual direction.
 
 Primary colors:
+
 - Deep black: #111111
 - Pure white: #FFFFFF
 - Off-white: #F7F7F5
@@ -74,6 +76,7 @@ Primary colors:
 Use a very restrained muted gold accent only where necessary, such as small icons or important CTA details. The website must primarily remain monochromatic.
 
 DESIGN STYLE:
+
 - Minimalist luxury.
 - Modern law firm aesthetic.
 - Editorial typography.
@@ -85,6 +88,7 @@ DESIGN STYLE:
 - Premium typography.
 
 Avoid:
+
 - Excessive gradients.
 - Bright colors.
 - Unnecessary animations.
@@ -100,8 +104,7 @@ Use Inter or Manrope for body text and navigation.
 
 The website should feel like an established Kathmandu-based legal practice.
 
-==================================================
-3. WEBSITE STRUCTURE
+================================================== 3. WEBSITE STRUCTURE
 ==================================================
 
 Build the following pages and sections:
@@ -128,6 +131,7 @@ Use a clean navigation bar with:
 - Contact
 
 Right side:
+
 - Language switcher
 - Book Consultation button
 
@@ -135,8 +139,7 @@ The navigation should be sticky and responsive.
 
 On mobile, use a functional hamburger menu.
 
-==================================================
-4. HOMEPAGE DESIGN
+================================================== 4. HOMEPAGE DESIGN
 ==================================================
 
 Create an impressive hero section.
@@ -179,6 +182,7 @@ Below the hero, create a horizontal trust indicator section with carefully desig
 Use editable placeholder values rather than inventing company achievements.
 
 Possible indicators:
+
 - Years of Legal Experience
 - Couples Assisted
 - Registration Services
@@ -186,8 +190,7 @@ Possible indicators:
 
 Never fabricate certifications, reviews, success numbers, or legal guarantees.
 
-==================================================
-5. COURT MARRIAGE PROCESS SECTION
+================================================== 5. COURT MARRIAGE PROCESS SECTION
 ==================================================
 
 Create a visually engaging step-by-step timeline.
@@ -210,6 +213,7 @@ STEP 04 — Court Registration
 Guide the couple through the applicable court registration process.
 
 Each step should have:
+
 - Number
 - Icon
 - Short description
@@ -220,8 +224,7 @@ Use a horizontal timeline on desktop and vertical timeline on mobile.
 IMPORTANT:
 Do not present estimated processing times as guaranteed. Actual requirements and timelines may depend on the couple's circumstances and applicable legal procedures.
 
-==================================================
-6. ELIGIBILITY CHECKER — IMPORTANT FEATURE
+================================================== 6. ELIGIBILITY CHECKER — IMPORTANT FEATURE
 ==================================================
 
 This is one of the most important website features.
@@ -234,6 +237,7 @@ STEP 1:
 Are both partners Nepali citizens?
 
 Options:
+
 - Yes
 - No
 - One Nepali and one foreign national
@@ -242,6 +246,7 @@ STEP 2:
 What is your current marital status?
 
 Options:
+
 - Both unmarried
 - One previously married
 - Both previously married
@@ -250,6 +255,7 @@ STEP 3:
 Are both partners legally of marriageable age?
 
 Options:
+
 - Yes
 - No
 - Not sure
@@ -258,6 +264,7 @@ STEP 4:
 Do both partners have valid identification documents?
 
 Options:
+
 - Yes
 - No
 - Partially
@@ -266,6 +273,7 @@ STEP 5:
 Where are you currently residing?
 
 Options:
+
 - Kathmandu Valley
 - Other district in Nepal
 - Outside Nepal
@@ -275,6 +283,7 @@ STEP 6:
 When are you planning to get married?
 
 Options:
+
 - As soon as possible
 - Within one month
 - Within three months
@@ -291,6 +300,7 @@ Possible result categories:
 3. A consultation is recommended before determining eligibility.
 
 Show:
+
 - Summary of submitted answers.
 - Preliminary result.
 - Important disclaimer.
@@ -306,6 +316,7 @@ Do not automatically declare someone legally eligible based on incomplete inform
 Use appropriate disclaimers explaining that eligibility depends on applicable Nepalese law, supporting documents, and individual circumstances.
 
 Make the entire checker functional with:
+
 - Next and Previous buttons.
 - Progress indicator.
 - Input validation.
@@ -314,8 +325,7 @@ Make the entire checker functional with:
 
 Do not ask for highly sensitive personal information such as citizenship numbers, passport numbers, or document uploads during this initial screening.
 
-==================================================
-7. SERVICES SECTION
+================================================== 7. SERVICES SECTION
 ==================================================
 
 Create an elegant services grid.
@@ -330,6 +340,7 @@ Services:
 6. Marriage Registration Guidance
 
 Each service should have:
+
 - Professional icon.
 - Service title.
 - Brief description.
@@ -339,8 +350,7 @@ Use subtle hover animations.
 
 Each Learn More button should open a dedicated service detail page or a relevant information section.
 
-==================================================
-8. INSTAGRAM / SOCIAL MEDIA INTEGRATION
+================================================== 8. INSTAGRAM / SOCIAL MEDIA INTEGRATION
 ==================================================
 
 Create a section titled:
@@ -352,6 +362,7 @@ Show a visually appealing Instagram-style feed.
 Display 6 post cards in a responsive grid.
 
 Include:
+
 - Image thumbnail.
 - Instagram icon.
 - Post caption preview.
@@ -360,6 +371,7 @@ Include:
 Also create a featured Instagram Reel preview section.
 
 The Reel preview should resemble a modern vertical Instagram video card with:
+
 - 9:16 aspect ratio.
 - Thumbnail image.
 - Play icon.
@@ -375,8 +387,7 @@ Create an easy-to-replace data structure for Instagram posts and reels.
 
 Do not claim the feed is live-connected to Instagram unless an actual integration exists.
 
-==================================================
-9. BLOG / LEGAL RESOURCES
+================================================== 9. BLOG / LEGAL RESOURCES
 ==================================================
 
 Build a professional blog section.
@@ -385,6 +396,7 @@ Heading:
 "Knowledge Before Commitment."
 
 Create article cards with:
+
 - Featured image.
 - Category.
 - Publication date.
@@ -404,6 +416,7 @@ Include sample article topics:
 Create individual blog article pages.
 
 Include:
+
 - Article title.
 - Featured image.
 - Author placeholder.
@@ -417,8 +430,7 @@ Create a searchable and filterable blog listing.
 
 Use clearly marked placeholder legal content that can be reviewed and replaced by the firm's lawyers before publication.
 
-==================================================
-10. CONTACT AND CONSULTATION BOOKING
+================================================== 10. CONTACT AND CONSULTATION BOOKING
 ==================================================
 
 Build a professional contact section.
@@ -440,6 +452,7 @@ Do not invent phone numbers, email addresses, addresses, or social media URLs.
 CONTACT FORM:
 
 Fields:
+
 - Full Name
 - Phone Number
 - Email Address
@@ -451,6 +464,7 @@ Fields:
 Add a required privacy consent checkbox.
 
 On submission:
+
 - Validate the form.
 - Display appropriate error messages.
 - Display a successful submission confirmation.
@@ -461,6 +475,7 @@ CONSULTATION BOOKING:
 Create a dedicated consultation booking modal or page.
 
 Include:
+
 - Name
 - Contact number
 - Email
@@ -474,8 +489,7 @@ For now, this is a booking request, not a confirmed appointment.
 After submission, show:
 "Your consultation request has been received. Our team will contact you to confirm the appointment."
 
-==================================================
-11. WHATSAPP INTEGRATION
+================================================== 11. WHATSAPP INTEGRATION
 ==================================================
 
 WhatsApp is an important conversion channel.
@@ -489,6 +503,7 @@ Example:
 "Hello BiheInCourt, I would like to know more about your court marriage services in Nepal."
 
 Also add WhatsApp buttons in:
+
 - Hero section
 - Eligibility results
 - Services section
@@ -499,13 +514,13 @@ Use the standard wa.me URL format.
 
 Keep the WhatsApp number in one central configuration file so it can easily be changed.
 
-==================================================
-12. LEAD GENERATION AND EXCEL EXPORT
+================================================== 12. LEAD GENERATION AND EXCEL EXPORT
 ==================================================
 
 This is a critical business requirement.
 
 Every lead submitted through:
+
 - Contact form
 - Consultation booking
 - Eligibility checker (only when the visitor voluntarily provides contact details)
@@ -539,6 +554,7 @@ Include a clearly separated, non-public route such as:
 /internal/lead-export
 
 This page should provide:
+
 - Total leads captured.
 - Lead list in a clean table.
 - Search functionality.
@@ -551,6 +567,7 @@ This page should provide:
 Use the SheetJS (xlsx) library for Excel export.
 
 The exported Excel file should have:
+
 - Proper column headers.
 - Readable column widths.
 - One lead per row.
@@ -565,8 +582,7 @@ Structure the code so that Supabase can be connected later for centralized lead 
 
 Do not build the full admin dashboard at this stage.
 
-==================================================
-13. ABOUT US SECTION
+================================================== 13. ABOUT US SECTION
 ==================================================
 
 Create a professional About Us page.
@@ -574,6 +590,7 @@ Create a professional About Us page.
 Position BiheInCourt as a legal service provider focused on helping couples navigate marriage registration in Nepal.
 
 Include:
+
 - Company introduction.
 - Mission.
 - Professional approach.
@@ -585,8 +602,7 @@ Add a team section with replaceable profile images and editable names and design
 
 Do not invent lawyer credentials, bar registration details, or professional achievements.
 
-==================================================
-14. FOOTER
+================================================== 14. FOOTER
 ==================================================
 
 Build a premium multi-column footer.
@@ -604,6 +620,7 @@ Column 4:
 Contact Information.
 
 Include social media icons:
+
 - Instagram
 - Facebook
 - TikTok
@@ -613,18 +630,19 @@ Include social media icons:
 All links should be configurable.
 
 Include:
+
 - Privacy Policy
 - Terms and Conditions
 - Legal Disclaimer
 - Copyright notice.
 
-==================================================
-15. TECHNICAL REQUIREMENTS
+================================================== 15. TECHNICAL REQUIREMENTS
 ==================================================
 
 Build this as a fully functional frontend prototype.
 
 Preferred stack:
+
 - React
 - TypeScript
 - Tailwind CSS
@@ -635,6 +653,7 @@ Preferred stack:
 Use clean component-based architecture.
 
 Create reusable components for:
+
 - Navigation
 - Footer
 - CTA buttons
@@ -667,6 +686,7 @@ Language toggle should switch between English and Nepali for the main website co
 Excel and CSV exports must work.
 
 The website must be responsive across:
+
 - Desktop
 - Laptop
 - Tablet
@@ -678,8 +698,7 @@ Use localStorage for prototype persistence.
 
 Keep business contact information, social URLs, service descriptions, Instagram posts, and other editable content in centralized configuration/data files.
 
-==================================================
-16. USER EXPERIENCE AND CONVERSION OPTIMIZATION
+================================================== 16. USER EXPERIENCE AND CONVERSION OPTIMIZATION
 ==================================================
 
 The website should guide visitors toward conversion without appearing overly promotional.
@@ -695,6 +714,7 @@ Important CTA placement:
 7. Footer.
 
 On mobile, include a discreet sticky bottom CTA with:
+
 - Call
 - WhatsApp
 - Book Consultation
@@ -705,8 +725,7 @@ Use smooth scrolling and subtle entrance animations.
 
 Prioritize loading performance and accessibility.
 
-==================================================
-17. FINAL DESIGN DIRECTION
+================================================== 17. FINAL DESIGN DIRECTION
 ==================================================
 
 The final website should look like a premium Kathmandu-based law firm website.
@@ -721,6 +740,7 @@ Think:
 - Excellent mobile experience.
 
 It should NOT look like:
+
 - A generic wedding planner website.
 - A matrimonial matchmaking platform.
 - A wedding photography website.
@@ -757,6 +777,30 @@ Continue developing this project in the [Lovable editor](https://lovable.dev/pro
 ## Development
 
 Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+
+### Consultation promotion popup
+
+The consultation promotion is controlled by the published Sanity `consultationPromo`
+document. It appears once per browser when `Show promotion` is enabled and all
+required copy is present. Dismissing it, closing it, pressing Escape, or choosing
+its CTA stores `imperial_consultation_promo_dismissed_v1` in `localStorage`, so
+it does not repeatedly show after dismissal. Visitors can see it again only
+after clearing that site data (or if the persistence key is intentionally
+versioned in the component).
+
+### Sanity and consultation configuration
+
+Copy `.env.example` to `.env.local` and provide the Sanity project settings and
+the firm's verified `VITE_CONSULTATION_RECIPIENT_EMAIL`. This address is
+intentionally a public client-side configuration value because Gmail must open a
+compose message addressed to it; it is not an authentication credential.
+
+The consultation subject and body heading are centralized in
+`src/config/site.ts`. The popup's heading, message, button label, visibility,
+image, and button destination are managed by the published Sanity
+`consultationPromo` document. Never place Sanity tokens, SMTP credentials,
+passwords, or other secrets in `.env.example`, `VITE_*` variables, or browser
+code.
 
 ```sh
 git clone <this-repository-url>

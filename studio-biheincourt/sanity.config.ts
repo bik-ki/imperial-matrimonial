@@ -6,6 +6,8 @@ import {schemaTypes} from './schemaTypes'
 const singletonDefinitions = [
   defineSingleton({documentId: 'homePage', schemaType: 'homePage'}),
   defineSingleton({documentId: 'siteSettings', schemaType: 'siteSettings'}),
+  defineSingleton({documentId: 'gallery', schemaType: 'gallery'}),
+  defineSingleton({documentId: 'consultationPromo', schemaType: 'consultationPromo'}),
 ]
 
 export default defineConfig({

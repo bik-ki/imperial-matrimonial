@@ -111,6 +111,39 @@ export type SiteSettingsContent = {
   socialLinks?: Array<{ platform: string; url: string }>;
 };
 
+export type GalleryImageContent = {
+  id: string;
+  src: string;
+  alt: string;
+  caption: string;
+};
+
+export type ConsultationPromoContent = {
+  image: string | null;
+  imageAlt: string;
+  heading: string;
+  message: string;
+  buttonLabel: string;
+  destination: "consultation" | "contact";
+};
+
+type SanityGalleryImage = {
+  _key?: string;
+  image?: unknown;
+  alt?: string;
+  caption?: string;
+};
+
+type SanityConsultationPromo = {
+  enabled?: boolean;
+  image?: unknown;
+  imageAlt?: string;
+  heading?: string;
+  message?: string;
+  buttonLabel?: string;
+  ctaDestination?: "consultation" | "contact";
+};
+
 const publishedPostFilter =
   '_type == "blogPost" && defined(slug.current) && defined(publishedAt) && dateTime(publishedAt) <= dateTime(now()) && !(_id in path("drafts.**"))';
 
@@ -150,6 +183,26 @@ async function getClient() {
     ...(token ? { token } : {}),
     useCdn: !token,
   });
+}
+
+async function getImageBuilder() {
+  const { default: imageUrlBuilder } = await import("@sanity/image-url");
+  return imageUrlBuilder({
+    projectId: process.env["SANITY_PROJECT_ID"] ?? defaultProjectId,
+    dataset: process.env["SANITY_DATASET"] ?? defaultDataset,
+  });
+}
+
+function getImageUrl(
+  builder: Awaited<ReturnType<typeof getImageBuilder>>,
+  source: unknown,
+): string | null {
+  if (!source) return null;
+  try {
+    return builder.image(source).width(1600).auto("format").url();
+  } catch {
+    return null;
+  }
 }
 
 export const getPublishedBlogPosts = createServerFn({ method: "GET" })
@@ -319,3 +372,57 @@ export const getSiteSettings = createServerFn({ method: "GET" }).handler(async (
 
   return client.fetch<SiteSettingsContent | null>(query);
 });
+
+export const getPublishedGallery = createServerFn({ method: "GET" }).handler(async () => {
+  const client = await getClient();
+  const gallery = await client.fetch<{ images?: SanityGalleryImage[] } | null>(
+    `*[_id == "gallery" && _type == "gallery"][0]{images[]{_key, image, alt, caption}}`,
+  );
+  if (!gallery?.images?.length) return [];
+
+  const builder = await getImageBuilder();
+  return gallery.images.flatMap((image, index) => {
+    const src = getImageUrl(builder, image.image);
+    if (!src) return [];
+
+    const alt = image.alt?.trim() || image.caption?.trim() || "BiheInCourt gallery image";
+    return [
+      {
+        id: image._key ?? `gallery-image-${index}`,
+        src,
+        alt,
+        caption: image.caption?.trim() ?? "",
+      },
+    ];
+  });
+});
+
+export const getPublishedConsultationPromo = createServerFn({ method: "GET" }).handler(
+  async (): Promise<ConsultationPromoContent | null> => {
+    const client = await getClient();
+    const promo = await client.fetch<SanityConsultationPromo | null>(
+      `*[_id == "consultationPromo" && _type == "consultationPromo" && enabled == true][0]{
+        image,
+        imageAlt,
+        heading,
+        message,
+        buttonLabel,
+        ctaDestination
+      }`,
+    );
+
+    if (!promo?.heading?.trim() || !promo.message?.trim() || !promo.buttonLabel?.trim()) {
+      return null;
+    }
+
+    const builder = promo.image ? await getImageBuilder() : null;
+    return {
+      image: builder ? getImageUrl(builder, promo.image) : null,
+      imageAlt: promo.imageAlt?.trim() || "BiheInCourt consultation",
+      heading: promo.heading.trim(),
+      message: promo.message.trim(),
+      buttonLabel: promo.buttonLabel.trim(),
+      destination: promo.ctaDestination === "contact" ? "contact" : "consultation",
+    };
+  },
+);

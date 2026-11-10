@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { services } from "@/data/content";
 import { useT, type TKey } from "@/lib/i18n";
+import { gmailComposeUrl, isConfiguredBusinessEmail, site } from "@/config/site";
 
 const phoneRe = /^[+\d][\d\s-]{6,19}$/;
 
@@ -42,7 +43,8 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
   const { lang, t } = useT();
   const [v, setV] = useState<Record<string, string | boolean>>({ consent: false });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [status, setStatus] = useState<"idle" | "done">("idle");
+  const [status, setStatus] = useState<"idle" | "preview" | "error" | "opened">("idle");
+  const [statusMessage, setStatusMessage] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
   const focusInvalidField = useRef(false);
   const set = (k: string, val: string | boolean) => setV((p) => ({ ...p, [k]: val }));
@@ -66,10 +68,65 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
       return;
     }
     setErrors({});
-    setStatus("done");
+    if (mode !== "booking") {
+      setStatus("preview");
+      setStatusMessage(
+        "Not sent: this form has no delivery integration, and your details have not been saved.",
+      );
+      return;
+    }
+
+    if (!isConfiguredBusinessEmail()) {
+      setStatus("error");
+      setStatusMessage(
+        "The business email is not configured yet. Please use the verified contact details instead.",
+      );
+      return;
+    }
+
+    if (!("time" in r.data)) {
+      setStatus("error");
+      setStatusMessage(
+        "The consultation details are incomplete. Please review the form and try again.",
+      );
+      return;
+    }
+
+    const data = r.data;
+    const subject = `${site.consultation.subjectPrefix} from ${data.fullName}`;
+    const body = [
+      site.consultation.bodyHeading,
+      "",
+      `Full name: ${data.fullName}`,
+      `Phone number: ${data.phone}`,
+      `Email address: ${data.email}`,
+      `Consultation type: ${data.service}`,
+      `Preferred date: ${data.date}`,
+      `Preferred time: ${data.time}`,
+      `Privacy consent: ${data.consent ? "Yes" : "No"}`,
+      "",
+      "Visitor query:",
+      data.message?.trim() || "No additional message provided.",
+    ].join("\n");
+    const composeWindow = window.open(
+      gmailComposeUrl({ recipient: site.email, subject, body }),
+      "_blank",
+      "noopener,noreferrer",
+    );
+    if (!composeWindow) {
+      setStatus("error");
+      setStatusMessage(
+        "Gmail could not open, possibly because your browser blocked the new tab. Allow pop-ups and try again.",
+      );
+      return;
+    }
+    setStatus("opened");
+    setStatusMessage(
+      "Gmail should now be open with your request prepared. Review it and press Send; opening Gmail does not confirm a booking.",
+    );
   };
 
-  if (status === "done")
+  if (status !== "idle")
     return (
       <div className="py-10 text-center" role="status">
         <Info className="mx-auto h-10 w-10 text-gold" />
@@ -83,6 +140,7 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
           onClick={() => {
             setV({ consent: false });
             setStatus("idle");
+            setStatusMessage("");
             onDone?.();
           }}
         >

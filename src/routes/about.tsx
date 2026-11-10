@@ -146,7 +146,7 @@ function About() {
                   width={1280}
                   height={896}
                   loading="lazy"
-                  className="aspect-[4/5] w-full object-cover grayscale"
+                  className="aspect-[4/5] w-full object-cover"
                 />
                 <h3 className="mt-4 font-serif text-2xl">{m.name}</h3>
                 <p className="text-sm text-muted-foreground">{m.role}</p>

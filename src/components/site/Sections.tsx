@@ -203,7 +203,7 @@ export function BlogCard({ a, headingLevel = 3 }: { a: BlogPostSummary; headingL
           src={a.image}
           alt={a.imageAlt}
           loading="lazy"
-          className="h-full w-full object-cover grayscale transition-transform duration-700 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
       </div>
       <div className="mt-5 flex items-center gap-3 text-xs text-muted-foreground">
@@ -263,7 +263,7 @@ export function InstagramCard({
         src={p.image}
         alt={p.imageAlt}
         loading="lazy"
-        className="h-full w-full object-cover grayscale"
+        className="h-full w-full object-cover"
       />
       <div className="absolute inset-0 flex flex-col justify-between bg-ink/65 p-4 text-ink-foreground">
         <p className="text-[0.65rem] uppercase tracking-widest text-gold">Sample post preview</p>
@@ -331,7 +331,7 @@ export function InstagramSection({
             src={reelImage}
             alt={reelImageAlt}
             loading="lazy"
-            className="h-full w-full object-cover opacity-80 grayscale"
+            className="h-full w-full object-cover opacity-80"
           />
           <div className="absolute inset-x-0 top-0 flex items-center gap-2 p-4 text-ink-foreground">
             <span className="flex h-8 w-8 items-center justify-center rounded-full border border-gold font-serif text-sm">

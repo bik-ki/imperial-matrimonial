@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Menu,
@@ -10,7 +10,6 @@ import {
   Facebook,
   Youtube,
   Music2,
-  MapPin,
   Mail,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -31,23 +30,20 @@ const nav: { to: string; key: TKey }[] = [
   { to: "/contact", key: "nav.contact" },
 ];
 
-const legalLinks = [
-  { doc: "privacy", label: "Privacy Policy" },
-  { doc: "terms", label: "Terms & Conditions" },
-  { doc: "disclaimer", label: "Legal Disclaimer" },
-] as const;
 const hasVerifiedPhone = !site.phoneDisplay.includes("[");
 const hasVerifiedWhatsApp = !site.whatsappDisplay.includes("[");
+const hasVerifiedInstagram =
+  !site.instagramHandle.includes("[") && new URL(site.social.instagram).pathname !== "/";
 
 export function Wordmark({ inverse = false }: { inverse?: boolean }) {
   return (
-    <Link to="/" className="flex flex-col leading-none" aria-label="Imperial Matrimonial home">
+    <Link to="/" className="flex flex-col leading-none" aria-label={`${site.name} home`}>
       <span
-        className={`font-serif text-xl tracking-[0.14em] ${inverse ? "text-ink-foreground" : "text-foreground"}`}
+        className={`whitespace-nowrap font-serif text-sm tracking-[0.08em] sm:text-xl sm:tracking-[0.14em] ${inverse ? "text-ink-foreground" : "text-foreground"}`}
       >
-        IMPERIAL MATRIMONIAL
+        {site.name}
       </span>
-      <span className="mt-1 text-[0.58rem] font-semibold uppercase tracking-[0.3em] text-gold">
+      <span className="mt-1 whitespace-nowrap text-[0.5rem] font-semibold uppercase tracking-[0.15em] text-gold sm:text-[0.58rem] sm:tracking-[0.3em]">
         Advocates & Legal Associates
       </span>
     </Link>
@@ -55,15 +51,16 @@ export function Wordmark({ inverse = false }: { inverse?: boolean }) {
 }
 
 function LangToggle() {
-  const { lang, setLang } = useT();
+  const { lang, setLang, t } = useT();
   return (
-    <div className="flex border text-xs" role="group" aria-label="Language">
+    <div className="flex border text-xs" role="group" aria-label={t("language.label")}>
       {(["en", "ne"] as const).map((l) => (
         <button
           key={l}
           onClick={() => setLang(l)}
           aria-pressed={lang === l}
-          className={`px-2.5 py-1.5 transition-colors ${lang === l ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+          title={l === "en" ? t("language.english") : t("language.nepali")}
+          className={`px-2.5 py-1.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${lang === l ? "bg-primary font-semibold text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
         >
           {l === "en" ? "EN" : "नेपाली"}
         </button>
@@ -73,46 +70,74 @@ function LangToggle() {
 }
 
 export function SiteHeader() {
-  const { t } = useT();
+  const { lang, t } = useT();
   const { open } = useConsultation();
   const [mobile, setMobile] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!mobile) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobile(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [mobile]);
+
+  const closeMobileMenu = () => {
+    setMobile(false);
+    menuButtonRef.current?.focus();
+  };
+
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
-      <div className="container-x flex h-20 items-center justify-between gap-6">
-        <Wordmark />
-        <nav className="hidden items-center gap-6 xl:flex" aria-label="Main">
-          {nav.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              activeOptions={{ exact: n.to === "/" }}
-              className="text-[0.8rem] text-muted-foreground transition-colors hover:text-foreground data-[status=active]:text-foreground"
-            >
-              {t(n.key)}
-            </Link>
-          ))}
-        </nav>
-        <div className="hidden items-center gap-3 xl:flex">
-          <LangToggle />
-          <Button onClick={open}>{t("cta.book")}</Button>
+    <>
+      <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
+        <div className="container-x flex h-20 items-center justify-between gap-6">
+          <Wordmark />
+          <nav className="hidden items-center gap-6 xl:flex" aria-label="Main">
+            {nav.map((n) => (
+              <Link
+                key={n.to}
+                to={n.to}
+                activeOptions={{ exact: n.to === "/" }}
+                className="text-[0.8rem] text-muted-foreground transition-colors hover:text-foreground data-[status=active]:text-foreground"
+              >
+                {t(n.key)}
+              </Link>
+            ))}
+          </nav>
+          <div className="hidden items-center gap-3 xl:flex">
+            <LangToggle />
+            <Button onClick={open}>{t("cta.book")}</Button>
+          </div>
+          <button
+            ref={menuButtonRef}
+            type="button"
+            className="inline-flex h-11 w-11 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold xl:hidden"
+            onClick={() => setMobile((isOpen) => !isOpen)}
+            aria-label={mobile ? t("common.closeMenu") : t("common.openMenu")}
+            aria-controls="mobile-navigation"
+            aria-expanded={mobile}
+          >
+            {mobile ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+          </button>
         </div>
-        <button
-          className="xl:hidden"
-          onClick={() => setMobile(!mobile)}
-          aria-label="Toggle menu"
-          aria-expanded={mobile}
+        <div
+          id="mobile-navigation"
+          className="max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain border-t bg-background xl:hidden"
+          hidden={!mobile}
         >
-          {mobile ? <X /> : <Menu />}
-        </button>
-      </div>
-      {mobile && (
-        <div className="border-t bg-background xl:hidden">
           <nav className="container-x flex flex-col py-4" aria-label="Mobile">
             {nav.map((n) => (
               <Link
                 key={n.to}
                 to={n.to}
-                onClick={() => setMobile(false)}
+                onClick={closeMobileMenu}
                 activeOptions={{ exact: n.to === "/" }}
                 className="border-b py-3 font-serif text-2xl data-[status=active]:text-gold"
               >
@@ -132,8 +157,18 @@ export function SiteHeader() {
             </div>
           </nav>
         </div>
+      </header>
+      {lang === "ne" && (
+        <div
+          lang="ne"
+          role="status"
+          aria-live="polite"
+          className="border-b bg-secondary/60 px-4 py-2 text-center text-xs text-muted-foreground"
+        >
+          {t("language.notice")}
+        </div>
       )}
-    </header>
+    </>
   );
 }
 
@@ -149,7 +184,11 @@ export function SocialIcons({ inverse }: { inverse?: boolean }) {
   return (
     <div className="flex gap-2">
       {socials
-        .filter((s) => s.label !== "WhatsApp" || hasVerifiedWhatsApp)
+        .filter((s) => {
+          if (s.label === "WhatsApp") return hasVerifiedWhatsApp;
+          if (s.label === "Instagram") return hasVerifiedInstagram;
+          return new URL(s.href).pathname !== "/";
+        })
         .map((s) => (
           <a
             key={s.label}
@@ -168,8 +207,13 @@ export function SocialIcons({ inverse }: { inverse?: boolean }) {
 }
 
 export function SiteFooter() {
-  const { t } = useT();
+  const { lang, t } = useT();
   const { open } = useConsultation();
+  const legalLinksToRender = [
+    { doc: "privacy", label: t("footer.legalPrivacy") },
+    { doc: "terms", label: t("footer.legalTerms") },
+    { doc: "disclaimer", label: t("footer.legalDisclaimer") },
+  ] as const;
   return (
     <footer className="bg-ink pb-24 text-ink-foreground md:pb-0">
       <div className="container-x border-b border-ink-foreground/10 py-14 md:flex md:items-end md:justify-between">
@@ -188,9 +232,13 @@ export function SiteFooter() {
           <div className="mt-6">
             <SocialIcons inverse />
           </div>
+          <div className="mt-5 flex items-center gap-3">
+            <span className="text-xs text-ink-foreground/60">{t("language.label")}</span>
+            <LangToggle />
+          </div>
         </div>
-        <div>
-          <p className="eyebrow text-gold">Quick Links</p>
+        <nav aria-label={t("footer.quickLinks")}>
+          <h2 className="eyebrow text-gold">{t("footer.quickLinks")}</h2>
           <ul className="mt-5 space-y-2.5 text-sm text-ink-foreground/70">
             {nav.map((n) => (
               <li key={n.to}>
@@ -200,9 +248,9 @@ export function SiteFooter() {
               </li>
             ))}
           </ul>
-        </div>
-        <div>
-          <p className="eyebrow text-gold">Our Services</p>
+        </nav>
+        <nav aria-label={t("footer.ourServices")}>
+          <h2 className="eyebrow text-gold">{t("footer.ourServices")}</h2>
           <ul className="mt-5 space-y-2.5 text-sm text-ink-foreground/70">
             {services.map((s) => (
               <li key={s.slug}>
@@ -211,59 +259,43 @@ export function SiteFooter() {
                   params={{ slug: s.slug }}
                   className="hover:text-ink-foreground"
                 >
-                  {s.title.en}
+                  {s.title[lang]}
                 </Link>
               </li>
             ))}
           </ul>
-        </div>
+        </nav>
         <div>
-          <p className="eyebrow text-gold">Contact</p>
+          <h2 className="eyebrow text-gold">{t("footer.contact")}</h2>
           <ul className="mt-5 space-y-3 text-sm text-ink-foreground/70">
             <li className="flex gap-2">
               <Phone className="h-4 w-4 shrink-0 text-gold" />
               {hasVerifiedPhone ? (
                 <a href={site.phoneHref}>{site.phoneDisplay}</a>
               ) : (
-                <span>[Client to provide verified phone number]</span>
+                <span>{t("footer.clientReview")} {t("footer.phone")}</span>
               )}
             </li>
             <li className="flex gap-2">
               <Mail className="h-4 w-4 shrink-0 text-gold" />
-              {site.email.includes("[") ? "[Client to provide verified email address]" : site.email}
+              <a href={`mailto:${site.email}`}>{site.email}</a>
             </li>
-            <li className="flex gap-2">
-              <MapPin className="h-4 w-4 shrink-0 text-gold" />
-              {site.address.includes("[")
-                ? "[Client to provide verified office address]"
-                : site.address}
-            </li>
-            {site.hours.some((h) => h.time.includes("[")) ? (
-              <li className="text-xs">[Client to provide verified office hours]</li>
-            ) : (
-              site.hours.map((h) => (
-                <li key={h.days} className="text-xs">
-                  {h.days}: {h.time}
-                </li>
-              ))
-            )}
           </ul>
         </div>
       </div>
       <div className="container-x flex flex-col gap-3 border-t border-ink-foreground/10 py-6 text-xs text-ink-foreground/50 md:flex-row md:justify-between">
         <p>
-          © {new Date().getFullYear()} Imperial Matrimonial — Advocates & Legal Associates. All
-          rights reserved.
+          © {new Date().getFullYear()} {site.name} — Advocates & Legal Associates. {t("footer.allRights")}
         </p>
         <div className="flex flex-wrap gap-x-5 gap-y-2">
-          {legalLinks.map((legal) => (
+          {legalLinksToRender.map((legal) => (
             <Link
               key={legal.doc}
               to="/legal/$doc"
               params={{ doc: legal.doc }}
               className="hover:text-ink-foreground"
             >
-              {legal.label} [Client to provide]
+              {legal.label}
             </Link>
           ))}
         </div>
@@ -301,7 +333,10 @@ export function MobileCTABar() {
           WhatsApp
         </a>
       )}
-      <button onClick={open} className={`${cls} bg-primary text-primary-foreground`}>
+      <button
+        onClick={open}
+        className={`${cls} bg-primary text-primary-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold`}
+      >
         <CalendarCheck className="h-4 w-4" />
         {t("cta.book")}
       </button>

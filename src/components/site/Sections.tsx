@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import {
   ArrowUpRight,
   Instagram,
-  Play,
   MessageSquare,
   FileText,
   ShieldCheck,
@@ -28,19 +27,22 @@ export function SectionHead({
   title,
   desc,
   center,
+  level = 2,
 }: {
   eyebrow: string;
   title: string;
   desc?: string | undefined;
   center?: boolean;
+  level?: 1 | 2;
 }) {
+  const Heading = level === 1 ? "h1" : "h2";
   return (
     <div className={`max-w-2xl ${center ? "mx-auto text-center" : ""}`}>
       <div className={`flex items-center gap-3 ${center ? "justify-center" : ""}`}>
         <span className="rule-gold" />
         <p className="eyebrow">{eyebrow}</p>
       </div>
-      <h2 className="mt-5 text-4xl leading-[1.05] md:text-6xl">{title}</h2>
+      <Heading className="mt-5 text-4xl leading-[1.05] md:text-6xl">{title}</Heading>
       {desc && <p className="mt-5 text-muted-foreground">{desc}</p>}
     </div>
   );
@@ -56,11 +58,11 @@ export function PageHero({
   desc?: string;
 }) {
   return (
-    <section className="border-b">
+    <header className="border-b">
       <div className="container-x animate-fade-up py-20 md:py-28">
-        <SectionHead eyebrow={eyebrow} title={title} desc={desc} />
+        <SectionHead eyebrow={eyebrow} title={title} desc={desc} level={1} />
       </div>
-    </section>
+    </header>
   );
 }
 
@@ -92,14 +94,13 @@ export function ProcessTimeline() {
               <h3 className="mt-2 text-2xl">{t(s.t)}</h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t(s.d)}</p>
               {i === 0 ? (
-                <button onClick={open} className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold">{t("cta.bookA")} <ArrowRight className="h-3 w-3" /></button>
-              ) : i === 1 ? (
-                <Link to="/services" className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold">{t("cta.learn")} <ArrowRight className="h-3 w-3" /></Link>
-              ) : i === 2 ? (
-                <Link to="/eligibility" className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold">{t("cta.learn")} <ArrowRight className="h-3 w-3" /></Link>
-              ) : (
-                <Link to="/contact" className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold">{t("cta.learn")} <ArrowRight className="h-3 w-3" /></Link>
-              )}
+                <button
+                  onClick={open}
+                  className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest hover:text-gold"
+                >
+                  {t("cta.bookA")} <ArrowRight className="h-3 w-3" />
+                </button>
+              ) : null}
             </li>
           ))}
         </ol>
@@ -171,7 +172,8 @@ export function formatDate(d: string) {
   });
 }
 
-export function BlogCard({ a }: { a: Article }) {
+export function BlogCard({ a, headingLevel = 3 }: { a: Article; headingLevel?: 2 | 3 }) {
+  const Heading = headingLevel === 2 ? "h2" : "h3";
   return (
     <Link to="/blog/$slug" params={{ slug: a.slug }} className="group flex flex-col">
       <div className="aspect-[4/3] overflow-hidden bg-muted">
@@ -193,9 +195,9 @@ export function BlogCard({ a }: { a: Article }) {
           </>
         )}
       </div>
-      <h3 className="mt-3 text-2xl leading-tight group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4">
+      <Heading className="mt-3 text-2xl leading-tight group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4">
         {a.title}
-      </h3>
+      </Heading>
       <p className="mt-2 text-sm text-muted-foreground">{a.excerpt}</p>
       <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest">
         Read more <ArrowRight className="h-3 w-3" />
@@ -227,28 +229,13 @@ export function BlogPreview() {
 
 export function InstagramCard({ p }: { p: (typeof instagramPosts)[number] }) {
   return (
-    <a
-      href={p.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group relative block aspect-square overflow-hidden bg-muted"
-    >
-      <img
-        src={p.image}
-        alt=""
-        loading="lazy"
-        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-      />
-      <div className="absolute inset-0 flex flex-col justify-between bg-ink/0 p-4 text-ink-foreground transition-colors group-hover:bg-ink/75">
-        <Instagram className="h-4 w-4 self-end" />
-        <div className="opacity-0 transition-opacity group-hover:opacity-100">
-          <p className="line-clamp-3 text-sm">{p.caption}</p>
-          <p className="mt-2 text-[0.65rem] uppercase tracking-widest text-gold">
-            View on Instagram
-          </p>
-        </div>
+    <div className="relative aspect-square overflow-hidden bg-muted">
+      <img src={p.image} alt="" loading="lazy" className="h-full w-full object-cover grayscale" />
+      <div className="absolute inset-0 flex flex-col justify-between bg-ink/65 p-4 text-ink-foreground">
+        <p className="text-[0.65rem] uppercase tracking-widest text-gold">Sample post preview</p>
+        <p className="line-clamp-4 text-sm">{p.caption}</p>
       </div>
-    </a>
+    </div>
   );
 }
 
@@ -257,28 +244,29 @@ export function InstagramSection() {
   return (
     <section className="border-t py-24 md:py-32">
       <div className="container-x grid gap-12 lg:grid-cols-[1fr_minmax(0,22rem)]">
-        <div>
+        <div className="min-w-0">
           <SectionHead eyebrow={t("ig.eyebrow")} title={t("ig.title")} />
           <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3">
             {instagramPosts.map((p) => (
               <InstagramCard key={p.id} p={p} />
             ))}
           </div>
-          <div className="mt-8 flex items-center justify-between gap-4">
+          <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs text-muted-foreground">Sample posts shown for this prototype.</p>
-            <Button asChild variant="outline">
-              <a href={site.social.instagram} target="_blank" rel="noopener noreferrer">
-                <Instagram /> Follow {site.instagramHandle}
-              </a>
-            </Button>
+            {site.instagramHandle.includes("[") ? (
+              <p className="text-xs text-muted-foreground">
+                Project placeholder: verify the Instagram profile URL and handle before publication.
+              </p>
+            ) : (
+              <Button asChild variant="outline">
+                <a href={site.social.instagram} target="_blank" rel="noopener noreferrer">
+                  <Instagram /> View Instagram profile ({site.instagramHandle})
+                </a>
+              </Button>
+            )}
           </div>
         </div>
-        <a
-          href={featuredReel.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative mx-auto block aspect-[9/16] w-full max-w-[22rem] overflow-hidden border bg-ink"
-        >
+        <div className="relative mx-auto block aspect-[9/16] w-full max-w-[22rem] overflow-hidden border bg-ink">
           <img
             src={featuredReel.image}
             alt=""
@@ -290,18 +278,14 @@ export function InstagramSection() {
               IM
             </span>
             <span className="text-sm font-semibold">{site.instagramHandle}</span>
-            <span className="ml-auto text-[0.6rem] uppercase tracking-widest text-gold">Reel</span>
-          </div>
-          <span className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-ink-foreground/60 bg-ink/30 text-ink-foreground backdrop-blur transition-transform group-hover:scale-110">
-            <Play className="ml-1 h-6 w-6" fill="currentColor" />
-          </span>
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink to-transparent p-5 pt-16 text-ink-foreground">
-            <p className="font-serif text-2xl leading-tight">{featuredReel.caption}</p>
-            <span className="mt-4 inline-flex items-center gap-1 text-xs uppercase tracking-widest text-gold">
-              View Reel <ArrowUpRight className="h-3 w-3" />
+            <span className="ml-auto text-[0.6rem] uppercase tracking-widest text-gold">
+              Project reel preview — not published
             </span>
           </div>
-        </a>
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink to-transparent p-5 pt-16 text-ink-foreground">
+            <p className="font-serif text-2xl leading-tight">{featuredReel.caption}</p>
+          </div>
+        </div>
       </div>
     </section>
   );

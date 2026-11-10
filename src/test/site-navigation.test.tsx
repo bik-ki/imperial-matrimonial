@@ -2,9 +2,10 @@ import { act, type MouseEventHandler, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { SiteHeader } from "@/components/site/Layout";
-import { SocialIcons } from "@/components/site/Layout";
+import { SiteFooter, SiteHeader, SocialIcons } from "@/components/site/Layout";
 import { InstagramSection, ProcessTimeline } from "@/components/site/Sections";
+import { LeadForm } from "@/components/site/ConsultationForm";
+import { LangProvider } from "@/lib/i18n";
 
 vi.mock("@tanstack/react-router", () => ({
   Link: ({
@@ -41,10 +42,18 @@ describe("Public site navigation", () => {
   let root: Root;
 
   beforeEach(() => {
+    localStorage.removeItem("imperial_lang");
+    document.documentElement.lang = "en";
     host = document.createElement("div");
     document.body.append(host);
     root = createRoot(host);
-    act(() => root.render(<SiteHeader />));
+    act(() =>
+      root.render(
+        <LangProvider>
+          <SiteHeader />
+        </LangProvider>,
+      ),
+    );
   });
 
   afterEach(() => {
@@ -56,6 +65,57 @@ describe("Public site navigation", () => {
     const wordmark = host.querySelector<HTMLAnchorElement>('a[aria-label="BiheInCourt home"]');
 
     expect(wordmark?.textContent).toContain("BiheInCourt");
+    expect(wordmark?.querySelector('img[src="/logo.png"]')).not.toBeNull();
+  });
+
+  it("keeps the selected language visible, persistent, and honest about untranslated copy", () => {
+    const nepaliButtons = Array.from(host.querySelectorAll<HTMLButtonElement>("button")).filter(
+      (button) => button.textContent?.trim() === "नेपाली",
+    );
+
+    act(() => nepaliButtons[0]?.dispatchEvent(new MouseEvent("click", { bubbles: true })));
+
+    expect(nepaliButtons).toHaveLength(2);
+    expect(nepaliButtons.every((button) => button.getAttribute("aria-pressed") === "true")).toBe(
+      true,
+    );
+    expect(localStorage.getItem("imperial_lang")).toBe("ne");
+    expect(document.documentElement.lang).toBe("ne");
+    expect(host.textContent).toContain("नेपाली अनुवाद अझै पूरा भएको छैन");
+
+    act(() => {
+      root.unmount();
+      root = createRoot(host);
+      root.render(
+        <LangProvider>
+          <SiteHeader />
+        </LangProvider>,
+      );
+    });
+
+    expect(
+      Array.from(host.querySelectorAll<HTMLButtonElement>("button"))
+        .filter((button) => button.textContent?.trim() === "नेपाली")
+        .every((button) => button.getAttribute("aria-pressed") === "true"),
+    ).toBe(true);
+    expect(document.documentElement.lang).toBe("ne");
+  });
+
+  it("uses translated common form labels and actions in Nepali", () => {
+    localStorage.setItem("imperial_lang", "ne");
+
+    act(() => {
+      root.render(
+        <LangProvider>
+          <LeadForm mode="contact" />
+        </LangProvider>,
+      );
+    });
+
+    expect(host.textContent).toContain("पूरा नाम");
+    expect(host.textContent).toContain("फोन नम्बर");
+    expect(host.textContent).toContain("सन्देश");
+    expect(host.textContent).toContain("सन्देश पठाउनुहोस्");
   });
 
   it("supports opening and dismissing the mobile menu with the keyboard", () => {
@@ -83,6 +143,12 @@ describe("Public site navigation", () => {
   });
 
   it("points each mobile navigation item to its public route", () => {
+    const desktopDestinations = Array.from(
+      host.querySelectorAll<HTMLAnchorElement>('header nav[aria-label="Main"] a'),
+      (link) => link.getAttribute("href"),
+    );
+    expect(desktopDestinations).toContain("/faq");
+
     act(() =>
       host
         .querySelector<HTMLButtonElement>('button[aria-label="Open navigation menu"]')
@@ -99,9 +165,39 @@ describe("Public site navigation", () => {
       "/process",
       "/services",
       "/eligibility",
+      "/faq",
       "/blog",
       "/contact",
     ]);
+  });
+
+  it("includes the language control and working quick links in the footer", () => {
+    act(() =>
+      root.render(
+        <LangProvider>
+          <SiteFooter />
+        </LangProvider>,
+      ),
+    );
+
+    const quickLinks = host.querySelector('footer nav[aria-label="Quick Links"]');
+    expect(
+      Array.from(quickLinks?.querySelectorAll<HTMLAnchorElement>("a") ?? [], (link) =>
+        link.getAttribute("href"),
+      ),
+    ).toEqual([
+      "/",
+      "/about",
+      "/process",
+      "/services",
+      "/eligibility",
+      "/faq",
+      "/blog",
+      "/contact",
+    ]);
+    expect(host.querySelector('footer [aria-label="Language"]')).not.toBeNull();
+    expect(host.querySelector("footer")?.textContent).toContain("Thapathali, Kathmandu, Nepal");
+    expect(host.querySelector('footer img[src="/logo.png"]')).not.toBeNull();
   });
 
   it("closes when a navigation link is selected and points services to its index", () => {

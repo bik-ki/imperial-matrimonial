@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { EligibilityChecker } from "@/components/site/EligibilityChecker";
 import { LeadForm } from "@/components/site/ConsultationForm";
+import { LangProvider } from "@/lib/i18n";
 
 describe("Public form accessibility", () => {
   let host: HTMLDivElement;
@@ -28,6 +29,7 @@ describe("Public form accessibility", () => {
   afterEach(() => {
     act(() => root.unmount());
     host.remove();
+    localStorage.removeItem("imperial_lang");
     if (resizeObserverDescriptor) {
       Object.defineProperty(globalThis, "ResizeObserver", resizeObserverDescriptor);
     } else {
@@ -61,6 +63,28 @@ describe("Public form accessibility", () => {
     );
     expect(options).toContain("General consultation");
     expect(options).toContain("Special consultation");
+  });
+
+  it("shows Nepali consultation options with a human-review note", () => {
+    localStorage.setItem("imperial_lang", "ne");
+    act(() =>
+      root.render(
+        <LangProvider>
+          <LeadForm mode="booking" />
+        </LangProvider>,
+      ),
+    );
+
+    const options = Array.from(
+      host.querySelectorAll<HTMLSelectElement>("#service option"),
+      (option) => option.textContent,
+    );
+    expect(options).toContain("सामान्य परामर्श");
+    expect(options).toContain("विशेष परामर्श");
+    expect(host.querySelector("#service-review-note")?.textContent).toContain("मानवीय समीक्षा");
+    expect(host.querySelector("#service")?.getAttribute("aria-describedby")).toContain(
+      "service-review-note",
+    );
   });
 
   it("supports arrow-key selection and roving focus in the eligibility choices", () => {

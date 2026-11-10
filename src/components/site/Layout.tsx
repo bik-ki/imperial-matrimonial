@@ -6,6 +6,7 @@ import {
   Phone,
   MessageCircle,
   CalendarCheck,
+  MapPin,
   Instagram,
   Facebook,
   Youtube,
@@ -32,39 +33,48 @@ const nav: { to: string; key: TKey }[] = [
   { to: "/contact", key: "nav.contact" },
 ];
 
-const legalLinks = [
-  { doc: "privacy", label: "Privacy Policy" },
-  { doc: "terms", label: "Terms & Conditions" },
-  { doc: "disclaimer", label: "Legal Disclaimer" },
-] as const;
 const hasVerifiedPhone = !site.phoneDisplay.includes("[");
 const hasVerifiedWhatsApp = !site.whatsappDisplay.includes("[");
 
 export function Wordmark({ inverse = false }: { inverse?: boolean }) {
   return (
-    <Link to="/" className="flex flex-col leading-none" aria-label={`${site.name} home`}>
-      <span
-        className={`whitespace-nowrap font-serif text-sm tracking-[0.08em] sm:text-xl sm:tracking-[0.14em] ${inverse ? "text-ink-foreground" : "text-foreground"}`}
-      >
-        {site.name}
-      </span>
-      <span className="mt-1 whitespace-nowrap text-[0.5rem] font-semibold uppercase tracking-[0.15em] text-gold sm:text-[0.58rem] sm:tracking-[0.3em]">
-        Advocates & Legal Associates
+    <Link
+      to="/"
+      className="flex items-center gap-2 leading-none sm:gap-3"
+      aria-label={`${site.name} home`}
+    >
+      <img
+        src="/logo.png"
+        alt=""
+        width={44}
+        height={44}
+        className="h-10 w-10 object-contain sm:h-11 sm:w-11"
+      />
+      <span className="flex flex-col">
+        <span
+          className={`whitespace-nowrap font-serif text-sm tracking-[0.08em] sm:text-xl sm:tracking-[0.14em] ${inverse ? "text-ink-foreground" : "text-foreground"}`}
+        >
+          {site.name}
+        </span>
+        <span className="mt-1 whitespace-nowrap text-[0.5rem] font-semibold uppercase tracking-[0.15em] text-gold sm:text-[0.58rem] sm:tracking-[0.3em]">
+          Advocates & Legal Associates
+        </span>
       </span>
     </Link>
   );
 }
 
 function LangToggle() {
-  const { lang, setLang } = useT();
+  const { lang, setLang, t } = useT();
   return (
-    <div className="flex border text-xs" role="group" aria-label="Language">
+    <div className="flex border text-xs" role="group" aria-label={t("language.label")}>
       {(["en", "ne"] as const).map((l) => (
         <button
           key={l}
           onClick={() => setLang(l)}
           aria-pressed={lang === l}
-          className={`px-2.5 py-1.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${lang === l ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+          title={l === "en" ? t("language.english") : t("language.nepali")}
+          className={`px-2.5 py-1.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${lang === l ? "bg-primary font-semibold text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
         >
           {l === "en" ? "EN" : "नेपाली"}
         </button>
@@ -74,7 +84,7 @@ function LangToggle() {
 }
 
 export function SiteHeader() {
-  const { t } = useT();
+  const { lang, t } = useT();
   const { open } = useConsultation();
   const [mobile, setMobile] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -99,68 +109,80 @@ export function SiteHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
-      <div className="container-x flex h-20 items-center justify-between gap-6">
-        <Wordmark />
-        <nav className="hidden items-center gap-6 xl:flex" aria-label="Main">
-          {nav.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              activeOptions={{ exact: n.to === "/" }}
-              className="text-[0.8rem] text-muted-foreground transition-colors hover:text-foreground data-[status=active]:text-foreground"
-            >
-              {t(n.key)}
-            </Link>
-          ))}
-        </nav>
-        <div className="hidden items-center gap-3 xl:flex">
-          <LangToggle />
-          <Button onClick={open}>{t("cta.book")}</Button>
-        </div>
-        <button
-          ref={menuButtonRef}
-          type="button"
-          className="inline-flex h-11 w-11 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold xl:hidden"
-          onClick={() => setMobile((isOpen) => !isOpen)}
-          aria-label={mobile ? "Close navigation menu" : "Open navigation menu"}
-          aria-controls="mobile-navigation"
-          aria-expanded={mobile}
-        >
-          {mobile ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
-        </button>
-      </div>
-      <div
-        id="mobile-navigation"
-        className="max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain border-t bg-background xl:hidden"
-        hidden={!mobile}
-      >
-        <nav className="container-x flex flex-col py-4" aria-label="Mobile">
-          {nav.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              onClick={closeMobileMenu}
-              activeOptions={{ exact: n.to === "/" }}
-              className="border-b py-3 font-serif text-2xl data-[status=active]:text-gold"
-            >
-              {t(n.key)}
-            </Link>
-          ))}
-          <div className="mt-5 flex items-center justify-between gap-3">
+    <>
+      <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
+        <div className="container-x flex h-20 items-center justify-between gap-6">
+          <Wordmark />
+          <nav className="hidden items-center gap-6 xl:flex" aria-label="Main">
+            {nav.map((n) => (
+              <Link
+                key={n.to}
+                to={n.to}
+                activeOptions={{ exact: n.to === "/" }}
+                className="text-[0.8rem] text-muted-foreground transition-colors hover:text-foreground data-[status=active]:text-foreground"
+              >
+                {t(n.key)}
+              </Link>
+            ))}
+          </nav>
+          <div className="hidden items-center gap-3 xl:flex">
             <LangToggle />
-            <Button
-              onClick={() => {
-                setMobile(false);
-                open();
-              }}
-            >
-              {t("cta.book")}
-            </Button>
+            <Button onClick={open}>{t("cta.book")}</Button>
           </div>
-        </nav>
-      </div>
-    </header>
+          <button
+            ref={menuButtonRef}
+            type="button"
+            className="inline-flex h-11 w-11 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold xl:hidden"
+            onClick={() => setMobile((isOpen) => !isOpen)}
+            aria-label={mobile ? t("common.closeMenu") : t("common.openMenu")}
+            aria-controls="mobile-navigation"
+            aria-expanded={mobile}
+          >
+            {mobile ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+          </button>
+        </div>
+        <div
+          id="mobile-navigation"
+          className="max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain border-t bg-background xl:hidden"
+          hidden={!mobile}
+        >
+          <nav className="container-x flex flex-col py-4" aria-label="Mobile">
+            {nav.map((n) => (
+              <Link
+                key={n.to}
+                to={n.to}
+                onClick={closeMobileMenu}
+                activeOptions={{ exact: n.to === "/" }}
+                className="border-b py-3 font-serif text-2xl data-[status=active]:text-gold"
+              >
+                {t(n.key)}
+              </Link>
+            ))}
+            <div className="mt-5 flex items-center justify-between gap-3">
+              <LangToggle />
+              <Button
+                onClick={() => {
+                  setMobile(false);
+                  open();
+                }}
+              >
+                {t("cta.book")}
+              </Button>
+            </div>
+          </nav>
+        </div>
+      </header>
+      {lang === "ne" && (
+        <div
+          lang="ne"
+          role="status"
+          aria-live="polite"
+          className="border-b bg-secondary/60 px-4 py-2 text-center text-xs text-muted-foreground"
+        >
+          {t("language.notice")}
+        </div>
+      )}
+    </>
   );
 }
 
@@ -229,8 +251,13 @@ export function SocialIcons({
 }
 
 export function SiteFooter({ socialLinks }: { socialLinks?: SiteSettingsContent["socialLinks"] }) {
-  const { t } = useT();
+  const { lang, t } = useT();
   const { open } = useConsultation();
+  const legalLinksToRender = [
+    { doc: "privacy", label: t("footer.legalPrivacy") },
+    { doc: "terms", label: t("footer.legalTerms") },
+    { doc: "disclaimer", label: t("footer.legalDisclaimer") },
+  ] as const;
   return (
     <footer className="bg-ink pb-24 text-ink-foreground md:pb-0">
       <div className="container-x border-b border-ink-foreground/10 py-14 md:flex md:items-end md:justify-between">
@@ -249,9 +276,13 @@ export function SiteFooter({ socialLinks }: { socialLinks?: SiteSettingsContent[
           <div className="mt-6">
             <SocialIcons inverse socialLinks={socialLinks} />
           </div>
+          <div className="mt-5 flex items-center gap-3">
+            <span className="text-xs text-ink-foreground/60">{t("language.label")}</span>
+            <LangToggle />
+          </div>
         </div>
-        <nav aria-label="Quick links">
-          <h2 className="eyebrow text-gold">Quick Links</h2>
+        <nav aria-label={t("footer.quickLinks")}>
+          <h2 className="eyebrow text-gold">{t("footer.quickLinks")}</h2>
           <ul className="mt-5 space-y-2.5 text-sm text-ink-foreground/70">
             {nav.map((n) => (
               <li key={n.to}>
@@ -262,8 +293,8 @@ export function SiteFooter({ socialLinks }: { socialLinks?: SiteSettingsContent[
             ))}
           </ul>
         </nav>
-        <nav aria-label="Our services">
-          <h2 className="eyebrow text-gold">Our Services</h2>
+        <nav aria-label={t("footer.ourServices")}>
+          <h2 className="eyebrow text-gold">{t("footer.ourServices")}</h2>
           <ul className="mt-5 space-y-2.5 text-sm text-ink-foreground/70">
             {services.map((s) => (
               <li key={s.slug}>
@@ -272,21 +303,27 @@ export function SiteFooter({ socialLinks }: { socialLinks?: SiteSettingsContent[
                   params={{ slug: s.slug }}
                   className="hover:text-ink-foreground"
                 >
-                  {s.title.en}
+                  {s.title[lang]}
                 </Link>
               </li>
             ))}
           </ul>
         </nav>
         <div>
-          <h2 className="eyebrow text-gold">Contact</h2>
+          <h2 className="eyebrow text-gold">{t("footer.contact")}</h2>
           <ul className="mt-5 space-y-3 text-sm text-ink-foreground/70">
+            <li className="flex gap-2">
+              <MapPin className="h-4 w-4 shrink-0 text-gold" />
+              <span>{site.location}</span>
+            </li>
             <li className="flex gap-2">
               <Phone className="h-4 w-4 shrink-0 text-gold" />
               {hasVerifiedPhone ? (
                 <a href={site.phoneHref}>{site.phoneDisplay}</a>
               ) : (
-                <span>[Client to provide verified phone number]</span>
+                <span>
+                  {t("footer.clientReview")} {t("footer.phone")}
+                </span>
               )}
             </li>
             <li className="flex gap-2">
@@ -298,13 +335,18 @@ export function SiteFooter({ socialLinks }: { socialLinks?: SiteSettingsContent[
       </div>
       <div className="container-x flex flex-col gap-3 border-t border-ink-foreground/10 py-6 text-xs text-ink-foreground/50 md:flex-row md:justify-between">
         <p>
-          © {new Date().getFullYear()} {site.name} — Advocates & Legal Associates. All rights
-          reserved.
+          © {new Date().getFullYear()} {site.name} — Advocates & Legal Associates.{" "}
+          {t("footer.allRights")}
         </p>
         <div className="flex flex-wrap gap-x-5 gap-y-2">
-          {legalLinks.map((legal) => (
-            <Link key={legal.doc} to="/legal/$doc" params={{ doc: legal.doc }} className="hover:text-ink-foreground">
-              {legal.label} [Client to provide]
+          {legalLinksToRender.map((legal) => (
+            <Link
+              key={legal.doc}
+              to="/legal/$doc"
+              params={{ doc: legal.doc }}
+              className="hover:text-ink-foreground"
+            >
+              {legal.label}
             </Link>
           ))}
         </div>

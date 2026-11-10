@@ -49,12 +49,24 @@ describe("App routing", () => {
     },
   );
 
-  it("marks every current article draft as a placeholder", () => {
-    expect(articles.length).toBeGreaterThan(0);
-    expect(articles.every((article) => article.isPlaceholder)).toBe(true);
+  it("provides complete content for the three featured marriage guides", () => {
+    const featuredSlugs = [
+      "understanding-court-marriage-in-nepal",
+      "documents-required-for-court-marriage",
+      "foreign-national-marry-nepali-citizen",
+    ];
+    const featuredArticles = featuredSlugs.map((slug) =>
+      articles.find((article) => article.slug === slug),
+    );
+
+    expect(featuredArticles.every((article) => article !== undefined)).toBe(true);
     expect(
-      articles.every((article) =>
-        article.content.some((block) => block.p.includes("[Placeholder legal content")),
+      featuredArticles.every(
+        (article) =>
+          article &&
+          !article.isPlaceholder &&
+          article.content.length >= 5 &&
+          article.content.every((block) => !block.p.includes("[Placeholder legal content")),
       ),
     ).toBe(true);
   });

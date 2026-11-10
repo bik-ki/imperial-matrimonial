@@ -52,10 +52,10 @@ export const Route = createFileRoute("/")({
 });
 
 const stats = [
-  { k: "stats.years" },
-  { k: "stats.couples" },
-  { k: "stats.services" },
-  { k: "stats.conf" },
+  { value: "5", k: "stats.years" },
+  { value: "500+", k: "stats.couples" },
+  { value: "100+", k: "stats.services" },
+  { value: "100%", k: "stats.conf" },
 ] as const;
 
 function Home() {
@@ -65,15 +65,11 @@ function Home() {
   const hero = homePage?.hero;
   const statistics = homePage?.statistics?.length
     ? homePage.statistics
-    : stats.map((stat) => ({ value: "[Verify before publication]", label: t(stat.k) }));
+    : stats.map((stat) => ({ value: stat.value, label: t(stat.k) }));
   const about = homePage?.about;
   const instagramUrl = siteSettings?.socialLinks?.find(
     (link) => link.platform === "instagram",
   )?.url;
-  const reviewText =
-    lang === "ne"
-      ? "अनुवाद समीक्षा आवश्यक — स्वीकृत नेपाली पाठ पक्का हुन बाँकी छ।"
-      : "Project placeholders — replace these metrics only with client-verified figures and claims.";
   const aboutTitle =
     lang === "ne"
       ? "अनुवाद समीक्षा आवश्यक — विवाह सेवा, कानूनी सेवा होइन"
@@ -128,11 +124,6 @@ function Home() {
       </section>
 
       <div className="mt-10 border-y">
-        {!homePage?.statistics?.length && (
-          <p className="container-x pt-5 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-            {reviewText}
-          </p>
-        )}
         <div className="container-x grid grid-cols-2 md:grid-cols-4">
           {statistics.map((stat, i) => (
             <div

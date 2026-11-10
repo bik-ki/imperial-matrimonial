@@ -11,6 +11,9 @@ import hero from "@/assets/hero-couple.jpg";
 import office from "@/assets/office.jpg";
 import signing from "@/assets/signing.jpg";
 import court from "@/assets/court.jpg";
+import blogCourtMarriage from "@/assets/blog-court-marriage.svg";
+import blogMarriageDocuments from "@/assets/blog-marriage-documents.svg";
+import blogInternationalCouple from "@/assets/blog-international-couple.svg";
 
 export const images = { hero, office, signing, court };
 
@@ -254,26 +257,37 @@ export const articles: Article[] = [
     slug: "understanding-court-marriage-in-nepal",
     title: "Understanding Court Marriage in Nepal",
     category: "Guides",
-    isPlaceholder: true,
+    isPlaceholder: false,
     date: "2026-10-12",
     readTime: "6 min",
-    image: court,
-    imageAlt: "Kathmandu District Court building",
+    image: blogCourtMarriage,
+    imageAlt: "Colorful illustration of a couple outside a courthouse in Nepal",
     excerpt:
       "An overview of what court marriage is, who it is for, and how the process is generally structured.",
     content: [
-      { p: placeholderNote },
       {
         h: "What is a court marriage?",
-        p: "A court marriage is a marriage registered through the applicable legal authority rather than solely through a religious or customary ceremony.",
+        p: "In Nepal, people commonly use “court marriage” to describe a marriage completed through the legal registration process. It creates an official record of the marriage. A cultural or religious celebration may be important to a couple, but it is a separate matter from completing the legal formalities.",
       },
       {
-        h: "Who chooses it?",
-        p: "Couples often choose this route for its legal clarity, especially where families are in different districts or one partner is a foreign national.",
+        h: "Who may consider this route?",
+        p: "Couples may consider legal registration whether or not they plan a larger ceremony. It can also be relevant when partners live in different places or one partner is a foreign national. The rules and supporting evidence can depend on each person’s circumstances, so do not rely on a general article to determine eligibility.",
       },
       {
-        h: "How the process is generally structured",
-        p: "The process typically involves eligibility review, document preparation, application and verification, followed by registration. Exact requirements depend on individual circumstances.",
+        h: "How to prepare",
+        p: "A practical first step is to discuss your situation with the relevant registration authority or a qualified Nepali lawyer. Confirm which office can handle your application, what evidence it expects, whether both partners and witnesses must attend, and whether any documents need translation or authentication.",
+      },
+      {
+        h: "What the process generally involves",
+        p: "While the exact procedure varies, couples are commonly asked to establish their identities and provide supporting information, submit an application, respond to any checks by the authority, and complete registration formalities. Ask for the current steps and requirements before making travel or ceremony plans.",
+      },
+      {
+        h: "Plan for your own circumstances",
+        p: "Names, dates, previous marriages, residence, and nationality can affect which documents are relevant. Keep copies of what you submit and ask the authority or your legal adviser to clarify anything that is unclear.",
+      },
+      {
+        h: "A note on legal information",
+        p: "This guide is general information, not legal advice. Laws and administrative requirements may change. Confirm the current rules for your case with the relevant authority or a qualified lawyer in Nepal.",
       },
     ],
   },
@@ -281,21 +295,36 @@ export const articles: Article[] = [
     slug: "documents-required-for-court-marriage",
     title: "Documents Required for Court Marriage",
     category: "Documentation",
-    isPlaceholder: true,
+    isPlaceholder: false,
     date: "2026-09-28",
     readTime: "5 min",
-    image: signing,
-    imageAlt: "Hands signing a marriage registration document",
+    image: blogMarriageDocuments,
+    imageAlt: "Colorful illustration of a marriage-registration document checklist",
     excerpt: "A general checklist of documents commonly requested, and why consistency matters.",
     content: [
-      { p: placeholderNote },
       {
-        h: "Commonly requested documents",
-        p: "Identification documents, photographs, proof of address and, where relevant, proof of marital status are commonly requested.",
+        h: "Start with an official checklist",
+        p: "There is no one-size-fits-all document list for every couple. Requirements can vary with nationality, residence, personal history, and the office handling the application. Ask the relevant authority or a Nepali lawyer for the current checklist before collecting or certifying documents.",
       },
       {
-        h: "Why consistency matters",
-        p: "Names, dates and addresses should match across all documents. Discrepancies may require correction before submission.",
+        h: "Items you may be asked to prepare",
+        p: "Depending on your circumstances, the authority may request identity documents, photographs, proof of residence or address, information about marital status, and supporting forms or declarations. These are examples to help you prepare questions—not a guaranteed or complete list.",
+      },
+      {
+        h: "If one partner is a foreign national",
+        p: "Ask in advance whether documents from abroad need to show single status or capacity to marry, and what form of verification, consular attestation, or Nepali translation is accepted. Requirements for the same document can differ by issuing country and authority.",
+      },
+      {
+        h: "Check every detail for consistency",
+        p: "Compare names, dates of birth, addresses, and document numbers across the application and supporting papers. If a name is spelled differently or a record contains an error, ask how it should be corrected or explained before submitting the file.",
+      },
+      {
+        h: "A simple preparation checklist",
+        p: "Confirm the current requirements; check document validity and expiry dates; make clear copies while keeping originals safe; arrange translations or authentication only as directed; and ask how many copies and which people must attend.",
+      },
+      {
+        h: "A note on legal information",
+        p: "This guide is general information, not legal advice or an official document checklist. Confirm the current requirements for your case with the relevant authority or a qualified lawyer in Nepal.",
       },
     ],
   },
@@ -303,21 +332,36 @@ export const articles: Article[] = [
     slug: "foreign-national-marry-nepali-citizen",
     title: "Can a Foreign National Marry a Nepali Citizen in Nepal?",
     category: "Foreign Nationals",
-    isPlaceholder: true,
+    isPlaceholder: false,
     date: "2026-09-10",
     readTime: "7 min",
-    image: images.hero,
-    imageAlt: "Couple walking through a Kathmandu courtyard",
+    image: blogInternationalCouple,
+    imageAlt: "Colorful illustration of an international couple with a Himalayan landscape",
     excerpt: "Key considerations for couples where one partner is not a Nepali citizen.",
     content: [
-      { p: placeholderNote },
       {
-        h: "Additional requirements",
-        p: "Foreign nationals may need documents from their home country or embassy, which may require attestation or translation.",
+        h: "It may be possible, but requirements are case-specific",
+        p: "A Nepali citizen and a foreign national may be able to register their marriage in Nepal, subject to the applicable law and procedure. The documents and checks involved can depend on the foreign partner’s nationality, residence, personal circumstances, and the authority handling the application.",
       },
       {
-        h: "Plan ahead",
-        p: "Gathering foreign documents can take time. An early consultation helps identify what applies.",
+        h: "Ask what evidence is needed from abroad",
+        p: "Before travelling, ask the relevant authority or a Nepali lawyer which documents the foreign partner must obtain from their home country or embassy. Ask whether proof of identity, marital status, or capacity to marry is required, and whether the documents must be translated, notarised, authenticated, or presented in a particular form.",
+      },
+      {
+        h: "Check the process before making plans",
+        p: "Confirm where the application should be made, whether either partner must meet a residence or stay requirement, which forms are used, who must attend, and what the expected sequence of steps is. Do not book travel or assume a registration date until these points have been checked for your case.",
+      },
+      {
+        h: "Keep names and records aligned",
+        p: "Make sure passport details and other identity records match the information on applications and supporting documents. If names differ because of transliteration or an earlier record, ask the authority how to address the difference before filing.",
+      },
+      {
+        h: "After registration",
+        p: "If you plan to use the marriage record abroad, ask the relevant embassy or destination-country authority what further registration, certification, or translation it may require. Recognition and immigration consequences are separate questions and should be checked with the appropriate authorities.",
+      },
+      {
+        h: "A note on legal information",
+        p: "This guide is general information, not legal advice. Cross-border requirements can change and depend on nationality and individual facts. Confirm the current rules with the relevant authority or a qualified lawyer in Nepal before acting.",
       },
     ],
   },

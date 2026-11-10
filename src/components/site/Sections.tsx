@@ -172,28 +172,31 @@ export function formatDate(d: string) {
   });
 }
 
-export function BlogCard({ a, headingLevel = 3 }: { a: Article; headingLevel?: 2 | 3 }) {
+type BlogCardArticle = Pick<Article, "slug" | "title" | "excerpt" | "image" | "imageAlt"> & {
+  category?: string;
+  tags?: string[];
+  date?: string;
+  publishedAt?: string;
+};
+
+export function BlogCard({ a, headingLevel = 3 }: { a: BlogCardArticle; headingLevel?: 2 | 3 }) {
   const Heading = headingLevel === 2 ? "h2" : "h3";
+  const category = a.category ?? a.tags?.[0] ?? "Legal resources";
+  const date = a.publishedAt ?? a.date;
+
   return (
     <Link to="/blog/$slug" params={{ slug: a.slug }} className="group flex flex-col">
-      <div className="aspect-[4/3] overflow-hidden bg-muted">
+      <div className="aspect-[4/3] overflow-hidden bg-secondary">
         <img
           src={a.image}
-          alt=""
+          alt={a.imageAlt}
           loading="lazy"
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
       </div>
       <div className="mt-5 flex items-center gap-3 text-xs text-muted-foreground">
-        <span className="font-semibold uppercase tracking-widest text-foreground">
-          {a.category}
-        </span>
-        {a.isPlaceholder && (
-          <>
-            <span>·</span>
-            <span className="uppercase tracking-widest">Draft placeholder</span>
-          </>
-        )}
+        <span className="font-semibold uppercase tracking-widest text-foreground">{category}</span>
+        {date && <span>· {formatDate(date)}</span>}
       </div>
       <Heading className="mt-3 text-2xl leading-tight group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4">
         {a.title}

@@ -1,10 +1,35 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { BlogCard, PageHero } from "@/components/site/Sections";
 import { getPublishedBlogPosts } from "@/lib/sanity.server";
+import { articles } from "@/data/content";
 import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/blog/")({
-  loader: () => getPublishedBlogPosts({ data: 100 }),
+  loader: async () => {
+    const publishedPosts = await getPublishedBlogPosts({ data: 100 });
+    const postsBySlug = new Map(
+      articles
+        .filter((article) => !article.isPlaceholder)
+        .map((article) => [
+          article.slug,
+          {
+            slug: article.slug,
+            title: article.title,
+            excerpt: article.excerpt,
+            tags: [article.category],
+            publishedAt: article.date,
+            image: article.image,
+            imageAlt: article.imageAlt,
+          },
+        ]),
+    );
+
+    for (const post of publishedPosts) postsBySlug.set(post.slug, post);
+
+    return [...postsBySlug.values()]
+      .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))
+      .slice(0, 100);
+  },
   head: () => ({
     meta: [
       { title: "Blog — BiheInCourt" },
@@ -23,15 +48,13 @@ function BlogIndexPage() {
   return (
     <>
       <PageHero
-        eyebrow={lang === "ne" ? "अनुवाद समीक्षा आवश्यक" : "Legal resources"}
+        eyebrow={lang === "ne" ? "कानुनी जानकारी" : "Legal resources"}
         title={
-          lang === "ne"
-            ? "अनुवाद समीक्षा आवश्यक — तपाईंको यात्राको लागि लेखहरू"
-            : "Articles for your journey."
+          lang === "ne" ? "तपाईंको यात्राका लागि उपयोगी लेखहरू" : "Guidance for your next chapter."
         }
         desc={
           lang === "ne"
-            ? "अनुवाद समीक्षा आवश्यक — विवाह दर्ता यात्राका लागि मार्गदर्शन र जानकारी।"
+            ? "नेपालमा विवाह दर्ताको तयारी, प्रक्रिया र कागजातबारे उपयोगी जानकारी।"
             : "Guidance and insights for your marriage registration journey."
         }
       />
@@ -45,13 +68,11 @@ function BlogIndexPage() {
         ) : (
           <div className="mt-12 border border-dashed p-10 text-center">
             <h2 className="text-3xl">
-              {lang === "ne"
-                ? "अनुवाद समीक्षा आवश्यक — लेख यहाँ देखा पर्नेछ"
-                : "Articles will appear here."}
+              {lang === "ne" ? "अहिले कुनै लेख उपलब्ध छैन" : "Articles will appear here."}
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
               {lang === "ne"
-                ? "अनुवाद समीक्षा आवश्यक — नयाँ लेखहरू उपलब्ध भएपछि यहाँ प्रकाशित हुनेछन्।"
+                ? "नयाँ लेखहरू प्रकाशित भएपछि यहाँ देखिनेछन्।"
                 : "New articles will be published here as they become available."}
             </p>
           </div>

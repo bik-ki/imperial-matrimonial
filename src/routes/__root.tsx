@@ -136,7 +136,7 @@ function RootComponent() {
               <SiteFooter socialLinks={settings?.socialLinks} />
               <WhatsAppFloat />
               <MobileCTABar />
-              <ConsultationPromo />
+              {path === "/" && <ConsultationPromo />}
             </>
           )}
         </ConsultationProvider>

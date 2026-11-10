@@ -87,22 +87,46 @@ describe("Public form accessibility", () => {
     );
   });
 
-  it("supports arrow-key selection and roving focus in the eligibility choices", () => {
+  it("provides labeled native radio controls for the eligibility questions", () => {
     act(() => root.render(<EligibilityChecker />));
 
-    const radios = host.querySelectorAll<HTMLButtonElement>('[role="radio"]');
-    expect(radios.length).toBeGreaterThan(1);
-    expect(radios[0]).toHaveAttribute("tabindex", "0");
-    expect(radios[1]).toHaveAttribute("tabindex", "-1");
+    const consent = host.querySelector<HTMLInputElement>("#mutual-consent-yes");
+    const notRelated = host.querySelector<HTMLInputElement>("#prohibited-relationship-no");
+
+    expect(consent).toHaveAccessibleName("Yes");
+    expect(notRelated).toHaveAccessibleName("No");
+    expect(consent?.closest("fieldset")).toHaveAccessibleName(
+      "Do both applicants freely and mutually consent to the marriage?",
+    );
+    expect(consent).toHaveAttribute("aria-required", "true");
+    expect(notRelated).toHaveAttribute("aria-required", "true");
+  });
+
+  it("preserves entered answers and announces required-field errors", () => {
+    act(() => root.render(<EligibilityChecker />));
+
+    const age = host.querySelector<HTMLInputElement>("#applicant-1-age");
+    const form = host.querySelector("form");
+    expect(age).not.toBeNull();
+    expect(form).not.toBeNull();
 
     act(() => {
-      radios[0]!.dispatchEvent(
-        new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true, cancelable: true }),
-      );
+      const setValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
+      setValue?.call(age, "24");
+      age!.dispatchEvent(new Event("input", { bubbles: true }));
     });
 
-    expect(radios[1]).toHaveAttribute("aria-checked", "true");
-    expect(radios[1]).toHaveAttribute("tabindex", "0");
-    expect(document.activeElement).toBe(radios[1]);
+    act(() => {
+      form!.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    });
+
+    expect(age).toHaveValue("24");
+    expect(host.querySelector("#applicant-1-marital-status")).toHaveAttribute(
+      "aria-invalid",
+      "true",
+    );
+    expect(host.querySelector('[role="alert"]')).toHaveTextContent(
+      "Select this applicant's marital status.",
+    );
   });
 });

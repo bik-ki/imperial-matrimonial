@@ -118,14 +118,17 @@ export type GalleryImageContent = {
   caption: string;
 };
 
-export type ConsultationPromoContent = {
-  image: string | null;
-  imageAlt: string;
-  heading: string;
-  message: string;
-  buttonLabel: string;
-  destination: "consultation" | "contact";
-};
+export type ConsultationPromoContent =
+  | { enabled: false }
+  | {
+      enabled: true;
+      image: string | null;
+      imageAlt: string;
+      heading: string;
+      message: string;
+      buttonLabel: string;
+      destination: "consultation" | "contact";
+    };
 
 type SanityGalleryImage = {
   _key?: string;
@@ -376,7 +379,7 @@ export const getSiteSettings = createServerFn({ method: "GET" }).handler(async (
 export const getPublishedGallery = createServerFn({ method: "GET" }).handler(async () => {
   const client = await getClient();
   const gallery = await client.fetch<{ images?: SanityGalleryImage[] } | null>(
-    `*[_id == "gallery" && _type == "gallery"][0]{images[]{_key, image, alt, caption}}`,
+    `*[_type == "gallery" && !(_id in path("drafts.**"))] | order(_updatedAt desc)[0]{images[]{_key, "image": coalesce(image, @), "alt": coalesce(alt, image.alt), caption}}`,
   );
   if (!gallery?.images?.length) return [];
 
@@ -385,7 +388,11 @@ export const getPublishedGallery = createServerFn({ method: "GET" }).handler(asy
     const src = getImageUrl(builder, image.image);
     if (!src) return [];
 
-    const alt = image.alt?.trim() || image.caption?.trim() || "BiheInCourt gallery image";
+    const altText = image.alt?.trim();
+    const alt =
+      (altText && !/^https?:\/\//i.test(altText) ? altText : null) ||
+      image.caption?.trim() ||
+      "BiheInCourt gallery image";
     return [
       {
         id: image._key ?? `gallery-image-${index}`,
@@ -401,7 +408,8 @@ export const getPublishedConsultationPromo = createServerFn({ method: "GET" }).h
   async (): Promise<ConsultationPromoContent | null> => {
     const client = await getClient();
     const promo = await client.fetch<SanityConsultationPromo | null>(
-      `*[_id == "consultationPromo" && _type == "consultationPromo" && enabled == true][0]{
+      `*[_type == "consultationPromo" && !(_id in path("drafts.**"))] | order(_updatedAt desc)[0]{
+        enabled,
         image,
         imageAlt,
         heading,
@@ -411,12 +419,15 @@ export const getPublishedConsultationPromo = createServerFn({ method: "GET" }).h
       }`,
     );
 
+    if (!promo) return null;
+    if (!promo.enabled) return { enabled: false };
     if (!promo?.heading?.trim() || !promo.message?.trim() || !promo.buttonLabel?.trim()) {
-      return null;
+      return { enabled: false };
     }
 
     const builder = promo.image ? await getImageBuilder() : null;
     return {
+      enabled: true,
       image: builder ? getImageUrl(builder, promo.image) : null,
       imageAlt: promo.imageAlt?.trim() || "BiheInCourt consultation",
       heading: promo.heading.trim(),

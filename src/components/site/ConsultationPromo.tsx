@@ -4,11 +4,20 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { useConsultation } from "./ConsultationDialog";
 import { fetchConsultationPromo, type ConsultationPromo } from "@/lib/consultation-promo";
 
-const DISMISSED_KEY = "imperial_consultation_promo_dismissed_v1";
+const DISMISSED_KEY = "imperial_consultation_promo_dismissed_v2";
+const DEFAULT_PROMO: ConsultationPromo = {
+  enabled: true,
+  image: null,
+  imageAlt: "",
+  heading: "Planning a court marriage in Nepal?",
+  message: "Get clear guidance on eligibility, documents, and the court process from our team.",
+  buttonLabel: "Book a consultation",
+  destination: "consultation",
+};
 
 function wasDismissed() {
   try {
-    return localStorage.getItem(DISMISSED_KEY) === "true";
+    return sessionStorage.getItem(DISMISSED_KEY) === "true";
   } catch {
     return false;
   }
@@ -16,7 +25,7 @@ function wasDismissed() {
 
 function persistDismissal() {
   try {
-    localStorage.setItem(DISMISSED_KEY, "true");
+    sessionStorage.setItem(DISMISSED_KEY, "true");
   } catch {
     // A blocked storage API should not prevent the visitor from dismissing the popup.
   }
@@ -35,13 +44,17 @@ export function ConsultationPromo() {
     let active = true;
     fetchConsultationPromo()
       .then((result) => {
-        if (active && result) {
-          setPromo(result);
+        if (active && result?.enabled !== false) {
+          setPromo(result ?? DEFAULT_PROMO);
           setOpen(true);
         }
       })
       .catch((error: unknown) => {
-        if (active) console.error("Unable to load consultation promotion.", error);
+        if (active) {
+          console.error("Unable to load consultation promotion.", error);
+          setPromo(DEFAULT_PROMO);
+          setOpen(true);
+        }
       });
 
     return () => {
@@ -49,7 +62,7 @@ export function ConsultationPromo() {
     };
   }, []);
 
-  if (!promo) return null;
+  if (!promo?.enabled) return null;
 
   const dismiss = () => {
     persistDismissal();
@@ -65,7 +78,7 @@ export function ConsultationPromo() {
       }}
     >
       <DialogContent
-        className={`max-h-[90vh] w-[calc(100%-2rem)] overflow-y-auto overflow-x-hidden p-0 motion-reduce:animate-none motion-reduce:transition-none ${promo.image && !imageFailed ? "sm:grid sm:grid-cols-2" : ""}`}
+        className={`max-h-[90vh] w-[calc(100%-2rem)] overflow-y-auto overflow-x-hidden p-0 motion-reduce:animate-none motion-reduce:transition-none ${promo.image && !imageFailed ? "max-w-2xl sm:grid sm:grid-cols-[5fr_7fr]" : "max-w-sm"}`}
       >
         {promo.image && !imageFailed && (
           <img
@@ -76,6 +89,7 @@ export function ConsultationPromo() {
           />
         )}
         <div className="flex min-w-0 flex-col justify-center gap-5 p-7 sm:p-10">
+          <p className="eyebrow">A note from our team</p>
           <DialogTitle className="break-words font-serif text-4xl font-medium leading-tight">
             {promo.heading}
           </DialogTitle>

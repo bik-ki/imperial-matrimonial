@@ -10,6 +10,10 @@ export const site = {
   phoneHref: `tel:+977${localPhoneNumber}`,
   whatsappDisplay: "+977 974 572 2755",
   email: "biheincourt@gmail.com",
+  consultation: {
+    subjectPrefix: "Consultation request",
+    bodyHeading: "New consultation request",
+  },
   whatsappMessage:
     "Hello BiheInCourt, I would like to know more about your court marriage services in Nepal.",
   social: {
@@ -23,4 +27,27 @@ export const site = {
 
 export function whatsappUrl(message: string = site.whatsappMessage) {
   return `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(message)}`;
+}
+
+export function isConfiguredBusinessEmail(email: string = site.email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !email.includes("[");
+}
+
+export function gmailComposeUrl({
+  recipient,
+  subject,
+  body,
+}: {
+  recipient: string;
+  subject: string;
+  body: string;
+}) {
+  const params = new URLSearchParams({
+    view: "cm",
+    fs: "1",
+    to: recipient,
+    su: subject,
+    body,
+  });
+  return `https://mail.google.com/mail/?${params.toString()}`;
 }

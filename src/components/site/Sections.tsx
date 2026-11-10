@@ -10,14 +10,17 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useT, type TKey } from "@/lib/i18n";
-import { instagramPosts, featuredReel } from "@/data/content";
+import {
+  services,
+  articles,
+  instagramPosts,
+  featuredReel,
+  type Article,
+  type Service,
+} from "@/data/content";
 import { site } from "@/config/site";
 import { useConsultation } from "./ConsultationDialog";
 import { WhatsAppButton } from "./WhatsAppButton";
-import type { BlogPostSummary } from "@/lib/sanity.server";
-import type { SanityServiceSummary } from "@/lib/sanity.server";
-import type { HomePageContent } from "@/lib/sanity.server";
-import { getServiceIcon } from "@/lib/service-icons";
 
 export function SectionHead({
   eyebrow,
@@ -70,42 +73,26 @@ const steps: { n: string; icon: typeof MessageSquare; t: TKey; d: TKey }[] = [
   { n: "04", icon: Landmark, t: "s4.t", d: "s4.d" },
 ];
 
-export function ProcessTimeline({ content }: { content?: HomePageContent["process"] }) {
+export function ProcessTimeline() {
   const { t } = useT();
   const { open } = useConsultation();
-  const timelineSteps = content?.steps?.length
-    ? content.steps.map((step, index) => ({
-        n: String(index + 1).padStart(2, "0"),
-        icon: steps[index % steps.length]!.icon,
-        title: step.title,
-        description: step.description,
-      }))
-    : steps.map((step) => ({
-        n: step.n,
-        icon: step.icon,
-        title: t(step.t),
-        description: t(step.d),
-      }));
   return (
     <section className="py-24 md:py-32">
       <div className="container-x">
-        <SectionHead
-          eyebrow={content?.eyebrow || t("process.eyebrow")}
-          title={content?.title || t("process.title")}
-        />
+        <SectionHead eyebrow={t("process.eyebrow")} title={t("process.title")} />
         <ol className="relative mt-16 grid gap-0 md:grid-cols-4">
           <div
             className="absolute left-5 top-0 h-full w-px bg-border md:left-0 md:top-5 md:h-px md:w-full"
             aria-hidden
           />
-          {timelineSteps.map((s, i) => (
+          {steps.map((s, i) => (
             <li key={s.n} className="relative pb-12 pl-16 md:pb-0 md:pl-0 md:pr-8">
               <span className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center border bg-background md:relative">
                 <s.icon className="h-4 w-4 text-gold" />
               </span>
               <p className="mt-0 font-serif text-5xl text-muted-foreground/40 md:mt-8">{s.n}</p>
-              <h3 className="mt-2 text-2xl">{s.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.description}</p>
+              <h3 className="mt-2 text-2xl">{t(s.t)}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t(s.d)}</p>
               {i === 0 ? (
                 <button
                   onClick={open}
@@ -118,15 +105,13 @@ export function ProcessTimeline({ content }: { content?: HomePageContent["proces
           ))}
         </ol>
         <div className="mt-14 flex flex-col gap-6 border-t pt-8 md:flex-row md:items-center md:justify-between">
-          <p className="max-w-xl text-sm text-muted-foreground">
-            {content?.note || t("process.note")}
-          </p>
+          <p className="max-w-xl text-sm text-muted-foreground">{t("process.note")}</p>
           <div className="flex flex-wrap gap-3">
             <Button asChild size="lg">
-              <Link to="/eligibility">{content?.primaryCtaLabel || t("cta.check")}</Link>
+              <Link to="/eligibility">{t("cta.check")}</Link>
             </Button>
             <Button variant="outline" size="lg" onClick={open}>
-              {content?.secondaryCtaLabel || t("cta.bookA")}
+              {t("cta.bookA")}
             </Button>
           </div>
         </div>
@@ -135,19 +120,18 @@ export function ProcessTimeline({ content }: { content?: HomePageContent["proces
   );
 }
 
-export function ServiceCard({ s }: { s: SanityServiceSummary }) {
+export function ServiceCard({ s }: { s: Service }) {
   const { lang, t } = useT();
-  const Icon = getServiceIcon(s.slug);
   return (
     <Link
       to="/services/$slug"
       params={{ slug: s.slug }}
       className="group relative flex flex-col border-b border-r bg-card p-8 transition-colors hover:bg-primary hover:text-primary-foreground md:p-10"
     >
-      <Icon className="h-6 w-6 text-gold" strokeWidth={1.3} />
-      <h3 className="mt-10 text-3xl">{lang === "ne" ? s.titleNe || s.title : s.title}</h3>
+      <s.icon className="h-6 w-6 text-gold" strokeWidth={1.3} />
+      <h3 className="mt-10 text-3xl">{s.title[lang]}</h3>
       <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground group-hover:text-primary-foreground/70">
-        {lang === "ne" ? s.summaryNe || s.summary : s.summary}
+        {s.short[lang]}
       </p>
       <span className="mt-8 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest">
         {t("cta.learn")}{" "}
@@ -157,22 +141,13 @@ export function ServiceCard({ s }: { s: SanityServiceSummary }) {
   );
 }
 
-export function ServicesGrid({
-  services,
-  content,
-}: {
-  services: SanityServiceSummary[];
-  content?: HomePageContent["servicesSection"];
-}) {
+export function ServicesGrid() {
   const { t } = useT();
   const { open } = useConsultation();
   return (
     <section className="bg-secondary/50 py-24 md:py-32">
       <div className="container-x">
-        <SectionHead
-          eyebrow={content?.eyebrow || t("services.eyebrow")}
-          title={content?.title || t("services.title")}
-        />
+        <SectionHead eyebrow={t("services.eyebrow")} title={t("services.title")} />
         <div className="mt-14 grid border-l border-t sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s) => (
             <ServiceCard key={s.slug} s={s} />
@@ -180,36 +155,45 @@ export function ServicesGrid({
         </div>
         <div className="mt-10 flex flex-wrap gap-3">
           <Button size="lg" onClick={open}>
-            {content?.consultationCtaLabel || t("cta.bookA")}
+            {t("cta.bookA")}
           </Button>
-          <WhatsAppButton
-            context="Services section"
-            label={content?.whatsappCtaLabel || t("cta.whatsapp")}
-            variant="outline"
-            size="lg"
-          />
+          <WhatsAppButton context="Services section" variant="outline" size="lg" />
         </div>
       </div>
     </section>
   );
 }
 
-export function BlogCard({ a, headingLevel = 3 }: { a: BlogPostSummary; headingLevel?: 2 | 3 }) {
+export function formatDate(d: string) {
+  return new Date(d).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+export function BlogCard({ a, headingLevel = 3 }: { a: Article; headingLevel?: 2 | 3 }) {
   const Heading = headingLevel === 2 ? "h2" : "h3";
   return (
     <Link to="/blog/$slug" params={{ slug: a.slug }} className="group flex flex-col">
       <div className="aspect-[4/3] overflow-hidden bg-muted">
         <img
           src={a.image}
-          alt={a.imageAlt}
+          alt=""
           loading="lazy"
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
       </div>
       <div className="mt-5 flex items-center gap-3 text-xs text-muted-foreground">
         <span className="font-semibold uppercase tracking-widest text-foreground">
-          {a.tags[0] || "Legal resources"}
+          {a.category}
         </span>
+        {a.isPlaceholder && (
+          <>
+            <span>·</span>
+            <span className="uppercase tracking-widest">Draft placeholder</span>
+          </>
+        )}
       </div>
       <Heading className="mt-3 text-2xl leading-tight group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4">
         {a.title}
@@ -222,28 +206,19 @@ export function BlogCard({ a, headingLevel = 3 }: { a: BlogPostSummary; headingL
   );
 }
 
-export function BlogPreview({
-  posts,
-  content,
-}: {
-  posts: BlogPostSummary[];
-  content?: HomePageContent["blogPreview"];
-}) {
+export function BlogPreview() {
   const { t } = useT();
   return (
     <section className="py-24 md:py-32">
       <div className="container-x">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-          <SectionHead
-            eyebrow={content?.eyebrow || t("blog.eyebrow")}
-            title={content?.title || t("blog.title")}
-          />
+          <SectionHead eyebrow={t("blog.eyebrow")} title={t("blog.title")} />
           <Button asChild variant="outline" size="lg">
-            <Link to="/blog">{content?.allArticlesLabel || "All articles"}</Link>
+            <Link to="/blog">All articles</Link>
           </Button>
         </div>
         <div className="mt-14 grid gap-10 md:grid-cols-3">
-          {posts.slice(0, 3).map((a) => (
+          {articles.slice(0, 3).map((a) => (
             <BlogCard key={a.slug} a={a} />
           ))}
         </div>
@@ -252,19 +227,10 @@ export function BlogPreview({
   );
 }
 
-export function InstagramCard({
-  p,
-}: {
-  p: { id: string; image: string; imageAlt: string; caption: string };
-}) {
+export function InstagramCard({ p }: { p: (typeof instagramPosts)[number] }) {
   return (
     <div className="relative aspect-square overflow-hidden bg-muted">
-      <img
-        src={p.image}
-        alt={p.imageAlt}
-        loading="lazy"
-        className="h-full w-full object-cover"
-      />
+      <img src={p.image} alt="" loading="lazy" className="h-full w-full object-cover" />
       <div className="absolute inset-0 flex flex-col justify-between bg-ink/65 p-4 text-ink-foreground">
         <p className="text-[0.65rem] uppercase tracking-widest text-gold">Sample post preview</p>
         <p className="line-clamp-4 text-sm">{p.caption}</p>
@@ -273,54 +239,28 @@ export function InstagramCard({
   );
 }
 
-export function InstagramSection({
-  content,
-  instagramUrl,
-}: {
-  content?: HomePageContent["instagram"];
-  instagramUrl?: string;
-}) {
+export function InstagramSection() {
   const { t } = useT();
-  const posts = content?.posts?.length
-    ? content.posts.map((post, index) => ({
-        id: String(index),
-        image: post.image || instagramPosts[index % instagramPosts.length]!.image,
-        imageAlt: post.imageAlt || "",
-        caption: post.caption,
-      }))
-    : instagramPosts.map((post) => ({ ...post, id: String(post.id), imageAlt: "" }));
-  const reelImage = content?.featuredReel?.image || featuredReel.image;
-  const reelImageAlt = content?.featuredReel?.imageAlt || "";
-  const reelCaption = content?.featuredReel?.caption || featuredReel.caption;
-  const profileUrl = instagramUrl || site.social.instagram;
-  const instagramVerified = instagramUrl
-    ? /^https:\/\/[^/]+\/[^/?#]/.test(instagramUrl)
-    : !site.instagramHandle.includes("[") && /^https:\/\/[^/]+\/[^/?#]/.test(site.social.instagram);
   return (
     <section className="border-t py-24 md:py-32">
       <div className="container-x grid gap-12 lg:grid-cols-[1fr_minmax(0,22rem)]">
         <div className="min-w-0">
-          <SectionHead
-            eyebrow={content?.eyebrow || t("ig.eyebrow")}
-            title={content?.title || t("ig.title")}
-          />
+          <SectionHead eyebrow={t("ig.eyebrow")} title={t("ig.title")} />
           <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3">
-            {posts.map((p) => (
+            {instagramPosts.map((p) => (
               <InstagramCard key={p.id} p={p} />
             ))}
           </div>
           <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-xs text-muted-foreground">
-              {content?.note || "Sample posts shown for this prototype."}
-            </p>
-            {!instagramVerified ? (
+            <p className="text-xs text-muted-foreground">Sample posts shown for this prototype.</p>
+            {site.instagramHandle.includes("[") ? (
               <p className="text-xs text-muted-foreground">
                 Project placeholder: verify the Instagram profile URL and handle before publication.
               </p>
             ) : (
               <Button asChild variant="outline">
-                <a href={profileUrl} target="_blank" rel="noopener noreferrer">
-                <Instagram /> View Instagram profile
+                <a href={site.social.instagram} target="_blank" rel="noopener noreferrer">
+                  <Instagram /> View Instagram profile ({site.instagramHandle})
                 </a>
               </Button>
             )}
@@ -328,10 +268,10 @@ export function InstagramSection({
         </div>
         <div className="relative mx-auto block aspect-[9/16] w-full max-w-[22rem] overflow-hidden border bg-ink">
           <img
-            src={reelImage}
-            alt={reelImageAlt}
+            src={featuredReel.image}
+            alt=""
             loading="lazy"
-            className="h-full w-full object-cover opacity-80"
+            className="h-full w-full object-cover"
           />
           <div className="absolute inset-x-0 top-0 flex items-center gap-2 p-4 text-ink-foreground">
             <span className="flex h-8 w-8 items-center justify-center rounded-full border border-gold font-serif text-sm">
@@ -343,7 +283,7 @@ export function InstagramSection({
             </span>
           </div>
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink to-transparent p-5 pt-16 text-ink-foreground">
-            <p className="font-serif text-2xl leading-tight">{reelCaption}</p>
+            <p className="font-serif text-2xl leading-tight">{featuredReel.caption}</p>
           </div>
         </div>
       </div>

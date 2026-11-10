@@ -1,6 +1,6 @@
 # Sanity content setup
 
-The website reads published blog posts, services, and FAQs, plus the homepage and site settings singleton documents.
+The website reads published blog posts, services, and FAQs, plus the homepage, site settings, gallery, and consultation promotion singleton documents.
 
 1. Copy `.env.example` to `.env.local`.
 2. Set `SANITY_PROJECT_ID`, `SANITY_DATASET`, and `SANITY_API_VERSION`.
@@ -13,8 +13,10 @@ The optional read token is used only by server-side queries. Keep it unprefixed 
 
 - **Services:** publish documents with a title, slug, summary, and any long-form content or image fields. Published services appear on the service list, detail pages, and homepage.
 - **FAQs:** create and publish FAQ documents with a question, answer, category, and display order. They appear at `/faq`, grouped by category and sorted by display order.
-- **Home page:** edit the existing **Home page** singleton. Add the required hero content, process title and at least one step; other homepage sections and images are optional and fall back to the existing site content when omitted.
-- **Site settings:** edit the **Site settings** singleton and add social links with HTTPS URLs. These populate the footer social icons and the homepage Instagram profile link. The schema also requires shared contact details to publish this singleton, but the website's contact surfaces still use `src/config/site.ts`.
+- **Home page:** create the **Home page** singleton if it does not exist, then publish it. Add the required hero content, process title and at least one step; other homepage sections and images are optional and fall back to existing site content when omitted.
+- **Site settings:** create the **Site settings** singleton if it does not exist. Add social links with HTTPS URLs; these populate the footer icons and homepage Instagram link. The schema also requires shared contact details to publish this singleton, but the website's contact surfaces still use `src/config/site.ts`.
+- **Gallery:** add and publish images in the **Gallery** singleton. The website preserves the order shown in Studio.
+- **Consultation promotion:** configure the **Consultation promotion** singleton. Set **Show promotion** to enable it; required copy and button fields must be populated before the promotion appears.
 
 Homepage text fields currently store one language; populated Sanity text is shown for both language selections. Missing fields use the existing frontend defaults, including its localized copy where available.
 

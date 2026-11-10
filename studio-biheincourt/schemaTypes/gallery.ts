@@ -1,22 +1,28 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
-import {slugField} from './sharedFields'
 
 export const gallery = defineType({
   name: 'gallery',
   title: 'Gallery',
   type: 'document',
   fields: [
-    defineField({name: 'title', type: 'string', validation: (rule) => rule.required()}),
-    slugField(),
-    defineField({name: 'description', type: 'text', rows: 3}),
+    defineField({name: 'title', type: 'string', initialValue: 'Gallery'}),
     defineField({
       name: 'images',
+      title: 'Images',
       type: 'array',
       of: [
         defineArrayMember({
-          type: 'image',
-          options: {hotspot: true},
+          name: 'galleryImage',
+          title: 'Gallery image',
+          type: 'object',
           fields: [
+            defineField({
+              name: 'image',
+              title: 'Image',
+              type: 'image',
+              options: {hotspot: true},
+              validation: (rule) => rule.required(),
+            }),
             defineField({
               name: 'alt',
               title: 'Alternative text',
@@ -25,12 +31,15 @@ export const gallery = defineType({
             }),
             defineField({name: 'caption', type: 'string'}),
           ],
+          preview: {
+            select: {title: 'caption', media: 'image'},
+            prepare: ({title, media}) => ({
+              title: title || 'Untitled gallery image',
+              media,
+            }),
+          },
         }),
       ],
-      validation: (rule) => rule.required().min(1),
     }),
   ],
-  preview: {
-    select: {title: 'title', subtitle: 'slug.current'},
-  },
 })

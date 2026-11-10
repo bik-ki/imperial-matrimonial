@@ -21,6 +21,7 @@ describe("App routing", () => {
     "/contact",
     "/process",
     "/eligibility",
+    "/gallery",
     "/blog",
     "/services",
     "/legal/privacy",

@@ -3,6 +3,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { ContactForm } from "@/routes/contact";
+import { gmailComposeUrl } from "@/config/site";
 
 describe("Contact form preview", () => {
   let host: HTMLDivElement;
@@ -41,5 +42,19 @@ describe("Contact form preview", () => {
       "Not sent: this form has no delivery integration, and your details have not been saved.",
     );
     expect(localStorage.length).toBe(0);
+  });
+
+  it("encodes Gmail recipient, subject, and body values", () => {
+    const url = new URL(
+      gmailComposeUrl({
+        recipient: "legal+intake@example.com",
+        subject: "Consultation & booking",
+        body: "Line one\nQuery: documents + timing?",
+      }),
+    );
+
+    expect(url.searchParams.get("to")).toBe("legal+intake@example.com");
+    expect(url.searchParams.get("su")).toBe("Consultation & booking");
+    expect(url.searchParams.get("body")).toBe("Line one\nQuery: documents + timing?");
   });
 });

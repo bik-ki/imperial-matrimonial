@@ -52,7 +52,7 @@ function ArticlePage() {
           <img
             src={article.image}
             alt={article.imageAlt}
-            className="aspect-[4/3] w-full object-cover grayscale"
+            className="aspect-[4/3] w-full object-cover"
           />
           <div className="space-y-6 leading-relaxed">
             <PortableText

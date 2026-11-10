@@ -179,7 +179,7 @@ export function BlogCard({ a }: { a: Article }) {
           src={a.image}
           alt=""
           loading="lazy"
-          className="h-full w-full object-cover grayscale transition-transform duration-700 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
       </div>
       <div className="mt-5 flex items-center gap-3 text-xs text-muted-foreground">
@@ -237,7 +237,7 @@ export function InstagramCard({ p }: { p: (typeof instagramPosts)[number] }) {
         src={p.image}
         alt=""
         loading="lazy"
-        className="h-full w-full object-cover grayscale transition-transform duration-700 group-hover:scale-105"
+        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
       />
       <div className="absolute inset-0 flex flex-col justify-between bg-ink/0 p-4 text-ink-foreground transition-colors group-hover:bg-ink/75">
         <Instagram className="h-4 w-4 self-end" />
@@ -283,7 +283,7 @@ export function InstagramSection() {
             src={featuredReel.image}
             alt=""
             loading="lazy"
-            className="h-full w-full object-cover opacity-80 grayscale"
+            className="h-full w-full object-cover"
           />
           <div className="absolute inset-x-0 top-0 flex items-center gap-2 p-4 text-ink-foreground">
             <span className="flex h-8 w-8 items-center justify-center rounded-full border border-gold font-serif text-sm">

@@ -20,6 +20,7 @@ describe("App routing", () => {
     "/contact",
     "/process",
     "/eligibility",
+    "/gallery",
     "/blog",
     "/legal/privacy",
     "/legal/terms",

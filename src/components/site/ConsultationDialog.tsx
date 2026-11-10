@@ -24,8 +24,8 @@ export function ConsultationProvider({ children }: { children: ReactNode }) {
               Consultation request preview
             </DialogTitle>
             <DialogDescription>
-              This prototype has no delivery integration. Completing this form does not send an
-              enquiry or book an appointment.
+              Submitting opens Gmail with a prepared request. You must review and send it yourself;
+              opening Gmail does not confirm an appointment.
             </DialogDescription>
           </DialogHeader>
           <LeadForm mode="booking" onDone={() => setOpen(false)} />

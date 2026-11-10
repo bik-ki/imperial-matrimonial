@@ -57,7 +57,7 @@ function About() {
           <div className="mt-12 grid gap-8 sm:grid-cols-3">
             {team.map((m, i) => (
               <div key={i}>
-                <img src={m.image} alt="" loading="lazy" className="aspect-[4/5] w-full object-cover grayscale" />
+                <img src={m.image} alt="" loading="lazy" className="aspect-[4/5] w-full object-cover" />
                 <p className="mt-4 font-serif text-2xl">{m.name}</p>
                 <p className="text-sm text-muted-foreground">{m.role}</p>
               </div>

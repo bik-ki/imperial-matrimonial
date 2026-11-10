@@ -27,6 +27,7 @@ const nav: { to: string; key: TKey }[] = [
   { to: "/services", key: "nav.services" },
   { to: "/eligibility", key: "nav.eligibility" },
   { to: "/blog", key: "nav.blog" },
+  { to: "/gallery", key: "nav.gallery" },
   { to: "/contact", key: "nav.contact" },
 ];
 
@@ -256,7 +257,12 @@ export function SiteFooter() {
         </p>
         <div className="flex flex-wrap gap-x-5 gap-y-2">
           {legalLinks.map((legal) => (
-            <Link key={legal.doc} to="/legal/$doc" params={{ doc: legal.doc }} className="hover:text-ink-foreground">
+            <Link
+              key={legal.doc}
+              to="/legal/$doc"
+              params={{ doc: legal.doc }}
+              className="hover:text-ink-foreground"
+            >
               {legal.label} [Client to provide]
             </Link>
           ))}

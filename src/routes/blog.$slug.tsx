@@ -41,7 +41,7 @@ function ArticlePage() {
       </header>
       <div className="container-x grid max-w-5xl gap-12 py-12 md:py-16 lg:grid-cols-[minmax(0,2fr)_minmax(16rem,1fr)]">
         <div className="space-y-8">
-          <img src={article.image} alt="" className="aspect-[4/3] w-full object-cover grayscale" />
+          <img src={article.image} alt="" className="aspect-[4/3] w-full object-cover" />
           <div className="border-l-2 border-gold bg-secondary/50 p-5 text-sm leading-relaxed text-muted-foreground">
             <strong className="text-foreground">Draft content — not for publication.</strong> This article and its metadata are placeholders, not client-verified legal guidance. Replace or approve all text and verify its details before publication.
           </div>

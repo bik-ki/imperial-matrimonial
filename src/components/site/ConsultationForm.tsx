@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { services } from "@/data/content";
+import { gmailComposeUrl, isConfiguredBusinessEmail, site } from "@/config/site";
 
 const phoneRe = /^[+\d][\d\s-]{6,19}$/;
 
@@ -38,7 +39,8 @@ const selectCls =
 export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone?: () => void }) {
   const [v, setV] = useState<Record<string, string | boolean>>({ consent: false });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [status, setStatus] = useState<"idle" | "done">("idle");
+  const [status, setStatus] = useState<"idle" | "preview" | "opened" | "error">("idle");
+  const [statusMessage, setStatusMessage] = useState("");
   const set = (k: string, val: string | boolean) => setV((p) => ({ ...p, [k]: val }));
   const today = new Date().toISOString().slice(0, 10);
 
@@ -52,24 +54,83 @@ export function LeadForm({ mode, onDone }: { mode: "booking" | "contact"; onDone
       return;
     }
     setErrors({});
-    setStatus("done");
+    if (mode !== "booking") {
+      setStatus("preview");
+      setStatusMessage(
+        "Not sent: this form has no delivery integration, and your details have not been saved.",
+      );
+      return;
+    }
+
+    if (!isConfiguredBusinessEmail()) {
+      setStatus("error");
+      setStatusMessage(
+        "The business email is not configured yet. Please use the verified contact details instead.",
+      );
+      return;
+    }
+
+    if (!("time" in r.data)) {
+      setStatus("error");
+      setStatusMessage(
+        "The consultation details are incomplete. Please review the form and try again.",
+      );
+      return;
+    }
+
+    const data = r.data;
+    const subject = `${site.consultation.subjectPrefix} from ${data.fullName}`;
+    const body = [
+      site.consultation.bodyHeading,
+      "",
+      `Full name: ${data.fullName}`,
+      `Phone number: ${data.phone}`,
+      `Email address: ${data.email}`,
+      `Consultation type: ${data.service}`,
+      `Preferred date: ${data.date}`,
+      `Preferred time: ${data.time}`,
+      `Privacy consent: ${data.consent ? "Yes" : "No"}`,
+      "",
+      "Visitor query:",
+      data.message?.trim() || "No additional message provided.",
+    ].join("\n");
+    const composeWindow = window.open(
+      gmailComposeUrl({ recipient: site.email, subject, body }),
+      "_blank",
+      "noopener,noreferrer",
+    );
+    if (!composeWindow) {
+      setStatus("error");
+      setStatusMessage(
+        "Gmail could not open, possibly because your browser blocked the new tab. Allow pop-ups and try again.",
+      );
+      return;
+    }
+    setStatus("opened");
+    setStatusMessage(
+      "Gmail should now be open with your request prepared. Review it and press Send; opening Gmail does not confirm a booking.",
+    );
   };
 
-  if (status === "done")
+  if (status !== "idle")
     return (
       <div className="py-10 text-center" role="status">
         <Info className="mx-auto h-10 w-10 text-gold" />
-        <h3 className="mt-4 text-3xl">Preview only.</h3>
-        <p className="mx-auto mt-3 max-w-md text-muted-foreground">
-          Not sent or saved: this prototype has no approved delivery integration. Use the firm's
-          verified contact details when they are available.
-        </p>
+        <h3 className="mt-4 text-3xl">
+          {status === "preview"
+            ? "Preview only."
+            : status === "opened"
+              ? "Gmail compose opened."
+              : "Unable to open Gmail."}
+        </h3>
+        <p className="mx-auto mt-3 max-w-md text-muted-foreground">{statusMessage}</p>
         <Button
           variant="outline"
           className="mt-6"
           onClick={() => {
             setV({ consent: false });
             setStatus("idle");
+            setStatusMessage("");
             onDone?.();
           }}
         >

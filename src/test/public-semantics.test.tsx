@@ -21,7 +21,7 @@ describe("Public page semantics", () => {
     host.remove();
   });
 
-  it("uses a page-level heading and labels the eligibility answer group", () => {
+  it("uses a page-level heading and labels the eligibility answer groups", () => {
     act(() =>
       root.render(
         <>
@@ -33,10 +33,15 @@ describe("Public page semantics", () => {
     );
 
     expect(host.querySelector("h1")?.textContent).toBe("A preliminary review.");
-    expect(host.querySelector('[role="radiogroup"]')?.getAttribute("aria-labelledby")).toBe(
-      "eligibility-question",
+    expect(host.querySelector("#applicant-1-age")).toHaveAccessibleName("Age");
+    expect(host.querySelector("#mutual-consent-yes")?.closest("fieldset")).toHaveAccessibleName(
+      "Do both applicants freely and mutually consent to the marriage?",
     );
-    expect(host.querySelector("#eligibility-question")?.textContent).toBeTruthy();
+    expect(
+      host.querySelector("#prohibited-relationship-no")?.closest("fieldset"),
+    ).toHaveAccessibleName(
+      "Are the applicants within a blood or kinship relationship prohibited under Nepali law?",
+    );
   });
 
   it("provides a description for every article lead image", () => {

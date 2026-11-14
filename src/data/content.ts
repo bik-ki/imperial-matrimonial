@@ -7,7 +7,7 @@ import {
   Compass,
   type LucideIcon,
 } from "lucide-react";
-import hero from "@/assets/herocouple.jepg";
+import hero from "@/assets/hero-couple.jepg";
 import office from "@/assets/office.jpg";
 import signing from "@/assets/signing.jpg";
 import court from "@/assets/court.jpg";
